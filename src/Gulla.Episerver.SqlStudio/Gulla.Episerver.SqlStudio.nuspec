@@ -10,13 +10,14 @@
     <license type="expression">Apache-2.0</license>
     <summary>Adds an admin tool that let you query the SQL database from within Episerver UI.</summary>
     <copyright>Copyright 2021</copyright>
-    <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio</projectUrl>
-    <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio" branch="main" />
+    <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
+    <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
     <releaseNotes>Initial release</releaseNotes>
     <tags>episerver,sql</tags>
     <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[11.12.0, 12.0.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.20.1, 12.0.0)" />
       <dependency id="EPiServer.CMS.UI.Core" version="[11.20.1, 12.0.0)" />
     </dependencies>
     <references>

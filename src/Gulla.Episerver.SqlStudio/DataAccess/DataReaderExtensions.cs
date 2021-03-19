@@ -76,6 +76,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
         public static IEnumerable<IEnumerable<string>> GetAllColumnsStringListList(this IDataReader dataReader)
         {
+            // TODO: Not optimal...
             if (dataReader.RecordsAffected > 0)
             {
                 throw new Exception(dataReader.RecordsAffected + " record" + (dataReader.RecordsAffected != 1 ? "s" : "") + " affected.");
