@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.SqlStudio</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Gulla.Episerver.SqlStudio</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <license type="expression">Apache-2.0</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
     <summary>Adds an admin tool that let you query the SQL database from within Episerver UI.</summary>
     <copyright>Copyright 2021</copyright>
     <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
-    <releaseNotes>Slim codemirror bundle,</releaseNotes>
+    <releaseNotes>Configuration</releaseNotes>
     <tags>episerver,sql</tags>
     <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
     <dependencies>

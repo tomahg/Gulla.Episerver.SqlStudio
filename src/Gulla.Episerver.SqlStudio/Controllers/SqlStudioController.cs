@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Gulla.Episerver.SqlStudio.DataAccess;
+using Gulla.Episerver.SqlStudio.Helpers;
 using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
@@ -20,6 +21,11 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
         public ActionResult Index()
         {
+            if (!ConfigHelper.Enabled())
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var model = new SqlStudioViewModel
             {
                 SqlAutoCompleteMetadata = _sqlService.GetMetaData(),
@@ -32,6 +38,11 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         [HttpPost]
         public ActionResult Index(string query, bool hideEmptyColumns)
         {
+            if (!ConfigHelper.Enabled())
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var model = new SqlStudioViewModel
             {
                 Query = query,

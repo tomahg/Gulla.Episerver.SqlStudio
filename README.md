@@ -1,10 +1,23 @@
 # Gulla.Episerver.SqlStudio
 
 ## Intro
-This addon will let you query the database directly from Episerver user interface.
+This addon will let you query the database directly from Episerver user interface. The result set can be exported to Excel, CSV or PDF.
 
-## Access control
-The addon is only available for users in the group `SqlAdmin`.
+![Addon gui](img/gui.jpg)
+
+## Warning
+With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is litterally not limts to what you can to with this addon.
+
+## Autocomplete
+Autocomplete is added for all tables in the database, both Episerver tables and any custom tables you might have. Trigger autocomplete with [CTRL] + [SPACE].
+
+![Autocomplete](img/autocomplete.jpg)
+
+## Access control and configuration
+The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:Enabled" value="false" />
+```
 
 ## Saving queries
 To save queries for later, first create a new table. You can do this from within the module. The name of the table and columns must match.
@@ -30,3 +43,11 @@ Will save the query following query:
 ``` SQL
 SELECT * FROM tblContentLanguage WHERE URLSegment LIKE '%.jpg'
 ```
+
+Saved queries will be displayed by category like this:
+
+![Saved queries](img/saved-queries.jpg)
+
+## Dependencies
+- [CodeMirror](https://codemirror.net/) is used for the editor.
+- [DataTables](https://datatables.net/) is used for displaying the result.
