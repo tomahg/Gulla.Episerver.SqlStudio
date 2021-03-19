@@ -196,13 +196,9 @@
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\matchtags.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\trailingspace.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\anyword-hint.js" />
-    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\css-hint.js" />
-    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\html-hint.js" />
-    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\javascript-hint.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.css" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\sql-hint.js" />
-    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\xml-hint.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\loadmode.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\multiplex.js" />
     <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\multiplex_test.js" />
