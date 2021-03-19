@@ -1,0 +1,770 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3E3C31A6-4FB7-43FE-A732-65C332431AD5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gulla.Episerver.SqlStudio</RootNamespace>
+    <AssemblyName>Gulla.Episerver.SqlStudio</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.Core.11.12.0\lib\net461\EPiServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.ApplicationModules, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.ApplicationModules.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Cms.AspNet, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.AspNet.11.12.0\lib\net461\EPiServer.Cms.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Cms.Shell.UI, Version=11.20.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.20.1\lib\net461\EPiServer.Cms.Shell.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Configuration, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.AspNet.11.12.0\lib\net461\EPiServer.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Data, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Data.Cache, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.Data.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Enterprise, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.Core.11.12.0\lib\net461\EPiServer.Enterprise.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Events, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Framework, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Framework.AspNet, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.AspNet.11.12.0\lib\net461\EPiServer.Framework.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.ImageLibrary, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.AspNet.11.12.0\lib\net461\EPiServer.ImageLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Licensing, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Framework.11.12.0\lib\net461\EPiServer.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.LinkAnalyzer, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.Core.11.12.0\lib\net461\EPiServer.LinkAnalyzer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Shell, Version=11.20.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.20.1\lib\net461\EPiServer.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Shell.UI, Version=11.20.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.20.1\lib\net461\EPiServer.Shell.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.UI, Version=11.20.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.20.1\lib\net461\EPiServer.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Web.WebControls, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.AspNet.11.12.0\lib\net461\EPiServer.Web.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Data.SqlClient, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.4.0\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.4.4.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Xml, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Xml.4.4.2\lib\net461\System.Security.Cryptography.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.4.4.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.4.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.AccessControl, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.AccessControl.4.4.0\lib\net461\System.Threading.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\SqlStudioController.cs" />
+    <Compile Include="DataAccess\DataReaderExtensions.cs" />
+    <Compile Include="DataAccess\QueryLoader.cs" />
+    <Compile Include="DataAccess\SqlService.cs" />
+    <Compile Include="Initialization\RouteInitialization.cs" />
+    <Compile Include="MenuProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\SqlQuery.cs" />
+    <Compile Include="ViewModels\SqlQueryCategory.cs" />
+    <Compile Include="ViewModels\SqlStudioViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\.editorconfig" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\.gitattributes" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\.npmignore" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\.travis.yml" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\AUTHORS" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\bin\authors.sh" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\bin\lint" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\bin\release" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\bin\source-highlight" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\CHANGELOG.md" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\CONTRIBUTING.md" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\LICENSE" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\package.json" />
+    <None Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\README.md" />
+    <None Include="packages.config" />
+    <None Include="Views\Index.cshtml" />
+    <None Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\comment\comment.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\comment\continuecomment.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\dialog\dialog.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\dialog\dialog.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\autorefresh.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\fullscreen.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\fullscreen.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\panel.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\placeholder.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\display\rulers.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\closebrackets.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\closetag.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\continuelist.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\matchbrackets.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\matchtags.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\trailingspace.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\brace-fold.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\comment-fold.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\foldcode.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\foldgutter.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\foldgutter.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\indent-fold.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\markdown-fold.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\fold\xml-fold.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\anyword-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\css-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\html-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\javascript-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\sql-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\xml-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\coffeescript-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\css-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\html-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\javascript-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\json-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\lint.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\sql-hint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\lint\yaml-lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\merge\merge.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\merge\merge.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\loadmode.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\multiplex.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\multiplex_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\overlay.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\mode\simple.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\runmode\colorize.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\runmode\runmode-standalone.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\runmode\runmode.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\runmode\runmode.node.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\scroll\annotatescrollbar.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\scroll\scrollpastend.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\scroll\simplescrollbars.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\scroll\simplescrollbars.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\jump-to-line.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\match-highlighter.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\matchesonscrollbar.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\matchesonscrollbar.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\search.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\search\searchcursor.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\selection\active-line.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\selection\mark-selection.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\selection\selection-pointer.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\tern\tern.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\tern\tern.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\tern\worker.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\wrap\hardwrap.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\bin\upload-release.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\activeline.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\anywordhint.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\bidi.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\btree.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\buffers.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\changemode.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\closebrackets.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\closetag.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\complete.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\emacs.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\folding.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\fullscreen.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\hardwrap.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\html5complete.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\indentwrap.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\lint.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\loadmode.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\marker.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\markselection.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\matchhighlighter.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\matchtags.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\merge.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\multiplex.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\mustache.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\panel.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\placeholder.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\preview.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\requirejs.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\resize.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\rulers.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\runmode-standalone.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\runmode.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\search.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\simplemode.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\simplescrollbars.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\spanaffectswrapping_shim.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\sublime.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\tern.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\theme.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\trailingspace.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\variableheight.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\vim.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\visibletabs.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\widget.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\demo\xmlcomplete.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\activebookmark.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\docs.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\internals.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\logo.png" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\logo.svg" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\manual.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\realworld.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\releases.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\reporting.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\upgrade_v2.2.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\upgrade_v3.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\upgrade_v4.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\doc\yinyang.png" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\keymap\emacs.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\keymap\sublime.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\keymap\vim.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\lib\codemirror.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\lib\codemirror.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\apl\apl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\apl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asciiarmor\asciiarmor.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asciiarmor\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asn.1\asn.1.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asn.1\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asterisk\asterisk.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\asterisk\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\brainfuck\brainfuck.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\brainfuck\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clike\clike.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clike\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clike\scala.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clike\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clojure\clojure.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clojure\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\clojure\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cmake\cmake.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cmake\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cobol\cobol.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cobol\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\coffeescript\coffeescript.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\coffeescript\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\commonlisp\commonlisp.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\commonlisp\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\crystal\crystal.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\crystal\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\css.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\gss.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\gss_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\less.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\less_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\scss.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\scss_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\css\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cypher\cypher.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cypher\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\cypher\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dart\dart.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dart\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\diff\diff.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\diff\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\django\django.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\django\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dockerfile\dockerfile.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dockerfile\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dockerfile\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dtd\dtd.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dtd\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dylan\dylan.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dylan\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\dylan\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\d\d.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\d\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\d\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ebnf\ebnf.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ebnf\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ecl\ecl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ecl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\eiffel\eiffel.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\eiffel\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\elm\elm.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\elm\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\erlang\erlang.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\erlang\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\factor\factor.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\factor\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\fcl\fcl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\fcl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\forth\forth.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\forth\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\fortran\fortran.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\fortran\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gas\gas.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gas\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gfm\gfm.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gfm\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gfm\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gherkin\gherkin.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\gherkin\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\go\go.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\go\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\groovy\groovy.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\groovy\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haml\haml.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haml\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haml\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\handlebars\handlebars.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\handlebars\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haskell-literate\haskell-literate.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haskell-literate\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haskell\haskell.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haskell\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haxe\haxe.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\haxe\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\htmlembedded\htmlembedded.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\htmlembedded\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\htmlmixed\htmlmixed.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\htmlmixed\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\http\http.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\http\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\idl\idl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\idl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\javascript\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\javascript\javascript.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\javascript\json-ld.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\javascript\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\javascript\typescript.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\jinja2\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\jinja2\jinja2.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\jsx\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\jsx\jsx.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\jsx\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\julia\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\julia\julia.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\livescript\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\livescript\livescript.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\lua\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\lua\lua.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\markdown\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\markdown\markdown.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\markdown\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mathematica\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mathematica\mathematica.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mbox\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mbox\mbox.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\meta.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mirc\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mirc\mirc.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mllike\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mllike\mllike.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\modelica\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\modelica\modelica.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mscgen\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mscgen\mscgen.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mscgen\mscgen_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mscgen\msgenny_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mscgen\xu_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mumps\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\mumps\mumps.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\nginx\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\nginx\nginx.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\nsis\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\nsis\nsis.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ntriples\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ntriples\ntriples.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\octave\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\octave\octave.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\oz\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\oz\oz.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pascal\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pascal\pascal.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pegjs\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pegjs\pegjs.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\perl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\perl\perl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\php\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\php\php.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\php\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pig\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pig\pig.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\powershell\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\powershell\powershell.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\powershell\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\properties\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\properties\properties.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\protobuf\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\protobuf\protobuf.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pug\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\pug\pug.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\puppet\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\puppet\puppet.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\python\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\python\python.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\python\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\q\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\q\q.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rpm\changes\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rpm\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rpm\rpm.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rst\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rst\rst.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ruby\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ruby\ruby.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ruby\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rust\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rust\rust.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\rust\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\r\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\r\r.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sass\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sass\sass.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sass\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sas\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sas\sas.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\scheme\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\scheme\scheme.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\shell\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\shell\shell.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\shell\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sieve\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sieve\sieve.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\slim\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\slim\slim.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\slim\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\smalltalk\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\smalltalk\smalltalk.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\smarty\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\smarty\smarty.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\solr\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\solr\solr.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\soy\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\soy\soy.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\soy\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sparql\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sparql\sparql.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\spreadsheet\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\spreadsheet\spreadsheet.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sql\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sql\sql.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\stex\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\stex\stex.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\stex\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\stylus\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\stylus\stylus.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\swift\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\swift\swift.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\swift\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tcl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tcl\tcl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\textile\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\textile\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\textile\textile.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiddlywiki\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiddlywiki\tiddlywiki.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiddlywiki\tiddlywiki.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiki\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiki\tiki.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tiki\tiki.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\toml\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\toml\toml.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tornado\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\tornado\tornado.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\troff\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\troff\troff.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ttcn-cfg\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ttcn-cfg\ttcn-cfg.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ttcn\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\ttcn\ttcn.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\turtle\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\turtle\turtle.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\twig\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\twig\twig.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vbscript\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vbscript\vbscript.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vb\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vb\vb.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\velocity\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\velocity\velocity.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\verilog\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\verilog\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\verilog\verilog.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vhdl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vhdl\vhdl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vue\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\vue\vue.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\wast\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\wast\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\wast\wast.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\webidl\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\webidl\webidl.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xml\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xml\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xml\xml.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xquery\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xquery\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\xquery\xquery.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yacas\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yacas\yacas.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yaml-frontmatter\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yaml-frontmatter\yaml-frontmatter.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yaml\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\yaml\yaml.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\z80\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\z80\z80.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\rollup.config.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\addon\runmode\codemirror-standalone.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\addon\runmode\codemirror.node.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\addon\runmode\runmode-standalone.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\addon\runmode\runmode.node.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\codemirror.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\Display.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\focus.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\gutters.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\highlight_worker.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\line_numbers.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\mode_state.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\operations.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\scrollbars.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\scrolling.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\scroll_events.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\selection.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\update_display.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\update_line.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\update_lines.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\display\view_tracking.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\CodeMirror.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\commands.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\deleteNearSelection.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\drop_events.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\fromTextArea.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\global_events.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\key_events.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\legacy.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\main.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\methods.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\mouse_events.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\options.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\edit\utils.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\ContentEditableInput.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\indent.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\input.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\keymap.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\keynames.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\movement.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\input\TextareaInput.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\highlight.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\line_data.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\pos.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\saw_special_spans.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\spans.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\line\utils_line.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\measurement\position_measurement.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\measurement\widgets.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\changes.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\change_measurement.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\chunk.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\Doc.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\document_data.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\history.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\line_widget.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\mark_text.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\selection.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\model\selection_updates.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\modes.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\bidi.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\browser.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\dom.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\event.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\feature_detection.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\misc.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\operation_group.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\src\util\StringStream.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\annotatescrollbar.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\comment_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\contenteditable_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\doc_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\driver.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\emacs_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\html-hint-test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\index.html" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\lint.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\mode_test.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\mode_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\multi_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\run.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\scroll_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\search_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\sql-hint-test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\sublime_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\test\vim_test.js" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\3024-day.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\3024-night.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\abcdef.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ambiance-mobile.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ambiance.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ayu-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ayu-mirage.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\base16-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\base16-light.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\bespin.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\blackboard.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\cobalt.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\colorforth.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\darcula.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\dracula.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\duotone-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\duotone-light.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\eclipse.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\elegant.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\erlang-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\gruvbox-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\hopscotch.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\icecoder.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\idea.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\isotope.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\lesser-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\liquibyte.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\lucario.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\material-darker.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\material-ocean.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\material-palenight.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\material.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\mbo.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\mdn-like.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\midnight.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\monokai.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\moxer.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\neat.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\neo.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\night.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\nord.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\oceanic-next.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\panda-syntax.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\paraiso-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\paraiso-light.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\pastel-on-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\railscasts.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\rubyblue.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\seti.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\shadowfox.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\solarized.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ssms.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\the-matrix.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\tomorrow-night-bright.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\tomorrow-night-eighties.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\ttcn.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\twilight.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\vibrant-ink.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\xq-dark.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\xq-light.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\yeti.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\yonce.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\zenburn.css" />
+    <Content Include="modules\Gulla.Episerver.SqlStudio\Static\Images\Execute.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

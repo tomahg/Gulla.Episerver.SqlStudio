@@ -1,0 +1,140 @@
+@using System.Web.Mvc.Html
+@using EPiServer.Shell.Navigation
+
+@model Gulla.Episerver.SqlStudio.ViewModels.SqlStudioViewModel
+
+<html>
+<head>
+    <title>@Model.Query</title>
+</head>
+<body style="margin: 0; background-color: #FBFBFB">
+
+@Html.Raw(Html.CreatePlatformNavigationMenu())
+<div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+    <div class="epi-contentArea" style="padding-top: 1.0em">
+        <div style="margin-left: 30px; margin-bottom: 10px;">
+            @if (Model.SavedQueries != null && Model.SavedQueries.Any())
+            {
+                foreach (var category in Model.SavedQueries)
+                {
+                    <select style="padding: 5px 2px;">
+                        <option value="">[@category.Name]</option>
+                        @foreach (var query in category.Queries)
+                        {
+                            <option value="@query.Query">@query.Name</option>
+                        }
+                    </select>
+                }
+            }
+        </div>
+
+
+        @using (Html.BeginForm())
+        {
+            <span class="epi-cmsButton" style="margin-left: 30px; margin-bottom: 10px;">
+                <input type="submit" name="Execute" value="Execute query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check"/>
+            </span>
+            <span>
+                @Html.CheckBoxFor(m => m.HideEmptyColumns) <label for="HideEmptyColumns">Hide empty columns</label>
+            </span>
+
+            <div>
+                <textarea id="query" name="query">@Html.Raw(Model.Query)</textarea>
+            </div>
+        }
+
+        @if (Model.SqlResult != null && Model.SqlResult.Any())
+        {
+            <div style="padding: 0 30px">
+                <table class="stripe cell-border" id="result">
+                    <thead>
+                    <tr>
+                        @foreach (var headerColumn in Model.SqlResult.First())
+                        {
+                            <th>@headerColumn</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var row in Model.SqlResult.Skip(1))
+                    {
+                        <tr>
+                            @foreach (var col in row)
+                            {
+                                <td>@col</td>
+                            }
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div style="margin-left: 30px;">
+                <p><em>@Model.Message</em></p>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.css">
+<link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/hint/show-hint.css"/>
+
+@*https://datatables.net/download/*@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/datatables.min.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/datatables.min.js"></script>
+
+
+<link rel="stylesheet" href="/App_Themes/Default/Styles/ToolButton.css"/>
+
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.js"></script>
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.js"></script>
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/edit/matchbrackets.js"></script>
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/mode/sql/sql.js"></script>
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/hint/show-hint.js"></script>
+<script src="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/hint/sql-hint.js"></script>
+
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('query'),
+        {
+            mode: 'text/x-mssql',
+            indentWithTabs: true,
+            smartIndent: true,
+            lineNumbers: true,
+            matchBrackets: true,
+            autofocus: true,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+            hintOptions: {
+                tables: {
+                    @Html.Raw(Model.SqlAutoCompleteMetadata)
+                }
+            }
+        });
+
+    $(document).ready(function() {
+        $('#result').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'colvis',
+                    collectionLayout: 'fixed two-column'
+                },
+                'csv', 'pdf', 'excel'
+            ]
+        });
+    });
+
+    $('select').on('change',
+        function(e) {
+            editor.getDoc().setValue(this.value);
+            this.selectedIndex = 0;;
+        });
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Gulla.Episerver.SqlStudio</id>
+    <version>1.0.0</version>
+    <title>Gulla.Episerver.SqlStudio</title>
+    <authors>Tomas Hensrud Gulla</authors>
+    <owners>Tomas Hensrud Gulla</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <summary>Adds an admin tool that let you query the SQL database from within Episerver UI.</summary>
+    <copyright>Copyright 2021</copyright>
+    <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio</projectUrl>
+    <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio" branch="main" />
+    <releaseNotes>Initial release</releaseNotes>
+    <tags>episerver,sql</tags>
+    <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.12.0, 12.0.0)" />
+      <dependency id="EPiServer.CMS.UI.Core" version="[11.20.1, 12.0.0)" />
+    </dependencies>
+    <references>
+      <reference file="Gulla.Episerver.SqlStudio.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="Views/index.cshtml" target="content\modules\Gulla.Episerver.SqlStudio\Views\Index.cshtml" />
+    <file src="Views/web.config" target="content\modules\Gulla.Episerver.SqlStudio\Views/web.config" />
+    <file src="bin/Debug/Gulla.Episerver.SqlStudio.dll" target="ref/net471/Gulla.Episerver.SqlStudio.dll" />
+  </files>
+</package>
