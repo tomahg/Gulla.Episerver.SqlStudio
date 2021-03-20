@@ -209,8 +209,10 @@
         function(e) {
             editor.getDoc().setValue(this.value);
             this.selectedIndex = 0;
+            editor.focus();
+            editor.setCursor(editor.lineCount(), 0);
         });
-</script>
+    </script>
 
 </body>
 </html>
