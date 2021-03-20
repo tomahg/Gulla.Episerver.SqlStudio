@@ -9,7 +9,7 @@ This addon will let you query the database directly from Episerver user interfac
 With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is litterally not limts to what you can to with this addon.
 
 ## IntelliSense / AutoComplete
-Autocomplete is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for som special keys. The IntelliSense popup can be closed with [ESC].
+IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
 InstelliSense will show SQL keywords, table names and columns from the last tablename you entered.
 
@@ -57,14 +57,14 @@ In order to insert queries with `'`, simply double them (`''`). Example:
 INSERT INTO SqlQueries VALUES('Jpg-images', 'Content', 'SELECT * FROM tblContentLanguage WHERE URLSegment LIKE ''%.jpg''')
 ```
 
-Will save the query following query:
+Will save the following query:
 ``` SQL
 SELECT * FROM tblContentLanguage WHERE URLSegment LIKE '%.jpg'
 ```
 
 Saved queries will be displayed by category like this:
 
-![Saved queries](img/saved-queries.jpg)
+![Saved queries](img/saved-queries.jpg "Selecting a saved query")
 
 ## Dependencies
 - [CodeMirror](https://codemirror.net/) is used for the editor, and basic IntelliSense.
