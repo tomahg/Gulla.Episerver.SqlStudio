@@ -20,7 +20,16 @@ Automatically displaying InstelliSense on every key-up can be disabled with this
 
 You can allways trigger IntelliSense with [CTRL] + [SPACE].
 
-![Autocomplete table name](img/autocomplete.jpg) ![Autocomplete column name](img/autocomplete-column.jpg)
+![IntelliSense on table name](img/autocomplete.jpg "IntelliSense complete on table names")
+![IntelliSense on column name](img/autocomplete-column.jpg "IntelliSense on column names")
+
+## Light mode
+The default editor is dark mode, but dark mode can be disabled with the following appsetting.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:DarkMode.Enabled" value="false" />
+```
+![Light mode](img/lightmode.jpg "Light mode")
+
 
 ## Access control and configuration
 The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.

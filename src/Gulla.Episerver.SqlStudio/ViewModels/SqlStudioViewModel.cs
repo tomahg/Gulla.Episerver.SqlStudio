@@ -12,5 +12,6 @@ namespace Gulla.Episerver.SqlStudio.ViewModels
         public string Message;
         public bool HideEmptyColumns;
         public bool AutoIntelliSense;
+        public bool DarkMode;
     }
 }

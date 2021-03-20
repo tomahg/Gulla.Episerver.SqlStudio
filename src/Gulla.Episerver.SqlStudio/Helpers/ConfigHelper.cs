@@ -21,5 +21,11 @@ namespace Gulla.Episerver.SqlStudio.Helpers
             var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled"];
             return value == null || bool.Parse(value);
         }
+
+        public static bool DarkModeEnabled()
+        {
+            var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:DarkMode.Enabled"];
+            return value == null || bool.Parse(value);
+        }
     }
 }

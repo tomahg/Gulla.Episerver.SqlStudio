@@ -31,7 +31,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>(),
                 SqlAutoCompleteMetadata = _sqlService.GetMetaData(),
                 SqlTableNameMap = _sqlService.TableNameMap(),
-                AutoIntelliSense = ConfigHelper.AutoHintEnabled()
+                AutoIntelliSense = ConfigHelper.AutoHintEnabled(),
+                DarkMode = ConfigHelper.DarkModeEnabled()
             };
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
@@ -64,6 +65,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             model.SqlAutoCompleteMetadata = _sqlService.GetMetaData();
             model.SqlTableNameMap = _sqlService.TableNameMap();
             model.AutoIntelliSense = ConfigHelper.AutoHintEnabled();
+            model.DarkMode = ConfigHelper.DarkModeEnabled();
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }
