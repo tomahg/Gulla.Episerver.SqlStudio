@@ -69,3 +69,6 @@ Saved queries will be displayed by category like this:
 ## Dependencies
 - [CodeMirror](https://codemirror.net/) is used for the editor, and basic IntelliSense.
 - [DataTables](https://datatables.net/) is used for displaying the result, and export to CSV, PDF and Excel.
+
+## Contribute
+You are welcome to register an issue, or create a pull request, if you see something that should be improved.
