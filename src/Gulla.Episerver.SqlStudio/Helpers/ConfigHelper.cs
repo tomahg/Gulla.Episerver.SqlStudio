@@ -15,5 +15,11 @@ namespace Gulla.Episerver.SqlStudio.Helpers
             var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:Enabled"];
             return value == null || bool.Parse(value);
         }
+
+        public static bool AutoHintEnabled()
+        {
+            var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled"];
+            return value == null || bool.Parse(value);
+        }
     }
 }

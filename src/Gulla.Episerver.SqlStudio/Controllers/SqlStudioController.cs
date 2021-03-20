@@ -28,8 +28,10 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
             var model = new SqlStudioViewModel
             {
+                SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>(),
                 SqlAutoCompleteMetadata = _sqlService.GetMetaData(),
-                SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>()
+                SqlTableNameMap = _sqlService.TableNameMap(),
+                AutoIntelliSense = ConfigHelper.AutoHintEnabled()
             };
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
@@ -60,6 +62,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             // If the SQL query updates the table 'SqlQueries', or other table columns - this must be called at the very end.
             model.SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>();
             model.SqlAutoCompleteMetadata = _sqlService.GetMetaData();
+            model.SqlTableNameMap = _sqlService.TableNameMap();
+            model.AutoIntelliSense = ConfigHelper.AutoHintEnabled();
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }

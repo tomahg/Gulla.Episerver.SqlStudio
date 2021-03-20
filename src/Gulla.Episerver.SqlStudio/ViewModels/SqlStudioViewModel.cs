@@ -6,9 +6,11 @@ namespace Gulla.Episerver.SqlStudio.ViewModels
     {
         public string Query;
         public string SqlAutoCompleteMetadata;
+        public string SqlTableNameMap;
         public IEnumerable<SqlQueryCategory> SavedQueries;
         public IEnumerable<IEnumerable<string>> SqlResult;
         public string Message;
         public bool HideEmptyColumns;
+        public bool AutoIntelliSense;
     }
 }

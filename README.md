@@ -1,17 +1,26 @@
 # Gulla.Episerver.SqlStudio
 
 ## Intro
-This addon will let you query the database directly from Episerver user interface. The result set can be exported to Excel, CSV or PDF.
+This addon will let you query the database directly from Episerver user interface. The result Innnset can be exported to Excel, CSV or PDF.
 
 ![Addon gui](img/gui.jpg)
 
 ## Warning
 With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is litterally not limts to what you can to with this addon.
 
-## Autocomplete
-Autocomplete is added for all tables in the database, both Episerver tables and any custom tables you might have. Trigger autocomplete with [CTRL] + [SPACE].
+## IntelliSense / AutoComplete
+Autocomplete is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for som special keys. The IntelliSense popup can be closed with [ESC].
 
-![Autocomplete](img/autocomplete.jpg)
+InstelliSense will show SQL keywords, table names and columns from the last tablename you entered.
+
+Automatically displaying InstelliSense on every key-up can be disabled with this appsetting.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled" value="false" />
+```
+
+You can allways trigger IntelliSense with [CTRL] + [SPACE].
+
+![Autocomplete table name](img/autocomplete.jpg) ![Autocomplete column name](img/autocomplete-column.jpg)
 
 ## Access control and configuration
 The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.

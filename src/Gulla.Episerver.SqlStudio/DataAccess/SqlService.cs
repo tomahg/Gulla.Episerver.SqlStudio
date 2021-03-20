@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -34,6 +35,20 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         public string GetMetaData()
         {
             return string.Join(",\r\n", GetMetaDataRows(true));
+        }
+
+        public string TableNameMap()
+        {
+            return string.Join(",\r\n", GetTableNameMapRows());
+        }
+
+        private IEnumerable<string> GetTableNameMapRows()
+        {
+            var tableNames = GetTableNames();
+            foreach (var tableName in tableNames)
+            {
+                yield return $"\t\t\"{tableName.ToUpper()}\" : \"{tableName}\"";
+            }
         }
 
         private IEnumerable<string> GetMetaDataRows(bool wrap = false)
