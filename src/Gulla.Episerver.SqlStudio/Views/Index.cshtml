@@ -46,7 +46,7 @@
                 @if (Model.SqlResult != null && Model.SqlResult.Any())
                 {
                     <div style="padding: 0 30px">
-                        <table class="stripe cell-border" id="result">
+                        <table class="stripe cell-border" id="result" style="font-size: 80%;">
                             <thead>
                                 <tr>
                                     @foreach (var headerColumn in Model.SqlResult.First())
