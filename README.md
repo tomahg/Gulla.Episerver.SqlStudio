@@ -22,8 +22,8 @@ Automatically displaying InstelliSense on every key-up can be disabled with this
 
 You can allways trigger IntelliSense with [CTRL] + [SPACE].
 
-![IntelliSense on table name](img/autocomplete.jpg "IntelliSense complete on table names")
-![IntelliSense on column name](img/autocomplete-column.jpg "IntelliSense on column names")
+![IntelliSense on table name](img/autocomplete-table.png "IntelliSense complete on table names")
+![IntelliSense on column name](img/autocomplete-column.png "IntelliSense on column names")
 
 ## Light mode
 The default editor is dark mode, but dark mode can be disabled with the following appsetting.
