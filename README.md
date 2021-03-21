@@ -3,6 +3,8 @@
 ## Intro
 This addon will let you query the database directly from Episerver user interface. The result Innnset can be exported to Excel, CSV or PDF.
 
+Enter your query, execute it with the execute-button - or hit F5 like in Microsoft SQL Management Sudio.
+
 ![Addon gui](img/gui.jpg)
 
 ## Warning

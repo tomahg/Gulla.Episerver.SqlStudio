@@ -32,7 +32,7 @@
                 @using (Html.BeginForm())
                 {
                     <span class="epi-cmsButton" style="margin-left: 30px; margin-bottom: 10px;">
-                        <input type="submit" name="Execute" value="Execute query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" />
+                        <input type="submit" id="submit" name="Execute" value="Execute query" title="Execute (F5)" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" />
                     </span>
                     <span>
                         @Html.CheckBoxFor(m => m.HideEmptyColumns) <label for="HideEmptyColumns">Hide empty columns</label>
@@ -184,6 +184,13 @@
             "222": "quote"
         }
 
+        $(window).keydown(function(event){
+            if(event.keyCode === 116) { // F5
+                event.preventDefault();
+                return false;
+            }
+        });
+
         editor.on("keyup", function (editor, event) {
             var __Cursor = editor.getDoc().getCursor();
             var __Token = editor.getTokenAt(__Cursor);
@@ -195,6 +202,10 @@
             if (editor.options.hintOptions.tables[tableNameMap[__Token.string.toUpperCase()]]) {
                 editor.options.hintOptions.defaultTable = __Token.string;
                 console.log("Default table: " + __Token.string);
+            }
+
+            if (event.keyCode === 116) { // F5
+                $("#submit").click();
             }
         });
 
