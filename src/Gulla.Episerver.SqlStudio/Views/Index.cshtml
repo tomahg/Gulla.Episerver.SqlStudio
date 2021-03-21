@@ -84,7 +84,9 @@
         <link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.css">
         <link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/hint/show-hint.css" />
         @if (Model.DarkMode)
-        {<link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/theme/colorforth.css" />}
+        {
+            <link rel="stylesheet" href="/Modules/Gulla.Episerver.SqlStudio/codemirror-5.59.4/theme/colorforth.css" />
+        }
 
 
         @*https://datatables.net/download/*@
@@ -114,6 +116,7 @@
                 matchBrackets: true,
                 autoCloseBrackets: true,
                 autofocus: true,
+                theme: darkMode ? "colorforth" : "default",
                 extraKeys: { "Ctrl-Space": "autocomplete" },
                 hintOptions: {
                     tables: {
@@ -121,10 +124,6 @@
                     }
                 }
             });
-
-        if (darkMode) {
-            editor.options.theme = "colorforth";
-        }
 
         var tableNameMap = {
             @Html.Raw(Model.SqlTableNameMap)
