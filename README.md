@@ -1,14 +1,14 @@
 # Gulla.Episerver.SqlStudio
 
+## Warning
+With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is litterally not limts to what you can to with this addon.
+
 ## Intro
 This addon will let you query the database directly from Episerver user interface. The result Innnset can be exported to Excel, CSV or PDF.
 
 Enter your query, execute it with the execute-button - or hit F5 like in Microsoft SQL Management Sudio.
 
 ![Addon gui](img/gui.jpg)
-
-## Warning
-With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is litterally not limts to what you can to with this addon.
 
 ## IntelliSense / AutoComplete
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
