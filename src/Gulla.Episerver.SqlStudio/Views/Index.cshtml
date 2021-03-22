@@ -1,4 +1,5 @@
 @using System.Web.Mvc.Html
+@using EPiServer.Framework.Web.Resources
 @using EPiServer.Shell.Navigation
 
 @model Gulla.Episerver.SqlStudio.ViewModels.SqlStudioViewModel
@@ -6,8 +7,25 @@
 <html>
     <head>
         <title>@Model.Query</title>
+        @Html.Raw(ClientResources.RenderResources("ShellCore"))
+        @Html.Raw(ClientResources.RenderResources("ShellCoreLightTheme"))
+        <link href="~/App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet">
+        <link href="~/App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet">       
+        
+        <style>
+            body {
+                margin: 0;
+                background-color: #FBFBFB
+            }
+            span.cm-keyword, span.cm-atom, span.cm-builtin {
+                text-transform: uppercase;
+            }
+            .cm-s-colorforth span.cm-atom {
+                color: #7777ff !important;
+            }
+        </style>
     </head>
-    <body style="margin: 0; background-color: #FBFBFB">
+    <body>
 
         @Html.Raw(Html.CreatePlatformNavigationMenu())
         <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
