@@ -12,22 +12,22 @@
         @Html.Raw(Html.CreatePlatformNavigationMenu())
         <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
             <div class="epi-contentArea" style="padding-top: 1.0em">
-                <div style="margin-left: 30px; margin-bottom: 10px;">
-                    @if (Model.SavedQueries != null && Model.SavedQueries.Any())
-                    {
-                        foreach (var category in Model.SavedQueries)
-                        {
-                            <select style="padding: 5px 2px;">
-                                <option value="">[@category.Name]</option>
-                                @foreach (var query in category.Queries)
-                                {
-                                    <option value="@query.Query">@query.Name</option>
-                                }
-                            </select>
-                        }
-                    }
-                </div>
+            @if (Model.SavedQueries != null && Model.SavedQueries.Any())
+                {
+                    <div style="margin-left: 30px; margin-bottom: 10px;">
 
+                            @foreach (var category in Model.SavedQueries)
+                            {
+                                <select style="padding: 5px 2px;">
+                                    <option value="">[@category.Name]</option>
+                                    @foreach (var query in category.Queries)
+                                    {
+                                        <option value="@query.Query">@query.Name</option>
+                                    }
+                                </select>
+                            }
+                    </div>
+                }
 
                 @using (Html.BeginForm())
                 {
