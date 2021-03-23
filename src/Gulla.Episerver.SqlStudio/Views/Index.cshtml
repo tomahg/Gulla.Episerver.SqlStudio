@@ -1,5 +1,4 @@
 @using System.Web.Mvc.Html
-@using EPiServer.Framework.Web.Resources
 @using EPiServer.Shell.Navigation
 
 @model Gulla.Episerver.SqlStudio.ViewModels.SqlStudioViewModel
@@ -7,9 +6,6 @@
 <html>
     <head>
         <title>@Model.Query</title>
-        @Html.Raw(ClientResources.RenderResources("ShellCore"))
-        @Html.Raw(ClientResources.RenderResources("ShellCoreLightTheme"))
-        <link href="~/App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet">
         <link href="~/App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet">       
         
         <style>
@@ -21,7 +17,7 @@
                 text-transform: uppercase;
             }
             .cm-s-colorforth span.cm-atom {
-                color: #7777ff !important;
+                color: #ffd900 !important;
             }
         </style>
     </head>
