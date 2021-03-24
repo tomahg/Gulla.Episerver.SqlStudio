@@ -26,20 +26,20 @@
         @Html.Raw(Html.CreatePlatformNavigationMenu())
         <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
             <div class="epi-contentArea" style="padding-top: 1.0em">
-            @if (Model.SavedQueries != null && Model.SavedQueries.Any())
+                @if (Model.SavedQueries != null && Model.SavedQueries.Any())
                 {
                     <div style="margin-left: 30px; margin-bottom: 10px;">
 
-                            @foreach (var category in Model.SavedQueries)
-                            {
-                                <select style="padding: 5px 2px;">
-                                    <option value="">[@category.Name]</option>
-                                    @foreach (var query in category.Queries)
-                                    {
-                                        <option value="@query.Query">@query.Name</option>
-                                    }
-                                </select>
-                            }
+                        @foreach (var category in Model.SavedQueries)
+                        {
+                            <select style="padding: 5px 2px;">
+                                <option value="">[@category.Name]</option>
+                                @foreach (var query in category.Queries)
+                                {
+                                    <option value="@query.Query">@query.Name</option>
+                                }
+                            </select>
+                        }
                     </div>
                 }
 
@@ -57,7 +57,7 @@
                     </div>
                 }
 
-                @if (Model.SqlResult != null && Model.SqlResult.Any())
+                @if (Model.SqlResult?.FirstOrDefault()?.Any() == true)
                 {
                     <div style="padding: 0 30px">
                         <table class="stripe cell-border" id="result" style="font-size: 80%;">
@@ -81,6 +81,12 @@
                                 }
                             </tbody>
                         </table>
+                    </div>
+                }
+                else if (Model.SqlResult?.Any() == true)
+                {
+                    <div style="margin-left: 30px;">
+                        <p><em>Query executed.</em></p>
                     </div>
                 }
                 else if (!string.IsNullOrEmpty(Model.Message))
