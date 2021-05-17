@@ -27,5 +27,26 @@ namespace Gulla.Episerver.SqlStudio.Helpers
             var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:DarkMode.Enabled"];
             return value == null || bool.Parse(value);
         }
+
+        public static string AllowPattern()
+        {
+            return WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:AllowPattern"];
+        }
+
+        public static string AllowMessage()
+        {
+            return WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:AllowMessage"];
+        }
+
+
+        public static string DenyPattern()
+        {
+            return WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:DenyPattern"];
+        }
+
+        public static string DenyMessage()
+        {
+            return WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:DenyMessage"];
+        }
     }
 }

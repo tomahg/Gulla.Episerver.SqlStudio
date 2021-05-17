@@ -39,6 +39,18 @@ The addon is only available for users in the group `SqlAdmin`. Other users will 
 <add key="Gulla.Episerver.SqlStudio:Enabled" value="false" />
 ```
 
+You can control what queries are allowed by providing a regular expression, that will be valdated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:AllowPattern" value="^\s*SELECT.*" />
+<add key="Gulla.Episerver.SqlStudio:AllowMessage" value="Nothing but SELECTs please!" />
+```
+
+In the same way, you can also control what queries are denied by providing a regular expressions. Example below.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:DenyPattern" value="^.*DROP.*" />
+<add key="Gulla.Episerver.SqlStudio:DenyMessage" value="No DROPing allowed!" />
+```
+
 ## Saving queries
 To save queries for later, first create a new table. You can do this from within the module. The name of the table and columns must match.
 ``` SQL 

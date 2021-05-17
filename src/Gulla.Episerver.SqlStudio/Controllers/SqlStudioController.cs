@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Helpers;
@@ -51,6 +52,39 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 Query = query,
             };
 
+            // Check for configured allow regex pattern
+            try
+            {
+                var allowPattern = ConfigHelper.AllowPattern();
+                if (!string.IsNullOrEmpty(allowPattern) && !Regex.Match(query, allowPattern, RegexOptions.IgnoreCase).Success)
+                {
+                    model.Message = ConfigHelper.AllowMessage() ?? "Query did not match provided allow pattern.";
+                    return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                }
+            }
+            catch (Exception e)
+            {
+                model.Message = e.Message;
+                return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            }
+
+            // Check for configured deny regex pattern
+            try
+            {
+                var denyPattern = ConfigHelper.DenyPattern();
+                if (!string.IsNullOrEmpty(denyPattern) && Regex.Match(query, denyPattern, RegexOptions.IgnoreCase).Success)
+                {
+                    model.Message = ConfigHelper.DenyMessage() ?? "Query matched provided deny pattern.";
+                    return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                }
+            }
+            catch (Exception e)
+            {
+                model.Message = e.Message;
+                return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            }
+
+            // Execute query
             try
             {
                 model.SqlResult = _sqlService.ExecuteQuery(query)?.HideEmptyColumns(hideEmptyColumns)?.ToList();
