@@ -1,7 +1,7 @@
 # Gulla.Episerver.SqlStudio
 
 ## Warning
-With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#access-control-and-configuration).
+With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#a-safety-net).
 
 ## Intro
 This addon will let you query the database directly from Episerver user interface. The result Innnset can be exported to Excel, CSV or PDF.
@@ -33,13 +33,13 @@ The default editor is dark mode, but dark mode can be disabled with the followin
 ![Light mode](img/lightmode.jpg "Light mode")
 
 
-## Access control and configuration
+## Access control
 The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:Enabled" value="false" />
 ```
-
-You can control what queries are allowed by providing a regular expression, that will be valdated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
+## A safety net
+You can control what queries are allowed by providing a regular expression that will be valdated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:AllowPattern" value="^\s*SELECT.*" />
 <add key="Gulla.Episerver.SqlStudio:AllowMessage" value="Nothing but SELECTs please!" />
