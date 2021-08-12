@@ -44,6 +44,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Index(string query, bool hideEmptyColumns, 
             int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
             int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading)

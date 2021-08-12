@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.SqlStudio</id>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <title>Gulla.Episerver.SqlStudio</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
@@ -12,7 +12,7 @@
     <copyright>Copyright 2021</copyright>
     <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
-    <releaseNotes>Bug fixes.</releaseNotes>
+    <releaseNotes>Allow posting queries with special characters.</releaseNotes>
     <tags>episerver,sql</tags>
     <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
     <dependencies>
