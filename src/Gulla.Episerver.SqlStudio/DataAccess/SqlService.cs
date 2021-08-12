@@ -82,12 +82,19 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
                     var contentName = "";
                     var rowAsList = row.ToList();
                     var contentIdString = rowAsList.ElementAt(contentIdIndex);
-                    var language = new CultureInfo(languages.Single(x => x.ID == int.Parse(rowAsList.ElementAt(languangeBranchIdIndex))).LanguageID);
-                    if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                    if (rowAsList.Count > languangeBranchIdIndex && int.TryParse(rowAsList.ElementAt(languangeBranchIdIndex), out int languageBranchId))
                     {
-                        if (_contentLoader.TryGet(new ContentReference(contentId), language, out IContent content))
+                        var languageBranch = languages.SingleOrDefault(x => x.ID == languageBranchId);
+                        if (languageBranch != null)
                         {
-                            contentName = content.Name;
+                            var language = new CultureInfo(languageBranch.LanguageID);
+                            if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                            {
+                                if (_contentLoader.TryGet(new ContentReference(contentId), language, out IContent content))
+                                {
+                                    contentName = content.Name;
+                                }
+                            }
                         }
                     }
                     rowAsList.Insert(insertNewColumnAtIndexAdjusted, contentName);
@@ -127,13 +134,16 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
                 {
                     var url = "";
                     var rowAsList = row.ToList();
-                    if (int.TryParse(rowAsList.ElementAt(languangeBranchIdIndex), out int languageId))
+                    if (rowAsList.Count > languangeBranchIdIndex && int.TryParse(rowAsList.ElementAt(languangeBranchIdIndex), out int languageId))
                     {
                         var language = languages.SingleOrDefault(x => x.ID == languageId)?.LanguageID;
-                        var contentIdString = rowAsList.ElementAt(contentIdIndex);
-                        if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                        if (!string.IsNullOrEmpty(language))
                         {
-                            url = GetExternalUrl(new ContentReference(int.Parse(rowAsList.ElementAt(contentIdIndex))), language);
+                            var contentIdString = rowAsList.ElementAt(contentIdIndex);
+                            if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                            {
+                                url = GetExternalUrl(new ContentReference(contentId), language);
+                            }
                         }
                     }
                     rowAsList.Insert(insertNewColumnAtIndexAdjusted, url);
