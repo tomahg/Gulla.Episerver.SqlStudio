@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Data;
@@ -126,11 +127,14 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
                 {
                     var url = "";
                     var rowAsList = row.ToList();
-                    var language = languages.SingleOrDefault(x => x.ID == int.Parse(rowAsList.ElementAt(languangeBranchIdIndex)))?.LanguageID;
-                    var contentIdString = rowAsList.ElementAt(contentIdIndex);
-                    if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                    if (int.TryParse(rowAsList.ElementAt(languangeBranchIdIndex), out int languageId))
                     {
-                        url = GetExternalUrl(new ContentReference(int.Parse(rowAsList.ElementAt(contentIdIndex))), language);
+                        var language = languages.SingleOrDefault(x => x.ID == languageId)?.LanguageID;
+                        var contentIdString = rowAsList.ElementAt(contentIdIndex);
+                        if (!string.IsNullOrEmpty(contentIdString) && int.TryParse(contentIdString, out int contentId))
+                        {
+                            url = GetExternalUrl(new ContentReference(int.Parse(rowAsList.ElementAt(contentIdIndex))), language);
+                        }
                     }
                     rowAsList.Insert(insertNewColumnAtIndexAdjusted, url);
                     yield return rowAsList;
@@ -147,10 +151,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (!string.IsNullOrEmpty(result) && Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var siteDefinition = _siteDefinitionResolver.GetByContent(contentLink, true, true);
-                var baseUri = siteDefinition.GetHosts(language, true).Where(x => x.Url != null).First();
-                var absoluteUri = new Uri(baseUri.Url, relativeUri);
-
+                var absoluteUri = new Uri(HttpContext.Current.Request.Url, relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 
@@ -163,10 +164,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var siteDefinition = _siteDefinitionResolver.GetByContent(contentLink, true, true);
-                var baseUri = siteDefinition.GetHosts(new CultureInfo(language), true).Where(x => x.Url != null).First();
-                var absoluteUri = new Uri(baseUri.Url, relativeUri);
-
+                var absoluteUri = new Uri(HttpContext.Current.Request.Url, relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 
