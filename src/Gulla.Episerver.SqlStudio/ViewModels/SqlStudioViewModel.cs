@@ -13,5 +13,16 @@ namespace Gulla.Episerver.SqlStudio.ViewModels
         public bool HideEmptyColumns;
         public bool AutoIntelliSense;
         public bool DarkMode;
+        public IEnumerable<Column> ColumnsContentId;
+        public IEnumerable<Column> ColumnsLanguageBranchId;
+        public IEnumerable<Column> ColumnsInsertIndex;
+        public int ContentNameIndex;
+        public int ContentNameLanguageIndex;
+        public int ContentNameInsertIndex;
+        public string ContentNameHeading;
+        public int ContentLinkIndex;
+        public int ContentLinkLanguageIndex;
+        public int ContentLinkInsertIndex;
+        public string ContentLinkHeading;
     }
 }

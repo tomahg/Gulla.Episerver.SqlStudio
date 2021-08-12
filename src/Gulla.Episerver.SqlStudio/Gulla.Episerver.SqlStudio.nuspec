@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.SqlStudio</id>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
     <title>Gulla.Episerver.SqlStudio</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
@@ -12,7 +12,7 @@
     <copyright>Copyright 2021</copyright>
     <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
-    <releaseNotes>Add safety net to make it possible to limit type of queries.</releaseNotes>
+    <releaseNotes>Add custom columns (episerver pagename and episerver page url).</releaseNotes>
     <tags>episerver,sql</tags>
     <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
     <dependencies>

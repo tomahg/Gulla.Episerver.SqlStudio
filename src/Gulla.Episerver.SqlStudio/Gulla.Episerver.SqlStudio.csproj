@@ -165,10 +165,12 @@
     <Compile Include="DataAccess\DataReaderExtensions.cs" />
     <Compile Include="DataAccess\QueryLoader.cs" />
     <Compile Include="DataAccess\SqlService.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="Initialization\RouteInitialization.cs" />
     <Compile Include="Menu\MenuProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Column.cs" />
     <Compile Include="ViewModels\SqlQuery.cs" />
     <Compile Include="ViewModels\SqlQueryCategory.cs" />
     <Compile Include="ViewModels\SqlStudioViewModel.cs" />

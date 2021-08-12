@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Gulla.Episerver.SqlStudio.DataAccess;
+using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.Helpers;
 using Gulla.Episerver.SqlStudio.ViewModels;
 
@@ -29,6 +30,9 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
             var model = new SqlStudioViewModel
             {
+                ColumnsContentId = Enumerable.Empty<Column>(),
+                ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
+                ColumnsInsertIndex = Enumerable.Empty<Column>(),
                 SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>(),
                 SqlAutoCompleteMetadata = _sqlService.GetMetaData(),
                 SqlTableNameMap = _sqlService.TableNameMap(),
@@ -40,16 +44,53 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string query, bool hideEmptyColumns)
+        public ActionResult Index(string query, bool hideEmptyColumns, 
+            int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
+            int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading)
         {
             if (!ConfigHelper.Enabled())
             {
                 return new HttpUnauthorizedResult();
             }
 
+            // Adjusting for indexes, if more than one custom column is used. Not too happy with this.
+            int contentNameIndexAdjusted = contentNameIndex ?? -1;
+            int contentNameLanguageIndexAdjusted = contentNameLanguageIndex ?? -1;
+            int contentNameInsertIndexAdjusted = contentNameInsertIndex ?? -1;
+            int contentLinkInsertIndexAdjusted = contentLinkInsertIndex ?? -1;
+            int contentLinkLanguageIndexAdjusted = contentLinkLanguageIndex ?? -1;
+            int contentLinkIndexAdjusted = contentLinkIndex ?? -1;
+
+            if (contentNameIndexAdjusted != -1 && contentNameInsertIndexAdjusted != -1 && contentLinkIndexAdjusted != -1)
+            {
+                if (contentNameInsertIndexAdjusted <= contentLinkIndexAdjusted)
+                {
+                    contentLinkIndexAdjusted++;
+                }
+                if (contentNameInsertIndexAdjusted <= contentLinkLanguageIndexAdjusted)
+                {
+                    contentLinkLanguageIndexAdjusted++;
+                }
+                if (contentNameInsertIndexAdjusted <= contentLinkInsertIndexAdjusted)
+                {
+                    contentLinkInsertIndexAdjusted++;
+                }
+            }
+
             var model = new SqlStudioViewModel
             {
                 Query = query,
+                ContentNameIndex = contentNameIndexAdjusted,
+                ContentNameLanguageIndex = contentNameLanguageIndexAdjusted,
+                ContentNameInsertIndex = contentNameInsertIndexAdjusted,
+                ContentNameHeading = contentNameHeading,
+                ContentLinkIndex = contentLinkIndexAdjusted,
+                ContentLinkLanguageIndex = contentLinkLanguageIndexAdjusted,
+                ContentLinkInsertIndex = contentLinkInsertIndexAdjusted,
+                ContentLinkHeading = contentLinkHeading,
+                ColumnsContentId = Enumerable.Empty<Column>(),
+                ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
+                ColumnsInsertIndex = Enumerable.Empty<Column>()
             };
 
             // Check for configured allow regex pattern
@@ -88,6 +129,20 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             try
             {
                 model.SqlResult = _sqlService.ExecuteQuery(query)?.HideEmptyColumns(hideEmptyColumns)?.ToList();
+                
+                model.ColumnsContentId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with content id]");
+                model.ColumnsLanguageBranchId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with language branch id (optional)]");
+                model.ColumnsInsertIndex = model.SqlResult.FirstOrDefault()?.GetColumnListForInserting("[Select where to insert column (default last)]");
+
+                if (model.ContentNameIndex != -1)
+                {
+                    model.SqlResult = _sqlService.AddContentName(model.SqlResult, model.ContentNameInsertIndex, model.ContentNameHeading, model.ContentNameIndex, model.ContentNameLanguageIndex);
+                }
+                
+                if (model.ContentLinkIndex != -1)
+                {
+                    model.SqlResult = _sqlService.AddContentLink(model.SqlResult, model.ContentLinkInsertIndex, model.ContentLinkHeading, model.ContentLinkIndex, model.ContentLinkLanguageIndex);
+                }
             }
             catch (Exception e)
             {
