@@ -38,6 +38,12 @@ The addon is only available for users in the group `SqlAdmin`. Other users will 
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:Enabled" value="false" />
 ```
+
+The addon can also be made available to users not in the group `SqlAdmin` by listing their user names like this.
+``` XML
+<add key="Gulla.Episerver.SqlStudio:Users" value="UserName1,UserName2,UserName3" />
+```
+
 ## A safety net
 You can control what queries are allowed by providing a regular expression that will be valdated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
 ``` XML

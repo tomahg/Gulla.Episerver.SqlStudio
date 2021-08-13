@@ -9,7 +9,6 @@ using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
-    [Authorize(Roles = "SqlAdmin")]
     public class SqlStudioController : Controller
     {
         private readonly SqlService _sqlService;

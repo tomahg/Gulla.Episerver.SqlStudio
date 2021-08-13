@@ -1,4 +1,6 @@
-﻿using System.Web.Configuration;
+﻿using System;
+using System.Linq;
+using System.Web.Configuration;
 using EPiServer.Security;
 
 namespace Gulla.Episerver.SqlStudio.Helpers
@@ -7,13 +9,28 @@ namespace Gulla.Episerver.SqlStudio.Helpers
     {
         public static bool Enabled()
         {
-            if (!PrincipalInfo.Current.RoleList.Contains("SqlAdmin"))
+            var enabledConfigValue = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:Enabled"];
+            if (!string.IsNullOrEmpty(enabledConfigValue) && enabledConfigValue.Equals("false", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
 
-            var value = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:Enabled"];
-            return value == null || bool.Parse(value);
+            if (PrincipalInfo.Current.RoleList.Contains("SqlAdmin"))
+            {
+                return true;
+            }
+
+            var usersConfigValue = WebConfigurationManager.AppSettings["Gulla.Episerver.SqlStudio:Users"];
+            if (!string.IsNullOrEmpty(usersConfigValue))
+            {
+                var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                if (users.Contains(PrincipalInfo.Current.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool AutoHintEnabled()
