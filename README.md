@@ -4,23 +4,23 @@
 With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#a-safety-net).
 
 ## Intro
-This addon will let you query the database directly from Episerver user interface. The result Innnset can be exported to Excel, CSV or PDF.
+This addon will let you query the database directly from Episerver user interface. The result set can be exported to Excel, CSV or PDF.
 
-Enter your query, execute it with the execute-button - or hit F5 like in Microsoft SQL Management Sudio.
+Enter your query, execute it with the execute-button - or hit F5 like in Microsoft SQL Management Studio.
 
 ![Addon gui](img/gui.jpg)
 
 ## IntelliSense / AutoComplete
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
-IntelliSense will show SQL keywords, table names and columns from the last tablename you entered.
+IntelliSense will show SQL keywords, table names and columns from the last table name you entered.
 
 Automatically displaying IntelliSense on every key-up can be disabled with this appsetting.
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled" value="false" />
 ```
 
-You can allways trigger IntelliSense with [CTRL] + [SPACE].
+You can always trigger IntelliSense with [CTRL] + [SPACE].
 
 ![IntelliSense on table name](img/autocomplete-table.png "IntelliSense complete on table names")
 ![IntelliSense on column name](img/autocomplete-column.png "IntelliSense on column names")
@@ -45,7 +45,7 @@ The addon can also be made available to users not in the group `SqlAdmin` by lis
 ```
 
 ## A safety net
-You can control what queries are allowed by providing a regular expression that will be valdated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
+You can control what queries are allowed by providing a regular expression that will be validated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:AllowPattern" value="^\s*SELECT.*" />
 <add key="Gulla.Episerver.SqlStudio:AllowMessage" value="Nothing but SELECTs please!" />
