@@ -13,9 +13,9 @@ Enter your query, execute it with the execute-button - or hit F5 like in Microso
 ## IntelliSense / AutoComplete
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
-InstelliSense will show SQL keywords, table names and columns from the last tablename you entered.
+IntelliSense will show SQL keywords, table names and columns from the last tablename you entered.
 
-Automatically displaying InstelliSense on every key-up can be disabled with this appsetting.
+Automatically displaying IntelliSense on every key-up can be disabled with this appsetting.
 ``` XML
 <add key="Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled" value="false" />
 ```
