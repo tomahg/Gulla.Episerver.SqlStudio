@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using EPiServer.Data;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.Helpers;
@@ -13,11 +14,13 @@ namespace Gulla.Episerver.SqlStudio.Controllers
     {
         private readonly SqlService _sqlService;
         private readonly QueryLoader _queryLoader;
+        private readonly DataAccessOptions _dataAccessOptions;
 
-        public SqlStudioController(SqlService sqlService, QueryLoader queryLoader)
+        public SqlStudioController(SqlService sqlService, QueryLoader queryLoader, DataAccessOptions dataAccessOptions)
         {
             _sqlService = sqlService;
             _queryLoader = queryLoader;
+            _dataAccessOptions = dataAccessOptions;
         }
 
         public ActionResult Index()
@@ -27,17 +30,31 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var connectionstringList = _dataAccessOptions.ConnectionStrings
+                .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
+                .Select(x => new SelectListItem {Text = x.Name, Value = x.ConnectionString}).ToList();
+            var connectionString = connectionstringList.FirstOrDefault()?.Value;
+
             var model = new SqlStudioViewModel
             {
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
-                SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>(),
-                SqlAutoCompleteMetadata = _sqlService.GetMetaData(),
-                SqlTableNameMap = _sqlService.TableNameMap(),
                 AutoIntelliSense = ConfigHelper.AutoHintEnabled(),
-                DarkMode = ConfigHelper.DarkModeEnabled()
+                DarkMode = ConfigHelper.DarkModeEnabled(),
+                ConnectionStrings = connectionstringList
             };
+
+            try
+            {
+                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString).ToList() : Enumerable.Empty<SqlQueryCategory>();
+                model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
+                model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
+            }
+            catch (Exception e)
+            {
+                model.Message = e.Message;
+            }
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }
@@ -46,7 +63,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         [ValidateInput(false)]
         public ActionResult Index(string query, bool hideEmptyColumns, 
             int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
-            int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading)
+            int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading,
+            string connectionString)
         {
             if (!ConfigHelper.Enabled())
             {
@@ -90,7 +108,10 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ContentLinkHeading = contentLinkHeading,
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
-                ColumnsInsertIndex = Enumerable.Empty<Column>()
+                ColumnsInsertIndex = Enumerable.Empty<Column>(),
+                ConnectionStrings = _dataAccessOptions.ConnectionStrings.OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName).Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }),
+                AutoIntelliSense = ConfigHelper.AutoHintEnabled(),
+                DarkMode = ConfigHelper.DarkModeEnabled()
             };
 
             // Check for configured allow regex pattern
@@ -125,36 +146,45 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
             }
 
-            // Execute query
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                // Execute query
+                try
+                {
+                    model.SqlResult = _sqlService.ExecuteQuery(query, connectionString)?.HideEmptyColumns(hideEmptyColumns)?.ToList();
+
+                    model.ColumnsContentId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with content id]");
+                    model.ColumnsLanguageBranchId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with language branch id (optional)]");
+                    model.ColumnsInsertIndex = model.SqlResult.FirstOrDefault()?.GetColumnListForInserting("[Select where to insert column (default last)]");
+
+                    if (model.ContentNameIndex != -1)
+                    {
+                        model.SqlResult = _sqlService.AddContentName(model.SqlResult, model.ContentNameInsertIndex, model.ContentNameHeading, model.ContentNameIndex, model.ContentNameLanguageIndex);
+                    }
+
+                    if (model.ContentLinkIndex != -1)
+                    {
+                        model.SqlResult = _sqlService.AddContentLink(model.SqlResult, model.ContentLinkInsertIndex, model.ContentLinkHeading, model.ContentLinkIndex, model.ContentLinkLanguageIndex);
+                    }
+                }
+                catch (Exception e)
+                {
+                    model.Message = e.Message;
+                }
+            }
+
+            // If the SQL query updates the table 'SqlQueries', or other table columns - this must be called at the very end.
             try
             {
-                model.SqlResult = _sqlService.ExecuteQuery(query)?.HideEmptyColumns(hideEmptyColumns)?.ToList();
-                
-                model.ColumnsContentId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with content id]");
-                model.ColumnsLanguageBranchId = model.SqlResult.FirstOrDefault()?.GetColumnList("[Select column with language branch id (optional)]");
-                model.ColumnsInsertIndex = model.SqlResult.FirstOrDefault()?.GetColumnListForInserting("[Select where to insert column (default last)]");
-
-                if (model.ContentNameIndex != -1)
-                {
-                    model.SqlResult = _sqlService.AddContentName(model.SqlResult, model.ContentNameInsertIndex, model.ContentNameHeading, model.ContentNameIndex, model.ContentNameLanguageIndex);
-                }
-                
-                if (model.ContentLinkIndex != -1)
-                {
-                    model.SqlResult = _sqlService.AddContentLink(model.SqlResult, model.ContentLinkInsertIndex, model.ContentLinkHeading, model.ContentLinkIndex, model.ContentLinkLanguageIndex);
-                }
+                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString).ToList() : Enumerable.Empty<SqlQueryCategory>();
+                model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
+                model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
             }
 
-            // If the SQL query updates the table 'SqlQueries', or other table columns - this must be called at the very end.
-            model.SavedQueries = _sqlService.GetTableNames().Contains("SqlQueries") ? _queryLoader.GetQueries().ToList() : Enumerable.Empty<SqlQueryCategory>();
-            model.SqlAutoCompleteMetadata = _sqlService.GetMetaData();
-            model.SqlTableNameMap = _sqlService.TableNameMap();
-            model.AutoIntelliSense = ConfigHelper.AutoHintEnabled();
-            model.DarkMode = ConfigHelper.DarkModeEnabled();
 
             return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }

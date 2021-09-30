@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using EPiServer.Data;
 
 namespace Gulla.Episerver.SqlStudio.ViewModels
 {
@@ -24,5 +26,7 @@ namespace Gulla.Episerver.SqlStudio.ViewModels
         public int ContentLinkLanguageIndex;
         public int ContentLinkInsertIndex;
         public string ContentLinkHeading;
+        public string ConnectionString;
+        public IEnumerable<SelectListItem> ConnectionStrings;
     }
 }
