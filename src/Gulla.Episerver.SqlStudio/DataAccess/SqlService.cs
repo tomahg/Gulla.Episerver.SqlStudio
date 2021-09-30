@@ -16,9 +16,9 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 {
     public class SqlService
     {
-        private IContentLoader _contentLoader;
-        private ILanguageBranchRepository _languageBranchRepository;
-        private IUrlResolver _urlResolver;
+        private readonly IContentLoader _contentLoader;
+        private readonly ILanguageBranchRepository _languageBranchRepository;
+        private readonly IUrlResolver _urlResolver;
         private ISiteDefinitionResolver _siteDefinitionResolver;
         private IDatabaseExecutor Executor { get; }
 
@@ -50,7 +50,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         public IEnumerable<IEnumerable<string>> AddContentName(IEnumerable<IEnumerable<string>> result, int insertNewColumnAtIndex, string heading, int contentIdIndex, int languangeBranchIdIndex)
         {
             var headings = result.First().ToList();
-            int insertNewColumnAtIndexAdjusted = insertNewColumnAtIndex == -1 ? headings.Count() : insertNewColumnAtIndex;
+            int insertNewColumnAtIndexAdjusted = insertNewColumnAtIndex == -1 ? headings.Count : insertNewColumnAtIndex;
 
             headings.Insert(insertNewColumnAtIndexAdjusted, heading);
             yield return headings;
