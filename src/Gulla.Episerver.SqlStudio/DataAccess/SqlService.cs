@@ -7,9 +7,7 @@ using System.Linq;
 using System.Web;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.Data;
 using EPiServer.DataAbstraction;
-using EPiServer.Web;
 using EPiServer.Web.Routing;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
@@ -19,32 +17,35 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         private readonly IContentLoader _contentLoader;
         private readonly ILanguageBranchRepository _languageBranchRepository;
         private readonly IUrlResolver _urlResolver;
-        private ISiteDefinitionResolver _siteDefinitionResolver;
-        private IDatabaseExecutor Executor { get; }
 
-        public SqlService(IDatabaseExecutor databaseExecutor, IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver, ISiteDefinitionResolver siteDefinitionResolver)
+        public SqlService( IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver)
         {
-            Executor = databaseExecutor;
             _contentLoader = contentLoader;
             _languageBranchRepository = languageBranchRepository;
             _urlResolver = urlResolver;
-            _siteDefinitionResolver = siteDefinitionResolver;
         }
 
-        public IEnumerable<IEnumerable<string>> ExecuteQuery(string query)
+        public IEnumerable<IEnumerable<string>> ExecuteQuery(string query, string connectionString)
         {
             if (string.IsNullOrEmpty(query))
             {
                 return null;
             }
 
-            return Executor.Execute(() =>
+            using (var connection = new SqlConnection(connectionString))
             {
-                using (var command = Executor.CreateCommand(query, CommandType.Text))
+                connection.Open();
+                var command = new SqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                try
                 {
-                    return command.ExecuteReader().GetAllColumnsStringListList().ToList();
+                    return reader.GetAllColumnsStringListList().ToList();
                 }
-            });
+                finally
+                {
+                    reader.Close();
+                }
+            }
         }
 
         public IEnumerable<IEnumerable<string>> AddContentName(IEnumerable<IEnumerable<string>> result, int insertNewColumnAtIndex, string heading, int contentIdIndex, int languangeBranchIdIndex)
@@ -181,67 +182,79 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             return result;
         }
 
-        public string GetMetaData()
+        public string GetMetaData(string connectionString)
         {
-            return string.Join(",\r\n", GetMetaDataRows(true));
+            return string.Join(",\r\n", GetMetaDataRows(connectionString, true));
         }
 
-        public string TableNameMap()
+        public string TableNameMap(string connectionString)
         {
-            return string.Join(",\r\n", GetTableNameMapRows());
+            return string.Join(",\r\n", GetTableNameMapRows(connectionString));
         }
 
-        private IEnumerable<string> GetTableNameMapRows()
+        private IEnumerable<string> GetTableNameMapRows(string connectionString)
         {
-            var tableNames = GetTableNames();
+            var tableNames = GetTableNames(connectionString);
             foreach (var tableName in tableNames)
             {
                 yield return $"\t\t\"{tableName.ToUpper()}\" : \"{tableName}\"";
             }
         }
 
-        private IEnumerable<string> GetMetaDataRows(bool wrap = false)
+        private IEnumerable<string> GetMetaDataRows(string connectionString, bool wrap = false)
         {
-            var tableNames = GetTableNames();
+            var tableNames = GetTableNames(connectionString);
             foreach (var tableName in tableNames)
             {
-                yield return $"\t\t\t\t\t{tableName}: [{string.Join(", ", GetColumnNames(tableName, wrap))}]";
+                yield return $"\t\t\t\t\t{tableName}: [{string.Join(", ", GetColumnNames(connectionString, tableName, wrap))}]";
             }
         }
 
-        public IEnumerable<string> GetTableNames()
+        public IEnumerable<string> GetTableNames(string connectionString)
         {
-            return Executor.Execute(() =>
+            var query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME ASC";
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                using (var command = Executor.CreateCommand(
-                    "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME ASC",
-                    CommandType.Text))
+                connection.Open();
+                var command = new SqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                try
                 {
-                    return command.ExecuteReader().GetStringList("TABLE_NAME").ToList();
+                    return reader.GetStringList("TABLE_NAME").ToList();
                 }
-            });
+                finally
+                {
+                    reader.Close();
+                }
+            }
         }
 
-        private IEnumerable<string> GetColumnNames(string tableName, bool wrap = false)
+        private IEnumerable<string> GetColumnNames(string connectionString, string tableName, bool wrap = false)
         {
-            return Executor.Execute(() =>
+            var query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @TableName";
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                using (var command = Executor.CreateCommand(
-                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @TableName",
-                    CommandType.Text
-                    ))
+                connection.Open();
+                var command = new SqlCommand(query, connection);
+                command.Parameters.Add(new SqlParameter
                 {
-                    command.Parameters.Add(new SqlParameter
-                    {
-                        ParameterName = "@TableName",
-                        SqlDbType = SqlDbType.VarChar,
-                        Size = 256,
-                        Value = tableName
-                    });
-                    command.Prepare();
-                    return command.ExecuteReader().GetStringList("COLUMN_NAME", wrap).ToList();
+                    ParameterName = "@TableName",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 256,
+                    Value = tableName
+                });
+                var reader = command.ExecuteReader();
+                try
+                {
+                    return reader.GetStringList("COLUMN_NAME", wrap).ToList();
                 }
-            });
+                finally
+                {
+                    reader.Close();
+                }
+            }
         }
     }
 }

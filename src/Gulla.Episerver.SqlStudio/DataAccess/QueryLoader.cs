@@ -1,31 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using EPiServer.Data;
 using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
 {
     public class QueryLoader
     {
-        private IDatabaseExecutor Executor { get; }
-
-        public QueryLoader(IDatabaseExecutor databaseExecutor)
+        public IEnumerable<SqlQueryCategory> GetQueries(string connectionString)
         {
-            Executor = databaseExecutor;
-        }
+            var query = "SELECT Name, Category, Query FROM SqlQueries ORDER BY Category, Name";
 
-        public IEnumerable<SqlQueryCategory> GetQueries()
-        {
-            return Executor.Execute(() =>
+            using (var connection = new SqlConnection(connectionString))
             {
-                using (var command = Executor.CreateCommand(
-                    "SELECT Name, Category, Query FROM SqlQueries ORDER BY Category, Name",
-                    CommandType.Text))
+                connection.Open();
+                var command = new SqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                try
                 {
-                    return command.ExecuteReader().GetQueryCategoryList().ToList();
+                    return reader.GetQueryCategoryList().ToList();
                 }
-            });
+                finally
+                {
+                    reader.Close();
+                }
+            }
         }
     }
 }
