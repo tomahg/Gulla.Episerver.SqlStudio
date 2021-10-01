@@ -116,7 +116,7 @@
                     </table>
                 </div>
             }
-            else if (Model.SqlResult?.Any() == true)
+            else if (Model.SqlResult != null && Model.SqlResult.Any())
             {
                 <div style="margin-left: 30px;">
                     <p><em>Query executed.</em></p>
