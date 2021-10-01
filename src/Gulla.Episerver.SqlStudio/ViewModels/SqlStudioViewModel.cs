@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
-using EPiServer.Data;
 
 namespace Gulla.Episerver.SqlStudio.ViewModels
 {
@@ -11,6 +11,7 @@ namespace Gulla.Episerver.SqlStudio.ViewModels
         public string SqlTableNameMap;
         public IEnumerable<SqlQueryCategory> SavedQueries;
         public IEnumerable<IEnumerable<string>> SqlResult;
+        public bool HasResults => SqlResult?.FirstOrDefault()?.Any() == true;
         public string Message;
         public bool HideEmptyColumns;
         public bool AutoIntelliSense;

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.SqlStudio</id>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <title>Gulla.Episerver.SqlStudio</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
