@@ -206,7 +206,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             var tableNames = GetTableNames(connectionString);
             foreach (var tableName in tableNames)
             {
-                yield return $"\t\t\t\t\t{tableName}: [{string.Join(", ", GetColumnNames(connectionString, tableName, wrap))}]";
+                yield return $"\t\t\t\t\t\"{tableName}\": [{string.Join(", ", GetColumnNames(connectionString, tableName, wrap))}]";
             }
         }
 
