@@ -1,32 +1,26 @@
 ﻿<?xml version="1.0"?>
 <package >
-  <metadata>
-    <id>Gulla.Episerver.SqlStudio</id>
-    <version>1.2.1</version>
-    <title>Gulla.Episerver.SqlStudio</title>
-    <authors>Tomas Hensrud Gulla</authors>
-    <owners>Tomas Hensrud Gulla</owners>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <license type="expression">MIT</license>
-    <summary>Adds an admin tool that let you query the SQL database from within Episerver UI.</summary>
-    <copyright>Copyright 2021</copyright>
-    <projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
-    <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
-    <releaseNotes>Make it possible to select connection string.</releaseNotes>
-    <tags>episerver,sql</tags>
-    <description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
-    <dependencies>
-      <dependency id="EPiServer.CMS.Core" version="[11.12.0, 12.0.0)" />
-      <dependency id="EPiServer.CMS.UI" version="[11.20.1, 12.0.0)" />
-      <dependency id="EPiServer.CMS.UI.Core" version="[11.20.1, 12.0.0)" />
-    </dependencies>
-    <references>
-      <reference file="Gulla.Episerver.SqlStudio.dll" />
-    </references>
-  </metadata>
-  <files>
-    <file src="Views/index.cshtml" target="content\modules\Gulla.Episerver.SqlStudio\Views\Index.cshtml" />
-    <file src="Views/web.config" target="content\modules\Gulla.Episerver.SqlStudio\Views/web.config" />
-    <file src="bin/Debug/Gulla.Episerver.SqlStudio.dll" target="ref/net471/Gulla.Episerver.SqlStudio.dll" />
-  </files>
+	<metadata>
+		<id>Gulla.Episerver.SqlStudio</id>
+		<version>1.3.0</version>
+		<title>Gulla.Episerver.SqlStudio</title>
+		<authors>Tomas Hensrud Gulla</authors>
+		<owners>Tomas Hensrud Gulla</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<summary>Adds an admin tool that let you query the SQL database from within Episerver UI.</summary>
+		<copyright>Copyright 2021</copyright>
+		<projectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</projectUrl>
+		<repository type="git" url="https://github.com/tomahg/Gulla.Episerver.SqlStudio/" branch="main" />
+		<releaseNotes>Update target framework, as an attempt to support older solution.</releaseNotes>
+		<tags>episerver,sql</tags>
+		<description>Adds an admin tool that let you query the SQL database from within Episerver UI.</description>
+		<dependencies>
+			<group targetFramework=".NETFramework4.6.1">
+				<dependency id="EPiServer.CMS.Core" version="[11.12.0, 12.0.0)" />
+				<dependency id="EPiServer.CMS.UI" version="[11.20.1, 12.0.0)" />
+				<dependency id="EPiServer.CMS.UI.Core" version="[11.20.1, 12.0.0)" />			
+			</group>
+		</dependencies>
+	</metadata>
 </package>
