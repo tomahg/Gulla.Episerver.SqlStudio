@@ -25,6 +25,11 @@ You can always trigger IntelliSense with [CTRL] + [SPACE].
 ![IntelliSense on table name](img/autocomplete-table.png "IntelliSense complete on table names")
 ![IntelliSense on column name](img/autocomplete-column.png "IntelliSense on column names")
 
+## Connection switcher
+If you have more than one database, i.e both Content Cloud and Commerce Cloud, or Content Cloud and a custom database, you are able to select connection string. If you change connection string, the page will reload and intellisense for the new database will be activated
+
+![Connection switcher](img/connectionstring.png "Connection switcher")
+
 ## Light mode
 The default editor is dark mode, but dark mode can be disabled with the following appsetting.
 ``` XML
