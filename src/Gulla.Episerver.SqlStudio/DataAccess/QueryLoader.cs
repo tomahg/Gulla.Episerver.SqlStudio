@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using Gulla.Episerver.SqlStudio.ViewModels;
+using Microsoft.Data.SqlClient;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
 {

@@ -1,48 +1,56 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
 using EPiServer.Data;
+using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Extensions;
-using Gulla.Episerver.SqlStudio.Helpers;
 using Gulla.Episerver.SqlStudio.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
-    public class SqlStudioController : Controller
+    [Route("episerver-sql-studio")]
+    public class ContainerController : Controller
     {
         private readonly SqlService _sqlService;
         private readonly QueryLoader _queryLoader;
         private readonly DataAccessOptions _dataAccessOptions;
+        private readonly ConfigurationService _configurationService;
 
-        public SqlStudioController(SqlService sqlService, QueryLoader queryLoader, DataAccessOptions dataAccessOptions)
+        public ContainerController(SqlService sqlService, QueryLoader queryLoader, DataAccessOptions dataAccessOptions, ConfigurationService configurationService)
         {
             _sqlService = sqlService;
             _queryLoader = queryLoader;
             _dataAccessOptions = dataAccessOptions;
+            _configurationService = configurationService;
         }
 
         public ActionResult Index()
         {
-            if (!ConfigHelper.Enabled())
+            if (!_configurationService.Enabled())
             {
-                return new HttpUnauthorizedResult();
+                return new ObjectResult("Unauthorized")
+                {
+                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                };
             }
 
-            var connectionstringList = _dataAccessOptions.ConnectionStrings
+            var connectionStringList = _dataAccessOptions.ConnectionStrings
                 .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
                 .Select(x => new SelectListItem {Text = x.Name, Value = x.ConnectionString}).ToList();
-            var connectionString = connectionstringList.FirstOrDefault()?.Value;
+            var connectionString = connectionStringList.FirstOrDefault()?.Value;
 
             var model = new SqlStudioViewModel
             {
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
-                AutoIntelliSense = ConfigHelper.AutoHintEnabled(),
-                DarkMode = ConfigHelper.DarkModeEnabled(),
-                ConnectionStrings = connectionstringList
+                AutoIntelliSense = _configurationService.AutoHintEnabled(),
+                DarkMode = _configurationService.DarkModeEnabled(),
+                ConnectionStrings = connectionStringList
             };
 
             try
@@ -56,19 +64,21 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 model.Message = e.Message;
             }
 
-            return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }
 
         [HttpPost]
-        [ValidateInput(false)]
         public ActionResult Index(string query, bool hideEmptyColumns, 
             int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
             int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading,
             string connectionString)
         {
-            if (!ConfigHelper.Enabled())
+            if (!_configurationService.Enabled())
             {
-                return new HttpUnauthorizedResult();
+                return new ObjectResult("Unauthorized")
+                {
+                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                };
             }
 
             // Adjusting for indexes, if more than one custom column is used. Not too happy with this.
@@ -110,40 +120,40 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
                 ConnectionStrings = _dataAccessOptions.ConnectionStrings.OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName).Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }),
-                AutoIntelliSense = ConfigHelper.AutoHintEnabled(),
-                DarkMode = ConfigHelper.DarkModeEnabled()
+                AutoIntelliSense = _configurationService.AutoHintEnabled(),
+                DarkMode = _configurationService.DarkModeEnabled()
             };
 
             // Check for configured allow regex pattern
             try
             {
-                var allowPattern = ConfigHelper.AllowPattern();
+                var allowPattern = _configurationService.AllowPattern();
                 if (!string.IsNullOrEmpty(allowPattern) && !Regex.Match(query, allowPattern, RegexOptions.IgnoreCase).Success)
                 {
-                    model.Message = ConfigHelper.AllowMessage() ?? "Query did not match provided allow pattern.";
-                    return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                    model.Message = _configurationService.AllowMessage() ?? "Query did not match provided allow pattern.";
+                    return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
-                return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
             }
 
             // Check for configured deny regex pattern
             try
             {
-                var denyPattern = ConfigHelper.DenyPattern();
+                var denyPattern = _configurationService.DenyPattern();
                 if (!string.IsNullOrEmpty(denyPattern) && Regex.Match(query, denyPattern, RegexOptions.IgnoreCase).Success)
                 {
-                    model.Message = ConfigHelper.DenyMessage() ?? "Query matched provided deny pattern.";
-                    return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                    model.Message = _configurationService.DenyMessage() ?? "Query matched provided deny pattern.";
+                    return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
-                return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
             }
 
             if (!string.IsNullOrWhiteSpace(query))
@@ -186,7 +196,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
 
 
-            return View("/Modules/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
         }
     }
 }

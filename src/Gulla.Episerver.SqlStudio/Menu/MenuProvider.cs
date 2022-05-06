@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Shell.Navigation;
-using Gulla.Episerver.SqlStudio.Helpers;
+using Gulla.Episerver.SqlStudio.Configuration;
 
 namespace Gulla.Episerver.SqlStudio.Menu
 {
@@ -9,13 +9,22 @@ namespace Gulla.Episerver.SqlStudio.Menu
         [MenuProvider]
         public class SqlStudioMenuProvider : IMenuProvider
         {
+            ConfigurationService _configurationService;
+
+            public SqlStudioMenuProvider(ConfigurationService configurationService)
+            {
+                _configurationService = configurationService;
+            }
+
             public IEnumerable<MenuItem> GetMenuItems()
             {
+                var foo = _configurationService.Enabled();
+
                 return new MenuItem[]
                 {
                     new UrlMenuItem("SQL", "/global/cms/sqlstudio", "/episerver-sql-studio")
                     {
-                        IsAvailable = context => ConfigHelper.Enabled()
+                        IsAvailable = context => _configurationService.Enabled()
                     }
                 };
             }

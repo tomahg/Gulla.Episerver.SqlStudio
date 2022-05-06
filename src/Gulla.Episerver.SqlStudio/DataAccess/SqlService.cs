@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
 {
@@ -17,12 +17,14 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         private readonly IContentLoader _contentLoader;
         private readonly ILanguageBranchRepository _languageBranchRepository;
         private readonly IUrlResolver _urlResolver;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SqlService( IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver)
+        public SqlService(IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver, IHttpContextAccessor httpContextAccessor)
         {
             _contentLoader = contentLoader;
             _languageBranchRepository = languageBranchRepository;
             _urlResolver = urlResolver;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<IEnumerable<string>> ExecuteQuery(string query, string connectionString)
@@ -162,7 +164,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (!string.IsNullOrEmpty(result) && Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var absoluteUri = new Uri(HttpContext.Current.Request.Url, relativeUri);
+                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Host.ToString() + relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 
@@ -175,7 +177,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var absoluteUri = new Uri(HttpContext.Current.Request.Url, relativeUri);
+                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Host.ToString() + relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 

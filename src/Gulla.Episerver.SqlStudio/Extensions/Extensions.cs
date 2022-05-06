@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.Extensions
@@ -10,11 +9,11 @@ namespace Gulla.Episerver.SqlStudio.Extensions
         {
             int index = 0;
 
-            yield return new Column() { Id = -1, Name = firstElement };
+            yield return new Column { Id = -1, Name = firstElement };
 
             foreach (var column in columns)
             {
-                yield return new Column() { Id = index++, Name = column };
+                yield return new Column { Id = index++, Name = column };
             }
         }
 
@@ -22,13 +21,13 @@ namespace Gulla.Episerver.SqlStudio.Extensions
         {
             int index = 0;
 
-            yield return new Column() { Id = -1, Name = firstElement };
+            yield return new Column { Id = -1, Name = firstElement };
 
-            yield return new Column() { Id = index++, Name = "First" };
+            yield return new Column { Id = index++, Name = "First" };
 
             foreach (var column in columns)
             {
-                yield return new Column() { Id = index++, Name = "After " + column };
+                yield return new Column { Id = index++, Name = "After " + column };
             }
         }
     }
