@@ -2,22 +2,22 @@
 using System.Linq;
 using EPiServer.Security;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Configuration
 {
     public class ConfigurationService
     {
-        private IConfiguration _configuration;
+        private readonly SqlStudioOptions _configuration;
 
-        public ConfigurationService(IConfiguration configuration)
+        public ConfigurationService(IConfiguration configuration, IOptions<SqlStudioOptions> options)
         {
-            _configuration = configuration;
+            _configuration = options.Value;
         }
 
         public bool Enabled()
         {
-            var enabledConfigValue = _configuration.GetValue<string>("Gulla:SqlStudio:Enabled");
-            if (!string.IsNullOrEmpty(enabledConfigValue) && enabledConfigValue.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+            if (!_configuration.Enabled)
             {
                 return false;
             }
@@ -27,7 +27,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
                 return true;
             }
 
-            var usersConfigValue = _configuration.GetValue<string>("Gulla:SqlStudio:Users");
+            var usersConfigValue = _configuration.Users;
             if (!string.IsNullOrEmpty(usersConfigValue))
             {
                 var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
