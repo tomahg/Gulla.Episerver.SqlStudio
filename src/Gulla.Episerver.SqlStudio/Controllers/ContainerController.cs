@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
-    [Route("episerver-sql-studio")]
     public class ContainerController : Controller
     {
         private readonly SqlService _sqlService;
@@ -64,7 +63,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 model.Message = e.Message;
             }
 
-            return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -131,13 +130,13 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 if (!string.IsNullOrEmpty(allowPattern) && !Regex.Match(query, allowPattern, RegexOptions.IgnoreCase).Success)
                 {
                     model.Message = _configurationService.AllowMessage() ?? "Query did not match provided allow pattern.";
-                    return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                    return View(model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
-                return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                return View(model);
             }
 
             // Check for configured deny regex pattern
@@ -147,13 +146,13 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 if (!string.IsNullOrEmpty(denyPattern) && Regex.Match(query, denyPattern, RegexOptions.IgnoreCase).Success)
                 {
                     model.Message = _configurationService.DenyMessage() ?? "Query matched provided deny pattern.";
-                    return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                    return View(model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
-                return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+                return View(model);
             }
 
             if (!string.IsNullOrWhiteSpace(query))
@@ -196,7 +195,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
 
 
-            return View("/modules/_protected/Gulla.Episerver.SqlStudio/Views/Index.cshtml", model);
+            return View(model);
         }
     }
 }

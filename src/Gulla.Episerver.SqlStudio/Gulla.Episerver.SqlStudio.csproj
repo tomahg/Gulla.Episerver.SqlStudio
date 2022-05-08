@@ -1,44 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	
   <PropertyGroup>
     <OutputType>Library</OutputType>
   </PropertyGroup>
+	
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+	<Version>2.0.0</Version>
+	<PackageVersion>2.0.0</PackageVersion>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<FileVersion>2.0.0.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
   <ItemGroup>
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\matchbrackets.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\matchtags.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\edit\trailingspace.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\anyword-hint.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.css" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\show-hint.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\addon\hint\sql-hint.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\lib\codemirror.css" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\lib\codemirror.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\LICENSE" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\mode\sql\sql.js" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\codemirror-5.59.4\theme\colorforth.css" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\Static\Images\Execute.png" />
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\Static\Styles\ToolButton.css" />
+    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\Gulla.Episerver.SqlStudio.zip" />
   </ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="EPiServer.CMS.Core" Version="12.0.3" />
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.0.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Content Update="modules\_protected\Gulla.Episerver.SqlStudio\module.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    <Content Include=".\msbuild\CopyModule.targets">
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <BuildAction>None</BuildAction>
+      <PackagePath>build\net5.0\$(MSBuildProjectName).targets</PackagePath>
     </Content>
-    <Content Update="modules\_protected\Gulla.Episerver.SqlStudio\Views\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+  </ItemGroup>	
+	
+  <Import Project="$(SolutionDir)\src\pack.proj" Condition="Exists('$(SolutionDir)\src\pack.proj')" />
+	
 </Project>
