@@ -194,7 +194,6 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 model.Message = e.Message;
             }
 
-
             return View(model);
         }
     }
