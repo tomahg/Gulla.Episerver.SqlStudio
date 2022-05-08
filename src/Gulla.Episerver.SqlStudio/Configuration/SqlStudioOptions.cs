@@ -6,9 +6,9 @@
 
         public string Users { get; set; }
 
-        public bool AutoIntellisenseEnabled { get; set; } = false;
+        public bool AutoIntellisenseEnabled { get; set; } = true;
 
-        public bool DarkModeEnabled { get; set; } = false;
+        public bool DarkModeEnabled { get; set; } = true;
 
         public string AllowPattern { get; set; }
 
