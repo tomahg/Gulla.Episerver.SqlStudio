@@ -9,6 +9,7 @@ using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
@@ -18,13 +19,19 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         private readonly QueryLoader _queryLoader;
         private readonly DataAccessOptions _dataAccessOptions;
         private readonly ConfigurationService _configurationService;
+        private readonly SqlStudioOptions _configuration;
 
-        public ContainerController(SqlService sqlService, QueryLoader queryLoader, DataAccessOptions dataAccessOptions, ConfigurationService configurationService)
+        public ContainerController(SqlService sqlService, 
+            QueryLoader queryLoader, 
+            DataAccessOptions dataAccessOptions, 
+            ConfigurationService configurationService, 
+            IOptions<SqlStudioOptions> options)
         {
             _sqlService = sqlService;
             _queryLoader = queryLoader;
             _dataAccessOptions = dataAccessOptions;
             _configurationService = configurationService;
+            _configuration = options.Value;
         }
 
         public ActionResult Index()
@@ -47,8 +54,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
-                AutoIntelliSense = _configurationService.AutoHintEnabled(),
-                DarkMode = _configurationService.DarkModeEnabled(),
+                AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
+                DarkMode = _configuration.DarkModeEnabled,
                 ConnectionStrings = connectionStringList
             };
 
@@ -119,17 +126,17 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
                 ConnectionStrings = _dataAccessOptions.ConnectionStrings.OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName).Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }),
-                AutoIntelliSense = _configurationService.AutoHintEnabled(),
-                DarkMode = _configurationService.DarkModeEnabled()
+                AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
+                DarkMode = _configuration.DarkModeEnabled
             };
 
             // Check for configured allow regex pattern
             try
             {
-                var allowPattern = _configurationService.AllowPattern();
+                var allowPattern = _configuration.AllowPattern;
                 if (!string.IsNullOrEmpty(allowPattern) && !Regex.Match(query, allowPattern, RegexOptions.IgnoreCase).Success)
                 {
-                    model.Message = _configurationService.AllowMessage() ?? "Query did not match provided allow pattern.";
+                    model.Message = _configuration.AllowMessage ?? "Query did not match provided allow pattern.";
                     return View(model);
                 }
             }
@@ -142,10 +149,10 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             // Check for configured deny regex pattern
             try
             {
-                var denyPattern = _configurationService.DenyPattern();
+                var denyPattern = _configuration.DenyPattern;
                 if (!string.IsNullOrEmpty(denyPattern) && Regex.Match(query, denyPattern, RegexOptions.IgnoreCase).Success)
                 {
-                    model.Message = _configurationService.DenyMessage() ?? "Query matched provided deny pattern.";
+                    model.Message = _configuration.DenyMessage ?? "Query matched provided deny pattern.";
                     return View(model);
                 }
             }

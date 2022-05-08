@@ -3,7 +3,7 @@ using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.Extensions
 {
-    public static class Extensions
+    public static class ColumnExtensions
     {
         public static IEnumerable<Column> GetColumnList(this IEnumerable<string> columns, string firstElement)
         {

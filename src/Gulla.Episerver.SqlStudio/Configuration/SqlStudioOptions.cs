@@ -1,4 +1,4 @@
-﻿namespace Gulla.Episerver.SqlStudio
+﻿namespace Gulla.Episerver.SqlStudio.Configuration
 {
     public class SqlStudioOptions
     {

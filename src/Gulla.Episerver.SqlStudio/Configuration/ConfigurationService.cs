@@ -39,38 +39,5 @@ namespace Gulla.Episerver.SqlStudio.Configuration
 
             return false;
         }
-
-        public bool AutoHintEnabled()
-        {
-            var value = _configuration.GetValue<bool?>("Gulla:SqlStudio:AutoIntellisenseEnabled");
-            return value == null || value == true;
-        }
-
-        public bool DarkModeEnabled()
-        {
-            var value = _configuration.GetValue<bool?>("Gulla:SqlStudio:DarkModeEnabled");
-            return value == null || value == true;
-        }
-
-        public string AllowPattern()
-        {
-            return _configuration.GetValue<string>("Gulla:SqlStudio:AllowPattern");
-        }
-
-        public string AllowMessage()
-        {
-            return _configuration.GetValue<string>("Gulla:SqlStudio:AllowMessage");
-        }
-
-
-        public string DenyPattern()
-        {
-            return _configuration.GetValue<string>("Gulla:SqlStudio:DenyPattern");
-        }
-
-        public string DenyMessage()
-        {
-            return _configuration.GetValue<string>("Gulla:SqlStudio:DenyMessage");
-        }
     }
 }

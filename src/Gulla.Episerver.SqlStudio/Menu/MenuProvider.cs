@@ -10,7 +10,7 @@ namespace Gulla.Episerver.SqlStudio.Menu
         [MenuProvider]
         public class SqlStudioMenuProvider : IMenuProvider
         {
-            ConfigurationService _configurationService;
+            readonly ConfigurationService _configurationService;
 
             public SqlStudioMenuProvider(ConfigurationService configurationService)
             {
