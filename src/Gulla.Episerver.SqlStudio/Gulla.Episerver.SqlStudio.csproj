@@ -6,10 +6,10 @@
 	
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	<Version>2.0.0</Version>
-	<PackageVersion>2.0.0</PackageVersion>
-	<AssemblyVersion>2.0.0.0</AssemblyVersion>
-	<FileVersion>2.0.0.0</FileVersion>	  
+	<Version>1.6.992</Version>
+	<PackageVersion>1.6.992</PackageVersion>
+	<AssemblyVersion>1.6.992.0</AssemblyVersion>
+	<FileVersion>1.6.992.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
