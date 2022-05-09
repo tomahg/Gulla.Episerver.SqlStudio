@@ -5,21 +5,63 @@ This is the readme for the CMS 12 version, the version for CMS 11 is [over here]
 ## Warning
 With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#a-safety-net).
 
-## Intro
+## Usage
 This addon will let you query the database directly from Episerver user interface. The result set can be exported to Excel, CSV or PDF.
 
-Enter your query, execute it with the execute-button - or hit F5 like in Microsoft SQL Management Studio.
+Enter your query and execute it with the execute-button, just like in Microsoft SQL Management Studio.
 
 ![Addon gui](img/gui.jpg)
 
+## Installation
+The command below will install SqlStudio in your Optimizely project.
+``` 
+dotnet add package Gulla.Episerver.SqlStudio
+```
+
+## Configuration
+For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have to options:
+* Add your user to the group `SqlAdmin`
+* Add your user to the `User` configuration setting
+
+Below is a code snippet with all possible configuration options:
+``` csharp
+.AddSqlStudio(x => {
+    x.AllowMessage = "Your options are very limited!";
+    x.AllowPattern = "SELECT TOP \\d{1,3} \\* FROM tblContent";
+    x.AutoIntellisenseEnabled = true;
+    x.DarkModeEnabled = true;
+    x.DenyMessage = "Careful, please!";
+    x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
+    x.Enabled = true;
+    x.Users = "Huey,Dewey,Louie"; 
+})
+```
+
+You can also configure SqlStudio using `appsettings.json`. A configuration setting from `appsettings.json` will override any configuration configured in `Startup.cs`. See example below:
+``` JSON
+  "Gulla": {
+    "SqlStudio": {
+      "AllowMessage": "Your options are very limited!",
+      "AllowPattern": "SELECT TOP \\d{1,3} \\* FROM tblContent",
+      "AutoIntellisenseEnabled": true,
+      "DarkModeEnabled": true,
+      "DenyMessage": "Careful, please!",
+      "DenyPattern": "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b",
+      "Enabled": true,
+      "Users": "Huey,Dewey,Louie"		  
+    }
+  }
+```
 ## IntelliSense / AutoComplete
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
 IntelliSense will show SQL keywords, table names and columns from the last table name you entered.
 
-Automatically displaying IntelliSense on every key-up can be disabled with this appsetting.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:AutoIntelliSense.Enabled" value="false" />
+Automatically displaying IntelliSense on every key-up can be disabled with this setting.
+``` csharp
+.AddSqlStudio(x => {
+    x.AutoIntellisenseEnabled = false;
+})
 ```
 
 You can always trigger IntelliSense with [CTRL] + [SPACE].
@@ -34,34 +76,44 @@ If you have more than one database, i.e both Content Cloud and Commerce Cloud, o
 
 ## Light mode
 The default editor is dark mode, but dark mode can be disabled with the following appsetting.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:DarkMode.Enabled" value="false" />
+``` csharp
+.AddSqlStudio(x => {
+    x.DarkModeEnabled = false;
+})
 ```
 ![Light mode](img/lightmode.jpg "Light mode")
 
 
 ## Access control
 The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:Enabled" value="false" />
+``` csharp
+.AddSqlStudio(x => {
+    x.Enabled = false;
+})
 ```
 
 The addon can also be made available to users not in the group `SqlAdmin` by listing their user names like this.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:Users" value="UserName1,UserName2,UserName3" />
+``` csharp
+.AddSqlStudio(x => {
+    x.Users = "Huey,Dewey,Louie";
+})
 ```
 
 ## A safety net
 You can control what queries are allowed by providing a regular expression that will be validated (ignore case) against the query prior to execution. Provide a message that is shown if validation fails. Example below.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:AllowPattern" value="^\s*SELECT.*" />
-<add key="Gulla.Episerver.SqlStudio:AllowMessage" value="Nothing but SELECTs please!" />
+``` csharp
+.AddSqlStudio(x => {
+    x.AllowPattern = "SELECT TOP \\d{1,3} \\* FROM tblContent";
+    x.AllowMessage = "Your options are very limited!";
+})
 ```
 
 In the same way, you can also control what queries are denied by providing a regular expressions. Example below.
-``` XML
-<add key="Gulla.Episerver.SqlStudio:DenyPattern" value="^.*DROP.*" />
-<add key="Gulla.Episerver.SqlStudio:DenyMessage" value="No DROPing allowed!" />
+``` csharp
+.AddSqlStudio(x => {
+    x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
+    x.DenyMessage = "Careful, please!";
+})
 ```
 
 ## Saving queries
