@@ -70,7 +70,7 @@ You can always trigger IntelliSense with [CTRL] + [SPACE].
 ![IntelliSense on column name](img/autocomplete-column.png "IntelliSense on column names")
 
 ## Connection string switcher
-If you have more than one database, i.e both Content Cloud and Commerce Cloud, or Content Cloud and a custom database, you are able to select a connection string. If you change the connection string, the page will reload and intelliSense for the new database will be activated
+If you have more than one database, i.e both Content Cloud and Commerce Cloud, or Content Cloud and a custom database, you are able to select a connection string. If you change the connection string, the page will reload and IntelliSense for the new database will be activated
 
 ![Connection switcher](img/connectionstring.png "Connection switcher")
 
@@ -126,7 +126,7 @@ CREATE TABLE SqlQueries (
  CONSTRAINT PK_SqlQueries PRIMARY KEY CLUSTERED (Name, Category))
 ```
 
-Then simply add queries to that table (using SQL). Two queries with identical categories will be placed in the same named dropdown list. Example of adding a query named `All` to the category `Content`:
+Then simply add queries to that table (using SQL). Two queries with identical categories will be placed in the same-named dropdown list. Example of adding a query named `All` to the category `Content`:
 ``` SQL
 INSERT INTO SqlQueries VALUES('All', 'Content', 'SELECT * FROM tblContent')
 ```
@@ -160,7 +160,7 @@ You may specify both the column header name and the placement (first, last, etc)
 
 ## Dependencies
 - [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense.
-- [DataTables](https://datatables.net/) is used for displaying the result, and export to CSV, PDF and Excel.
+- [DataTables](https://datatables.net/) is used for displaying the result, and exporting to CSV, PDF and Excel.
 
 ## Contribute
-You are welcome to register an issue, or create a pull request if you see something that should be improved.
+You are welcome to register an issue or create a pull request if you see something that should be improved.
