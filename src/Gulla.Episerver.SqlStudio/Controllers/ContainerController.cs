@@ -59,16 +59,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ConnectionStrings = connectionStringList
             };
 
-            try
-            {
-                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString).ToList() : Enumerable.Empty<SqlQueryCategory>();
-                model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
-                model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
-            }
-            catch (Exception e)
-            {
-                model.Message = e.Message;
-            }
+            FillModelWithTableMetaData(model, connectionString);
 
             return View(model);
         }
@@ -137,12 +128,14 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 if (!string.IsNullOrEmpty(allowPattern) && !Regex.Match(query, allowPattern, RegexOptions.IgnoreCase).Success)
                 {
                     model.Message = _configuration.AllowMessage ?? "Query did not match provided allow pattern.";
+                    FillModelWithTableMetaData(model, connectionString);
                     return View(model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
+                FillModelWithTableMetaData(model, connectionString);
                 return View(model);
             }
 
@@ -153,12 +146,14 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 if (!string.IsNullOrEmpty(denyPattern) && Regex.Match(query, denyPattern, RegexOptions.IgnoreCase).Success)
                 {
                     model.Message = _configuration.DenyMessage ?? "Query matched provided deny pattern.";
+                    FillModelWithTableMetaData(model, connectionString);
                     return View(model);
                 }
             }
             catch (Exception e)
             {
                 model.Message = e.Message;
+                FillModelWithTableMetaData(model, connectionString);
                 return View(model);
             }
 
@@ -190,6 +185,13 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
 
             // If the SQL query updates the table 'SqlQueries', or other table columns - this must be called at the very end.
+            FillModelWithTableMetaData(model, connectionString);
+
+            return View(model);
+        }
+
+        private void FillModelWithTableMetaData(SqlStudioViewModel model, string connectionString)
+        {
             try
             {
                 model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString).ToList() : Enumerable.Empty<SqlQueryCategory>();
@@ -198,10 +200,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
             catch (Exception e)
             {
-                model.Message = e.Message;
+                model.Message += e.Message;
             }
-
-            return View(model);
         }
     }
 }
