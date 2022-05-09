@@ -3,12 +3,12 @@
 This is the readme for the CMS 12 version, the version for CMS 11 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/main).
 
 ## Warning
-With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#a-safety-net).
+With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There are literally no limits to what you can do with this addon unless you correctly [configure the limits](#a-safety-net).
 
 ## Usage
-This addon will let you query the database directly from Episerver user interface. The result set can be exported to Excel, CSV or PDF.
+This addon will let you query the database directly from the Optimizely/Episerver user interface. The result set can be exported to Excel, CSV or PDF.
 
-Enter your query and execute it with the execute-button, just like in Microsoft SQL Management Studio.
+Enter your query and execute it with the execute button, just like in Microsoft SQL Management Studio.
 
 ![Addon gui](img/gui.png)
 
@@ -19,7 +19,7 @@ dotnet add package Gulla.Episerver.SqlStudio
 ```
 
 ## Configuration
-For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have to options:
+For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have two options:
 * Add your user to the group `SqlAdmin`
 * Add your user to the `User` configuration setting
 
@@ -37,7 +37,7 @@ Below is a code snippet with all possible configuration options:
 })
 ```
 
-You can also configure SqlStudio using `appsettings.json`. A configuration setting from `appsettings.json` will override any configuration configured in `Startup.cs`. See example below:
+You can also configure SqlStudio using `appsettings.json`. A configuration setting specified in `appsettings.json` will override any configuration configured in `Startup.cs`. See example below:
 ``` JSON
   "Gulla": {
     "SqlStudio": {
@@ -53,7 +53,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
   }
 ```
 ## IntelliSense / AutoComplete
-IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with exception for some special keys. The IntelliSense popup can be closed with [ESC].
+IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with an exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
 IntelliSense will show SQL keywords, table names and columns from the last table name you entered.
 
@@ -70,7 +70,7 @@ You can always trigger IntelliSense with [CTRL] + [SPACE].
 ![IntelliSense on column name](img/autocomplete-column.png "IntelliSense on column names")
 
 ## Connection string switcher
-If you have more than one database, i.e both Content Cloud and Commerce Cloud, or Content Cloud and a custom database, you are able to select connection string. If you change connection string, the page will reload and intellisense for the new database will be activated
+If you have more than one database, i.e both Content Cloud and Commerce Cloud, or Content Cloud and a custom database, you are able to select a connection string. If you change the connection string, the page will reload and intelliSense for the new database will be activated
 
 ![Connection switcher](img/connectionstring.png "Connection switcher")
 
@@ -108,7 +108,7 @@ You can control what queries are allowed by providing a regular expression that 
 })
 ```
 
-In the same way, you can also control what queries are denied by providing a regular expressions. Example below.
+In the same way, you can also control what queries are denied by providing a regular expression. Example below.
 ``` csharp
 .AddSqlStudio(x => {
     x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
@@ -117,7 +117,7 @@ In the same way, you can also control what queries are denied by providing a reg
 ```
 
 ## Saving queries
-To save queries for later, first create a new table. You can do this from within the module. The name of the table and columns must match.
+To save queries for later, first, create a new table. You can do this from within the module. The name of the table and columns must match.
 ``` SQL 
 CREATE TABLE SqlQueries (
 	Name varchar(256) NOT NULL,
@@ -147,20 +147,20 @@ Saved queries will be displayed by category like this:
 
 ## Custom columns
 
-Although SQL might potentially be the optimal way of querying and manipulating your data, sometimes a little help is welcome. Using the inputs for custom culumns, it's possible to add two extra columns to your dataset. The columns are calculated from each row.
+Although SQL might potentially be the optimal way of querying and manipulating your data, sometimes a little help is welcome. Using the inputs for custom columns, it's possible to add two extra columns to your dataset. The columns are calculated from each row.
 * The content name
 * The content URL
 
-For each of the two columns you can specify what column from the previous query to use as the content id and (optional) language branch id. Behind the scenes `ContentLoader` will be run for each row, populating the custom column with Name or External URL.
+For each of the two columns, you can specify what column from the previous query to use as the content id and (optional) language branch id. Behind the scenes `ContentLoader` will be run for each row, populating the custom column with Name or External URL.
 
-You may specify both the column header name and the placement (first, last etc).
+You may specify both the column header name and the placement (first, last, etc).
 
 ![Saved queries](img/custom-columns.png "Custom column input")
 
 
 ## Dependencies
-- [CodeMirror](https://codemirror.net/) is used for the editor, and basic IntelliSense.
+- [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense.
 - [DataTables](https://datatables.net/) is used for displaying the result, and export to CSV, PDF and Excel.
 
 ## Contribute
-You are welcome to register an issue, or create a pull request, if you see something that should be improved.
+You are welcome to register an issue, or create a pull request if you see something that should be improved.
