@@ -1,4 +1,6 @@
-# Gulla.Episerver.SqlStudio
+# Gulla.Episerver.SqlStudio for CMS 11
+
+This is the readme for the CMS 11 version, the version for CMS 12 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/cms12).
 
 ## Warning
 With great powers comes great responsibility! This addon will indeed provide great powers. Delegate and use them wisely, and with caution. The addon should not be enabled for users you would not trust with full access to your database, and it is probably not wise to enable it in production. There is literally no limits to what you can do with this addon, unless you correctly [configure the limits](#a-safety-net).
