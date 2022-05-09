@@ -6,12 +6,21 @@
 	
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	<Version>1.6.992</Version>
-	<PackageVersion>1.6.992</PackageVersion>
-	<AssemblyVersion>1.6.992.0</AssemblyVersion>
-	<FileVersion>1.6.992.0</FileVersion>	  
+	<Version>2.0.0</Version>
+	<PackageVersion>2.0.0</PackageVersion>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<FileVersion>2.0.0.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <PackageId>Gulla.Episerver.SqlStudio</PackageId>
+    <Title>Gulla.Episerver.SqlStudio</Title>
+    <Authors>Tomas Hensrud Gulla</Authors>
+    <Description>Adds an admin tool that let you query the SQL database from within Optimizely Content Cloud UI.</Description>
+    <PackageTags>Optimizely Episerver SQL</PackageTags>
+    <PackageProjectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
