@@ -78,7 +78,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 };
             }
 
-            // Adjusting for indexes, if more than one custom column is used. Not too happy with this.
+            // Adjusting for indexes, if more than one custom column is used. Not too happy with this!!!
             int contentNameIndexAdjusted = contentNameIndex ?? -1;
             int contentNameLanguageIndexAdjusted = contentNameLanguageIndex ?? -1;
             int contentNameInsertIndexAdjusted = contentNameInsertIndex ?? -1;
