@@ -10,7 +10,7 @@ This addon will let you query the database directly from Episerver user interfac
 
 Enter your query and execute it with the execute-button, just like in Microsoft SQL Management Studio.
 
-![Addon gui](img/gui.jpg)
+![Addon gui](img/gui.png)
 
 ## Installation
 The command below will install SqlStudio in your Optimizely project.
@@ -144,6 +144,19 @@ SELECT * FROM tblContentLanguage WHERE URLSegment LIKE '%.jpg'
 Saved queries will be displayed by category like this:
 
 ![Saved queries](img/saved-queries.jpg "Selecting a saved query")
+
+## Custom columns
+
+Although SQL might potentially be the optimal way of querying and manipulating your data, sometimes a little help is welcome. Using the inputs for custom culumns, it's possible to add two extra columns to your dataset. The columns are calculated from each row.
+* The content name
+* The content URL
+
+For each of the two columns you can specify what column from the previous query to use as the content id and (optional) language branch id. Behind the scenes `ContentLoader` will be run for each row, populating the custom column with Name or External URL.
+
+You may specify both the column header name and the placement (first, last etc).
+
+![Saved queries](img/custom-columns.png "Custom column input")
+
 
 ## Dependencies
 - [CodeMirror](https://codemirror.net/) is used for the editor, and basic IntelliSense.
