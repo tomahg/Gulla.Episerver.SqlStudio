@@ -6,11 +6,11 @@ using EPiServer.PlugIn;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Gulla.Episerver.SqlStudio")]
-[assembly: AssemblyDescription("Adds an admin tool that let you query the SQL database from within Episerver UI.")]
+[assembly: AssemblyDescription("Adds an admin tool that let you query the SQL database from within Optimizely Content Cloud UI.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tomas Hensrud Gulla")]
 [assembly: AssemblyProduct("Gulla.Episerver.SqlStudio")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright © 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: PlugInSummary("https://github.com/tomahg/gulla.episerver.sqlstudio", LicensingMode.CustomLicense)]
@@ -33,5 +33,5 @@ using EPiServer.PlugIn;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.0.3.0")]
+[assembly: AssemblyFileVersion("2.0.3.0")]
