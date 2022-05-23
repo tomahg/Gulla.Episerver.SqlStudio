@@ -164,7 +164,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (!string.IsNullOrEmpty(result) && Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Host.ToString() + relativeUri);
+                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Scheme  + "://" + _httpContextAccessor.HttpContext.Request.Host + relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 
@@ -177,7 +177,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
 
             if (Uri.TryCreate(result, UriKind.RelativeOrAbsolute, out var relativeUri) && relativeUri.IsAbsoluteUri == false)
             {
-                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Host.ToString() + relativeUri);
+                var absoluteUri = new Uri(_httpContextAccessor.HttpContext.Request.Scheme + "://" + _httpContextAccessor.HttpContext.Request.Host.ToString() + relativeUri);
                 return absoluteUri.AbsoluteUri;
             }
 
