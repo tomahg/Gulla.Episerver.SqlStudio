@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<ItemGroup>
 		<SourceScripts
-		  Include="$(MSBuildThisFileDirectory)..\..\contentFiles\any\net5.0\modules\_protected\**\*.zip"/>
+		  Include="$(MSBuildThisFileDirectory)..\..\contentFiles\any\any\modules\_protected\**\*.*"/>
 	</ItemGroup>
 
 	<Target Name="CopyZipFiles" BeforeTargets="Build">
