@@ -18,21 +18,6 @@ The command below will install SqlStudio in your Optimizely project.
 dotnet add package Gulla.Episerver.SqlStudio
 ```
 
-If you get an error message after deploying the your site with this addon, that says somethng like this:
-```
-ArgumentException: Unable to find a module by assembly 'Gulla.Episerver.SqlStudio, Version"....
-```
-
-Then, add the following to the project file of your site, to make sure the module zip are deployet.
-```
-<ItemGroup>
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\Gulla.Episerver.SqlStudio.zip">
-		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</Content>
-</ItemGroup>	
-```
-
-
 ## Configuration
 For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have two options:
 * Add your user to the group `SqlAdmin`
