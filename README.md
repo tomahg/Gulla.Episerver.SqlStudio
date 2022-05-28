@@ -8,7 +8,7 @@ With great powers comes great responsibility! This addon will indeed provide gre
 ## Usage
 This addon will let you query the database directly from the Optimizely/Episerver user interface. The result set can be exported to Excel, CSV or PDF.
 
-Enter your query and execute it with the execute button, just like in Microsoft SQL Management Studio.
+Enter your query and execute it with the execute button - or hit F5, just like in Microsoft SQL Management Studio.
 
 ![Addon gui](img/gui.png)
 

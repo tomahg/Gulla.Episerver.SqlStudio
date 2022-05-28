@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using EPiServer.Shell.Modules;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +15,6 @@ namespace Gulla.Episerver.SqlStudio
 
         public static IServiceCollection AddSqlStudio(this IServiceCollection services, Action<SqlStudioOptions> setupAction)
         {
-            AddModule(services);
             services.AddTransient<SqlService, SqlService>();
             services.AddTransient<QueryLoader, QueryLoader>();
             services.AddTransient<ConfigurationService, ConfigurationService>();
@@ -29,18 +26,6 @@ namespace Gulla.Episerver.SqlStudio
             });
 
             return services;
-        }
-
-        private static void AddModule(IServiceCollection services)
-        {
-            services.Configure<ProtectedModuleOptions>(
-                pm =>
-                {
-                    if (!pm.Items.Any(i => i.Name.Equals(Constants.ModuleName, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        pm.Items.Add(new ModuleDetails { Name = Constants.ModuleName });
-                    }
-                });
         }
     }
 }

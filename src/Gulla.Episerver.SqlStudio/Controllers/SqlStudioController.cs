@@ -13,7 +13,8 @@ using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
-    public class ContainerController : Controller
+    [Route("SqlStudio")]
+    public class SqlStudioController : Controller
     {
         private readonly SqlService _sqlService;
         private readonly QueryLoader _queryLoader;
@@ -21,7 +22,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         private readonly ConfigurationService _configurationService;
         private readonly SqlStudioOptions _configuration;
 
-        public ContainerController(SqlService sqlService, 
+        public SqlStudioController(SqlService sqlService, 
             QueryLoader queryLoader, 
             DataAccessOptions dataAccessOptions, 
             ConfigurationService configurationService, 

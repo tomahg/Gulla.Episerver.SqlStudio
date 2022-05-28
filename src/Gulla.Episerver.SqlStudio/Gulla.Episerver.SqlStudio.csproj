@@ -6,10 +6,10 @@
 	
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	<Version>2.0.18</Version>
-	<PackageVersion>2.0.18</PackageVersion>
-	<AssemblyVersion>2.0.18.0</AssemblyVersion>
-	<FileVersion>2.0.18.0</FileVersion>	  
+	<Version>2.1.00</Version>
+	<PackageVersion>2.1.0</PackageVersion>
+	<AssemblyVersion>2.1.0.0</AssemblyVersion>
+	<FileVersion>2.1.0.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
@@ -28,25 +28,4 @@
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="[12.0.2, 13.0.0)" />
   </ItemGroup>
 
-	<ItemGroup>
-        <Content Include=".\msbuild\CopyModule.targets">
-          <Pack>true</Pack>
-          <PackagePath>build\net5.0\$(MSBuildProjectName).targets</PackagePath>
-        </Content>
-    </ItemGroup>	
-	
-  <ItemGroup>
-    <Content Include="modules\_protected\Gulla.Episerver.SqlStudio\Gulla.Episerver.SqlStudio.zip">
-      <Pack>true</Pack>
-      <PackagePath>content\modules\_protected\$(MSBuildProjectName)\;contentFiles\any\any\modules\_protected\$(MSBuildProjectName)\</PackagePath>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="CodeMirrorLicense.txt">
-		<Pack>true</Pack>
-		<PackagePath>content\modules\_protected\$(MSBuildProjectName)\;contentFiles\any\any\modules\_protected\$(MSBuildProjectName)\</PackagePath>
-	</Content>
-  </ItemGroup>
-	
 </Project>

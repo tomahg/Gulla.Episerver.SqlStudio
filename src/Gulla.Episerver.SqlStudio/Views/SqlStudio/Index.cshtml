@@ -2,6 +2,10 @@
 
 @model Gulla.Episerver.SqlStudio.ViewModels.SqlStudioViewModel
 
+@{
+    Layout = null;
+}
+
 <html>
 <head>
     <title>@Model.Query</title>
@@ -129,7 +133,6 @@
         </div>
     </div>
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <link href="/_content/Gulla.Episerver.SqlStudio/Static/Styles/ToolButton.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="/_content/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.css">
@@ -138,7 +141,6 @@
     {
         <link rel="stylesheet" href="/_content/Gulla.Episerver.SqlStudio/codemirror-5.59.4/theme/colorforth.css" />
     }
-
 
     @*https://datatables.net/download/*@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/datatables.min.css" />
@@ -254,7 +256,7 @@
             }
 
             if (event.keyCode === 116) { // F5
-                $("#submit").click();
+                $("#btnSubmit").click();
             }
         });
 
