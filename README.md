@@ -159,8 +159,8 @@ You may specify both the column header name and the placement (first, last, etc)
 
 
 ## Dependencies
-- [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense.
-- [DataTables](https://datatables.net/) is used for displaying the result, and exporting to CSV, PDF and Excel.
+- [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense. ([LICENSE](https://raw.githubusercontent.com/tomahg/Gulla.Episerver.SqlStudio/main/src/Gulla.Episerver.SqlStudio/wwwroot/codemirror-5.59.4/LICENSE))
+- [DataTables](https://datatables.net/) is used for displaying the result, and exporting to CSV, PDF and Excel. ([LICENSE](https://datatables.net/license/))
 
 ## Contribute
 You are welcome to register an issue or create a pull request if you see something that should be improved.
