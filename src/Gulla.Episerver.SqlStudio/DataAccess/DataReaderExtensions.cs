@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.ViewModels;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
@@ -57,6 +58,9 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             var categoryQueries = new List<SqlQuery>();
             foreach (var query in flatQueryList)
             {
+                query.Category = query.Category.TrimSort();
+                query.Name = query.Name.TrimSort();
+
                 if (first || category != query.Category)
                 {
                     if (!first)
