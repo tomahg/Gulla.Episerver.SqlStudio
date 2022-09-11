@@ -128,12 +128,12 @@ CREATE TABLE SqlQueries (
 
 Then simply add queries to that table (using SQL). Two queries with identical categories will be placed in the same-named dropdown list. Example of adding a query named `All` to the category `Content`:
 ``` SQL
-INSERT INTO SqlQueries VALUES('All', 'Content', 'SELECT * FROM tblContent')
+INSERT INTO SqlQueries VALUES('[01] All', 'Content', 'SELECT * FROM tblContent')
 ```
 
 In order to insert queries with `'`, simply double them (`''`). Example:
 ``` SQL
-INSERT INTO SqlQueries VALUES('Jpg-images', 'Content', 'SELECT * FROM tblContentLanguage WHERE URLSegment LIKE ''%.jpg''')
+INSERT INTO SqlQueries VALUES('[02] Jpg-images', 'Content', 'SELECT * FROM tblContentLanguage WHERE URLSegment LIKE ''%.jpg''')
 ```
 
 Will save the following query:
@@ -144,6 +144,8 @@ SELECT * FROM tblContentLanguage WHERE URLSegment LIKE '%.jpg'
 Saved queries will be displayed by category like this:
 
 ![Saved queries](img/saved-queries.jpg "Selecting a saved query")
+
+Saved queries (and their categories) can be sorted by starting the name (of query or category) with a number enclosed in square brackets. The brackets/number will not be shown in the UI, and in only used for sorting.
 
 ## Custom columns
 
