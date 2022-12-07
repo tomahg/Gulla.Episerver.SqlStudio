@@ -17,5 +17,7 @@
         public string DenyPattern { get; set; }
 
         public string DenyMessage { get; set; }
+
+        public string ConnectionString { get; set; }
     }
 }

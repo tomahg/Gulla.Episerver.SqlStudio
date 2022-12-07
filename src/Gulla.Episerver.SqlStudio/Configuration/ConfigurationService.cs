@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using EPiServer.Security;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Configuration
@@ -10,7 +9,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
     {
         private readonly SqlStudioOptions _configuration;
 
-        public ConfigurationService(IConfiguration configuration, IOptions<SqlStudioOptions> options)
+        public ConfigurationService(IOptions<SqlStudioOptions> options)
         {
             _configuration = options.Value;
         }
@@ -31,7 +30,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             if (!string.IsNullOrEmpty(usersConfigValue))
             {
                 var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
                 {
                     return true;
                 }

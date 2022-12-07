@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -45,9 +46,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 };
             }
 
-            var connectionStringList = _dataAccessOptions.ConnectionStrings
-                .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
-                .Select(x => new SelectListItem {Text = x.Name, Value = x.ConnectionString}).ToList();
+            var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
             var connectionString = connectionStringList.FirstOrDefault()?.Value;
 
             var model = new SqlStudioViewModel
@@ -77,6 +76,12 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 {
                     StatusCode = (int?)HttpStatusCode.Unauthorized
                 };
+            }
+
+            // Dropdown is hidden from GUI, if there is only one connectionstring, or if the connectionstring is set in configuration
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = GetConnectionStringList(_dataAccessOptions, _configuration).FirstOrDefault()?.Value;
             }
 
             // Adjusting for indexes, if more than one custom column is used. Not too happy with this!!!
@@ -117,7 +122,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
-                ConnectionStrings = _dataAccessOptions.ConnectionStrings.OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName).Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }),
+                ConnectionStrings = GetConnectionStringList(_dataAccessOptions, _configuration),
                 AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
                 DarkMode = _configuration.DarkModeEnabled
             };
@@ -202,6 +207,27 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             catch (Exception e)
             {
                 model.Message += e.Message;
+            }
+        }
+
+        private List<SelectListItem> GetConnectionStringList(DataAccessOptions dataAccessOptions, SqlStudioOptions configuration)
+        {
+            if (!string.IsNullOrEmpty(configuration.ConnectionString))
+            {
+                return new List<SelectListItem>
+                {
+                    new SelectListItem
+                    {
+                        Text = "Default",
+                        Value = configuration.ConnectionString
+                    }
+                };
+            }
+            else
+            {
+                return dataAccessOptions.ConnectionStrings
+                    .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
+                    .Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }).ToList();
             }
         }
     }

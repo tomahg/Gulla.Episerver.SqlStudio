@@ -9,7 +9,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
     {
         public IEnumerable<SqlQueryCategory> GetQueries(string connectionString)
         {
-            var query = "SELECT Name, Category, Query FROM SqlQueries ORDER BY Category, Name";
+            const string query = "SELECT Name, Category, Query FROM SqlQueries ORDER BY Category, Name";
 
             using (var connection = new SqlConnection(connectionString))
             {

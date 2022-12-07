@@ -36,11 +36,13 @@
         <div class="epi-contentArea">
             @using (Html.BeginForm())
             {
-                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 10px;">
-                    <h4 style="margin-bottom: 5px">Connection string</h4>
-                    @Html.DropDownListFor(m => m.ConnectionString, Model.ConnectionStrings, new { onchange = "editor.setValue('');this.form.submit();" })
-                </div>
-
+                if (Model.ConnectionStrings.Count() > 1)
+                {
+                    <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 10px;">
+                        <h4 style="margin-bottom: 5px">Connection string</h4>
+                        @Html.DropDownListFor(m => m.ConnectionString, Model.ConnectionStrings, new { onchange = "editor.setValue('');this.form.submit();" })
+                    </div>
+                }
 
                 if (Model.SavedQueries != null && Model.SavedQueries.Any())
                 {
