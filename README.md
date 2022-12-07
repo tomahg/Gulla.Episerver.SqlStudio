@@ -92,6 +92,12 @@ If you have more than one database, i.e both Content Cloud and Commerce Cloud, o
 
 If you specify the connectionstring using configuration, this connectionstring will replace any other connectionstrings available. This way you may use a connectionstring with readonly access rights, if you want to limit the options for f\*cking up.
 
+```csharp
+.AddSqlStudio(x => {
+    x.ConnectionString = "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;";
+})
+```
+
 ## Light mode
 
 The default editor is dark mode, but dark mode can be disabled with the following appsetting.
