@@ -6,7 +6,7 @@
 
         public string Users { get; set; }
 
-        public string GroupName { get; set; }
+        public string GroupNames { get; set; }
 
         public bool AutoIntellisenseEnabled { get; set; } = true;
 
