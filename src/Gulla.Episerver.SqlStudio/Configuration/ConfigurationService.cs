@@ -26,6 +26,11 @@ namespace Gulla.Episerver.SqlStudio.Configuration
                 return true;
             }
 
+            if (!string.IsNullOrEmpty(_configuration.GroupName) && PrincipalInfo.CurrentPrincipal.IsInRole(_configuration.GroupName))
+            {
+                return true;
+            }
+
             var usersConfigValue = _configuration.Users;
             if (!string.IsNullOrEmpty(usersConfigValue))
             {

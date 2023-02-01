@@ -6,6 +6,8 @@
 
         public string Users { get; set; }
 
+        public string GroupName { get; set; }
+
         public bool AutoIntellisenseEnabled { get; set; } = true;
 
         public bool DarkModeEnabled { get; set; } = true;

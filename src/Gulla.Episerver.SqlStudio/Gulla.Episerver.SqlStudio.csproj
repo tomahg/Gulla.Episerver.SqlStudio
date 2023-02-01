@@ -6,10 +6,10 @@
     
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>2.3.0</Version>
-    <PackageVersion>2.3.0</PackageVersion>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.3.0.0</FileVersion>	  
+    <Version>2.4.0</Version>
+    <PackageVersion>2.4.0</PackageVersion>
+    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <FileVersion>2.4.0.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
@@ -21,7 +21,7 @@
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Add the possibility to add single connectionstring, only for this addon.</PackageReleaseNotes>
+    <PackageReleaseNotes>Make it possible to configure a group that should have access to the addon.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
