@@ -8,7 +8,7 @@ With great powers comes great responsibility! This addon will indeed provide gre
 
 ## Usage
 
-This addon will let you query the database directly from the Optimizely/Episerver user interface. The result set can be exported to Excel, CSV or PDF.
+This addon will let you query the database directly from the Optimizely/Episerver user interface. The result set can be exported to Excel, CSV, or PDF.
 
 Enter your query and execute it with the execute button - or hit F5, just like in Microsoft SQL Management Studio.
 
@@ -24,10 +24,11 @@ dotnet add package Gulla.Episerver.SqlStudio
 
 ## Configuration
 
-For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have two options:
+For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have three options:
 
 -   Add your user to the group `SqlAdmin`
--   Add your user to the `User` configuration setting
+-   Add your user to the `Users` configuration setting
+-   Add a group that your user belongs to, to the `GroupNames` configuration setting
 
 Below is a code snippet with all possible configuration options:
 
@@ -40,12 +41,13 @@ Below is a code snippet with all possible configuration options:
     x.DenyMessage = "Careful, please!";
     x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
     x.Enabled = true;
+    x.GroupNames = "SuperAdmins,DatabaseAdmins"
     x.Users = "Huey,Dewey,Louie";
     x.ConnectionString = "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;";
 })
 ```
 
-You can also configure SqlStudio using `appsettings.json`. A configuration setting specified in `appsettings.json` will override any configuration configured in `Startup.cs`. See example below:
+You can also configure SqlStudio using `appsettings.json`. A configuration setting specified in `appsettings.json` will override any configuration configured in `Startup.cs`. See the example below:
 
 ```JSON
   "Gulla": {
@@ -57,6 +59,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "DenyMessage": "Careful, please!",
       "DenyPattern": "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b",
       "Enabled": true,
+      "GroupNames": "SuperAdmins,DatabaseAdmins",
       "Users": "Huey,Dewey,Louie",
       "ConnectionString": "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;"
     }
@@ -67,7 +70,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
 
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with an exception for some special keys. The IntelliSense popup can be closed with [ESC].
 
-IntelliSense will show SQL keywords, table names and columns from the last table name you entered.
+IntelliSense will show SQL keywords, table names, and columns from the last table name you entered.
 
 Automatically displaying IntelliSense on every key-up can be disabled with this setting.
 
@@ -88,9 +91,9 @@ If you have more than one database, i.e both Content Cloud and Commerce Cloud, o
 
 ![Connection switcher](img/connectionstring.png "Connection switcher")
 
-## Specify connectionstring
+## Specify connection string
 
-If you specify the connectionstring using configuration, this connectionstring will replace any other connectionstrings available. This way you may use a connectionstring with readonly access rights, if you want to limit the options for f\*cking up.
+If you specify the connection string using configuration, this connection string will replace any other connection strings available. This way you may use a connection string with read-only access rights, if you want to limit the options for f\*cking up.
 
 ```csharp
 .AddSqlStudio(x => {
@@ -112,7 +115,7 @@ The default editor is dark mode, but dark mode can be disabled with the followin
 
 ## Access control
 
-The addon is only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.
+The addon is by default only available for users in the group `SqlAdmin`. Other users will be blocked, and will not be able to see the addon's menu item or access it in any other way. The addon can also be completely disabled for specific environments by adding the following to your appsettings. If disabled by appsettings, the addon will not be available for users in the group `SqlAdmin` either.
 
 ```csharp
 .AddSqlStudio(x => {
@@ -120,11 +123,19 @@ The addon is only available for users in the group `SqlAdmin`. Other users will 
 })
 ```
 
-The addon can also be made available to users not in the group `SqlAdmin` by listing their user names like this.
+The addon can also be made available to users not in the group `SqlAdmin`, by listing their user names like this.
 
 ```csharp
 .AddSqlStudio(x => {
     x.Users = "Huey,Dewey,Louie";
+})
+```
+
+The addon can also be made available to users in other groups than `SqlAdmin`, by listing possible user groups like this.
+
+```csharp
+.AddSqlStudio(x => {
+    x.GroupNames = "SuperAdmins,DatabaseAdmins"
 })
 ```
 
@@ -148,7 +159,7 @@ In the same way, you can also control what queries are denied by providing a reg
 })
 ```
 
-Specifying a separate connectionstring with limited access rights maybe the best safety net.
+Specifying a separate connection string with limited access rights may be the best safety net.
 
 ## Saving queries
 
@@ -202,7 +213,7 @@ You may specify both the column header name and the placement (first, last, etc)
 ## Dependencies
 
 -   [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense. ([LICENSE](https://raw.githubusercontent.com/tomahg/Gulla.Episerver.SqlStudio/main/src/Gulla.Episerver.SqlStudio/wwwroot/codemirror-5.59.4/LICENSE))
--   [DataTables](https://datatables.net/) is used for displaying the result, and exporting to CSV, PDF and Excel. ([LICENSE](https://datatables.net/license/))
+-   [DataTables](https://datatables.net/) is used for displaying the result and exporting to CSV, PDF, and Excel. ([LICENSE](https://datatables.net/license/))
 
 ## Contribute
 
