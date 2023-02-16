@@ -226,6 +226,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             else
             {
                 return dataAccessOptions.ConnectionStrings
+                    .DistinctBy(x => x.Name)
                     .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
                     .Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }).ToList();
             }
