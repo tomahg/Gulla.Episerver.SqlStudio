@@ -38,6 +38,7 @@ Below is a code snippet with all possible configuration options:
     x.AllowPattern = "SELECT TOP \\d{1,3} \\* FROM tblContent";
     x.AutoIntellisenseEnabled = true;
     x.DarkModeEnabled = true;
+    x.CustomColumnsEnabled = true;
     x.DenyMessage = "Careful, please!";
     x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
     x.Enabled = true;
@@ -56,6 +57,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "AllowPattern": "SELECT TOP \\d{1,3} \\* FROM tblContent",
       "AutoIntellisenseEnabled": true,
       "DarkModeEnabled": true,
+      "CustomColumnsEnabled": true,
       "DenyMessage": "Careful, please!",
       "DenyPattern": "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b",
       "Enabled": true,
@@ -208,7 +210,15 @@ For each of the two columns, you can specify what column from the previous query
 
 You may specify both the column header name and the placement (first, last, etc).
 
-![Saved queries](img/custom-columns.png "Custom column input")
+![Custom columns](img/custom-columns.png "Custom column input")
+
+Custom columns are shown by default, but they can be disabled with the following appsetting.
+
+```csharp
+.AddSqlStudio(x => {
+    x.CustomColumnsEnabled = false;
+})
+```
 
 ## Dependencies
 

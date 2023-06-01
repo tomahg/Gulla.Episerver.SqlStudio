@@ -56,6 +56,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
                 AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
                 DarkMode = _configuration.DarkModeEnabled,
+                ShowCustomColumns = !_configuration.CustomColumnsEnabled,
                 ConnectionStrings = connectionStringList
             };
 
@@ -124,7 +125,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
                 ConnectionStrings = GetConnectionStringList(_dataAccessOptions, _configuration),
                 AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
-                DarkMode = _configuration.DarkModeEnabled
+                DarkMode = _configuration.DarkModeEnabled,
+                ShowCustomColumns = _configuration.CustomColumnsEnabled
             };
 
             // Check for configured allow regex pattern

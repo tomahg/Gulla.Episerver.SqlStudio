@@ -12,6 +12,8 @@
 
         public bool DarkModeEnabled { get; set; } = true;
 
+        public bool CustomColumnsEnabled { get; set; } = true;
+
         public string AllowPattern { get; set; }
 
         public string AllowMessage { get; set; }
