@@ -23,5 +23,17 @@
         public string DenyMessage { get; set; }
 
         public string ConnectionString { get; set; }
+
+        public bool DisableAuditLog { get; set; }
+
+        public string AuditLogViewAllUsers { get; set; }
+
+        public string AuditLogViewAllGroupNames { get; set; }
+
+        public string AuditLogDeleteUsers { get; set; }
+
+        public string AuditLogDeleteGroupNames { get; set; }
+
+        public int AuditLogDaysToKeep { get; set; } = 30;
     }
 }

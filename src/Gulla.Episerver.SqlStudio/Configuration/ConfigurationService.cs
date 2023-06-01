@@ -48,5 +48,70 @@ namespace Gulla.Episerver.SqlStudio.Configuration
 
             return false;
         }
+
+        public bool IsAuditLogEnabled()
+        {
+            if (_configuration.DisableAuditLog)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CanUserViewAllAuditLogs()
+        {
+            var auditLogViewAllGroupNamesConfigValue = _configuration.AuditLogViewAllGroupNames;
+            if (!string.IsNullOrEmpty(auditLogViewAllGroupNamesConfigValue))
+            {
+                var groups = auditLogViewAllGroupNamesConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
+                {
+                    return true;
+                }
+            }
+
+            var auditLogViewAllUsersConfigValue = _configuration.AuditLogViewAllUsers;
+            if (!string.IsNullOrEmpty(auditLogViewAllUsersConfigValue))
+            {
+                var users = auditLogViewAllUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool CanUserDeleteAuditLogs()
+        {
+            var auditLogDeleteGroupNamesConfigValue = _configuration.AuditLogDeleteGroupNames;
+            if (!string.IsNullOrEmpty(auditLogDeleteGroupNamesConfigValue))
+            {
+                var groups = auditLogDeleteGroupNamesConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
+                {
+                    return true;
+                }
+            }
+
+            var auditLogDeleteUsersConfigValue = _configuration.AuditLogDeleteUsers;
+            if (!string.IsNullOrEmpty(auditLogDeleteUsersConfigValue))
+            {
+                var users = auditLogDeleteUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public int GetAuditLogDaysToKeep()
+        {
+            return _configuration.AuditLogDaysToKeep;
+        }
     }
 }

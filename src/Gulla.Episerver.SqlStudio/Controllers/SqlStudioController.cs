@@ -4,12 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using EPiServer.Data;
+using EPiServer.Security;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
+using Gulla.Episerver.SqlStudio.Dds;
 using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
@@ -22,18 +25,21 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         private readonly DataAccessOptions _dataAccessOptions;
         private readonly ConfigurationService _configurationService;
         private readonly SqlStudioOptions _configuration;
+        private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;
 
         public SqlStudioController(SqlService sqlService, 
             QueryLoader queryLoader, 
             DataAccessOptions dataAccessOptions, 
             ConfigurationService configurationService, 
-            IOptions<SqlStudioOptions> options)
+            IOptions<SqlStudioOptions> options,
+            ISqlStudioDdsRepository sqlStudioDdsRepository)
         {
             _sqlService = sqlService;
             _queryLoader = queryLoader;
             _dataAccessOptions = dataAccessOptions;
             _configurationService = configurationService;
             _configuration = options.Value;
+            _sqlStudioDdsRepository = sqlStudioDdsRepository;
         }
 
         public ActionResult Index()
@@ -195,6 +201,11 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             // If the SQL query updates the table 'SqlQueries', or other table columns - this must be called at the very end.
             FillModelWithTableMetaData(model, connectionString);
 
+            if (_configurationService.IsAuditLogEnabled())
+            {
+                _sqlStudioDdsRepository.Log(PrincipalInfo.CurrentPrincipal.Identity.Name, model.Query, model.Message, AnonymizeConnectionString(connectionString));
+            }
+
             return View(model);
         }
 
@@ -232,6 +243,22 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                     .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
                     .Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }).ToList();
             }
+        }
+
+        private static string AnonymizeConnectionString(string connectionString)
+        {
+            string output;
+            try
+            {
+                var connection = new SqlConnectionStringBuilder(connectionString);
+                output = connection.UserID + " @ " + connection.InitialCatalog;
+            }
+            catch 
+            {
+                // If everything else fails, return the length of the connection string
+                output = (connectionString?.Length ?? 0).ToString();
+            }
+            return output;
         }
     }
 }

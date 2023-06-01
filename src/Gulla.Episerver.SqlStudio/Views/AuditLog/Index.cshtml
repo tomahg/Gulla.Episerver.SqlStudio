@@ -1,0 +1,94 @@
+@using EPiServer.Shell.Navigation
+@using Gulla.Episerver.SqlStudio.Dds
+
+@model Gulla.Episerver.SqlStudio.ViewModels.AuditLogViewModel
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <title>SqlStudio Log</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #FBFBFB
+        }
+
+        .inputcontainer select, .inputcontainer input {
+            padding: 5px 2px;
+        }
+    </style>
+</head>
+<body>
+
+    @Html.Raw(Html.CreatePlatformNavigationMenu())
+    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+        <div class="epi-contentArea">
+            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
+                <h4 style="margin-bottom: 5px">Audit Log</h4>
+                @if (Model.HasResults)
+                {
+                    <div>
+                        <table class="stripe cell-border" id="result" style="font-size: 80%;">
+                            <thead>
+                                <tr>
+                                    <th>@nameof(SqlStudioDdsLogItem.UserName)</th>
+                                    <th>@nameof(SqlStudioDdsLogItem.Timestamp) (UTC)</th>
+                                    <th>@nameof(SqlStudioDdsLogItem.Query)</th>
+                                    <th>@nameof(SqlStudioDdsLogItem.Message)</th>
+                                    <th>@nameof(SqlStudioDdsLogItem.ConnectionString)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in Model.Logs)
+                                {
+                                    <tr>
+                                        <td>@log.UserName</td>
+                                        <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm.ss")</td>
+                                        <td>@log.Query</td>
+                                        <td>@log.Message</td>
+                                        <td>@log.ConnectionString</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-left: 30px;">
+                        <p><em>No audit logs found.</em></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+    @*https://datatables.net/download/*@
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/datatables.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#result').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        collectionLayout: 'fixed two-column'
+                    },
+                    'csv', 'pdf', 'excel'
+                ],
+                order: []
+            });
+        });
+    </script>
+</body>
+</html>

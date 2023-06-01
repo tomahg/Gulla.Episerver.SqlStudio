@@ -137,7 +137,7 @@ The addon can also be made available to users in other groups than `SqlAdmin`, b
 
 ```csharp
 .AddSqlStudio(x => {
-    x.GroupNames = "SuperAdmins,DatabaseAdmins"
+    x.GroupNames = "SuperAdmins,DatabaseAdmins";
 })
 ```
 
@@ -219,6 +219,60 @@ Custom columns are shown by default, but they can be disabled with the following
     x.CustomColumnsEnabled = false;
 })
 ```
+
+## Audit Log
+
+By default the audit log is enabled, and each user may see a log of their own queries. The audit log may be disabled with the following appsetting.
+
+```csharp
+.AddSqlStudio(x => {
+    x.DisableAuditLog = true;
+})
+```
+
+If some users should be able to see the audit log for all users, add their user names like this.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AuditLogViewAllUsers = "Huey,Dewey,Louie";
+})
+```
+
+Or add a group that should be able to see the audit log for all users.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AuditLogViewAllGroupNames = "SuperAdmins,DatabaseAdmins";
+})
+```
+
+If some users should be able to delete the audit logs for all users, add their user names like this.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AuditLogDeleteUsers = "Huey,Dewey,Louie";
+})
+```
+
+Or add a group that should be able to delete the audit logs for all users.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AuditLogDeleteGroupNames = "SuperAdmins,DatabaseAdmins";
+})
+```
+
+Audit logs are stored in Dynamic Data Store (DSS), and when they are deleted the entire DSS store is deleted.
+
+By default audit logs are deleted automatically after a 30 day retention time, but this can be changed with this appsetting.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AuditLogDaysToKeep = 10;
+})
+```
+
+Set the value to `0` to keep the audit logs forever.
 
 ## Dependencies
 
