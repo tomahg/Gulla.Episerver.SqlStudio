@@ -195,7 +195,7 @@ Saved queries will be displayed by category like this:
 
 ![Saved queries](img/saved-queries.jpg "Selecting a saved query")
 
-Saved queries (and their categories) can be sorted by starting the name (of query or category) with a number enclosed in square brackets. The brackets/number will not be shown in the UI, and in only used for sorting.
+Saved queries (and their categories) can be sorted by starting the name (of query or category) with a number enclosed in square brackets. The brackets/number will not be shown in the UI, and is only used for sorting.
 
 ## Custom columns
 
@@ -213,7 +213,7 @@ You may specify both the column header name and the placement (first, last, etc)
 ## Dependencies
 
 -   [CodeMirror](https://codemirror.net/) is used for the editor and basic IntelliSense. ([LICENSE](https://raw.githubusercontent.com/tomahg/Gulla.Episerver.SqlStudio/main/src/Gulla.Episerver.SqlStudio/wwwroot/codemirror-5.59.4/LICENSE))
--   [DataTables](https://datatables.net/) is used for displaying the result and exporting to CSV, PDF, and Excel. ([LICENSE](https://datatables.net/license/))
+-   [DataTables](https://datatables.net/) is used for displaying the result and exporting it to CSV, PDF, and Excel. ([LICENSE](https://datatables.net/license/))
 
 ## Contribute
 
