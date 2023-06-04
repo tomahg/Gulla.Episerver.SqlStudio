@@ -45,6 +45,12 @@ Below is a code snippet with all possible configuration options:
     x.GroupNames = "SuperAdmins,DatabaseAdmins"
     x.Users = "Huey,Dewey,Louie";
     x.ConnectionString = "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;";
+    x.DisableAuditLog = true;
+    x.AuditLogViewAllUsers = "Huey,Dewey,Louie";
+    x.AuditLogViewAllGroupNames = "SuperAdmins,LogViewerAdmin";
+    x.AuditLogDeleteUsers = "Huey,Dewey,Louie";
+    x.AuditLogDeleteGroupNames = "SuperAdmins,LogDeleterAdmin";
+    x.AuditLogDaysToKeep = 10;
 })
 ```
 
@@ -63,7 +69,13 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "Enabled": true,
       "GroupNames": "SuperAdmins,DatabaseAdmins",
       "Users": "Huey,Dewey,Louie",
-      "ConnectionString": "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;"
+      "ConnectionString": "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;",
+      "DisableAuditLog": true,
+      "AuditLogViewAllUsers": "Huey,Dewey,Louie",
+      "AuditLogViewAllGroupNames": "SuperAdmins,LogViewerAdmin",
+      "AuditLogDeleteUsers": "Huey,Dewey,Louie",
+      "AuditLogDeleteGroupNames": "SuperAdmins,LogDeleterAdmin",
+      "AuditLogDaysToKeep": 10,
     }
   }
 ```
@@ -242,7 +254,7 @@ Or add a group that should be able to see the audit log for all users.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.AuditLogViewAllGroupNames = "SuperAdmins,DatabaseAdmins";
+    x.AuditLogViewAllGroupNames = "SuperAdmins,LogViewerAdmin";
 })
 ```
 
@@ -258,7 +270,7 @@ Or add a group that should be able to delete the audit logs for all users.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.AuditLogDeleteGroupNames = "SuperAdmins,DatabaseAdmins";
+    x.AuditLogDeleteGroupNames = "SuperAdmins,LogDeleterAdmin";
 })
 ```
 
