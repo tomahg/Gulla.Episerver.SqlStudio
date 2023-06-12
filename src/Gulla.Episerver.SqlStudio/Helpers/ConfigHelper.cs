@@ -15,7 +15,7 @@ namespace Gulla.Episerver.SqlStudio.Helpers
                 return false;
             }
 
-            if (PrincipalInfo.Current.RoleList.Contains("SqlAdmin"))
+            if (PrincipalInfo.Current.RoleList.Contains("SqlAdmin", StringComparer.InvariantCultureIgnoreCase))
             {
                 return true;
             }
@@ -24,7 +24,7 @@ namespace Gulla.Episerver.SqlStudio.Helpers
             if (!string.IsNullOrEmpty(usersConfigValue))
             {
                 var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (users.Contains(PrincipalInfo.Current.Name))
+                if (users.Contains(PrincipalInfo.Current.Name, StringComparer.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
