@@ -40,7 +40,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             if (!string.IsNullOrEmpty(usersConfigValue))
             {
                 var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
@@ -75,7 +75,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             if (!string.IsNullOrEmpty(auditLogViewAllUsersConfigValue))
             {
                 var users = auditLogViewAllUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
@@ -100,7 +100,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             if (!string.IsNullOrEmpty(auditLogDeleteUsersConfigValue))
             {
                 var users = auditLogDeleteUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name))
+                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
