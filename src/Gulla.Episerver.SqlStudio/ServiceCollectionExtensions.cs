@@ -1,4 +1,5 @@
 ﻿using System;
+using Gulla.Episerver.SqlStudio.AI;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,7 @@ namespace Gulla.Episerver.SqlStudio
         {
             services.AddTransient<SqlService, SqlService>();
             services.AddTransient<QueryLoader, QueryLoader>();
+            services.AddTransient<OpenAiService, OpenAiService>();
             services.AddTransient<ConfigurationService, ConfigurationService>();
             
             services.AddOptions<SqlStudioOptions>().Configure<IConfiguration>((options, configuration) =>

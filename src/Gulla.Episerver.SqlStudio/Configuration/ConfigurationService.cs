@@ -59,6 +59,16 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             return true;
         }
 
+        public bool IsAiGenerationEnabled()
+        {
+            if (!_configuration.AiEnabled || string.IsNullOrEmpty(_configuration.AiApiKey))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool CanUserViewAllAuditLogs()
         {
             var auditLogViewAllGroupNamesConfigValue = _configuration.AuditLogViewAllGroupNames;

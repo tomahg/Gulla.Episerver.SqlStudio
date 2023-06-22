@@ -1,4 +1,4 @@
-@using EPiServer.Shell.Navigation
+﻿@using EPiServer.Shell.Navigation
 
 @model Gulla.Episerver.SqlStudio.ViewModels.SqlStudioViewModel
 
@@ -24,8 +24,25 @@
             color: #ffd900 !important;
         }
 
+        .cm-s-colorforth span.cm-comment {
+            color: #17b74a !important;
+        }
+
         .inputcontainer select, .inputcontainer input {
             padding: 5px 2px;
+        }
+        .spinner {
+          animation: spin 2s linear infinite;
+          display: inline-block;
+        }
+
+        @@keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
     </style>
 </head>
@@ -83,8 +100,21 @@
                 }
 
                 <span class="epi-cmsButton" style="margin-left: 30px; margin-bottom: 10px;">
-                    <input type="submit" id="btnSubmit" name="Execute" value="Execute query" title="Execute (F5)" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" />
+                    <input type="submit" id="btnSubmit" name="submit" value="Execute query" title="Execute (F5)" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" onclick="document.getElementById('spinner1').style.visibility = 'visible'; return true;" />
                 </span>
+                <div class="spinner" id="spinner1" style="visibility: hidden">🚀</div>
+                @if(Model.ShowAiButtons)
+                {
+                    <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
+                        <input type="submit" id="btnGenerate" name="submit" value="Generate query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Refresh" onclick="document.getElementById('spinner2').style.visibility = 'visible'; return true;" />
+                    </span>
+                    <div class="spinner" id="spinner2" style="visibility: hidden">🤖</div>
+                    <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
+                        <input type="submit" id="btnGenerate" name="submit" value="Explain query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Help" onclick="document.getElementById('spinner3').style.visibility = 'visible'; return true;" />
+                    </span>
+                    <div class="spinner" id="spinner3" style="visibility: hidden">🤖</div>
+                }
+
                 <span>
                     @Html.CheckBoxFor(m => m.HideEmptyColumns) <label for="HideEmptyColumns">Hide empty columns</label>
                 </span>
@@ -136,7 +166,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-    <link href="/_content/Gulla.Episerver.SqlStudio/Static/Styles/ToolButton.css" type="text/css" rel="stylesheet">
+    <link href="/_content/Gulla.Episerver.SqlStudio/Static/Styles/ToolButton.css?d=220623" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="/_content/Gulla.Episerver.SqlStudio/codemirror-5.59.4/lib/codemirror.css">
     <link rel="stylesheet" href="/_content/Gulla.Episerver.SqlStudio/codemirror-5.59.4/addon/hint/show-hint.css" />
     @if (Model.DarkMode)

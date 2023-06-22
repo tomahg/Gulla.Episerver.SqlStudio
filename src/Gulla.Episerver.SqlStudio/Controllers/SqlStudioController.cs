@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using EPiServer.Data;
 using EPiServer.Security;
+using Gulla.Episerver.SqlStudio.AI;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Dds;
@@ -25,6 +27,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         private readonly DataAccessOptions _dataAccessOptions;
         private readonly ConfigurationService _configurationService;
         private readonly SqlStudioOptions _configuration;
+        private readonly OpenAiService _openAiService;
         private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;
 
         public SqlStudioController(SqlService sqlService, 
@@ -32,6 +35,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             DataAccessOptions dataAccessOptions, 
             ConfigurationService configurationService, 
             IOptions<SqlStudioOptions> options,
+            OpenAiService openAiService,
             ISqlStudioDdsRepository sqlStudioDdsRepository)
         {
             _sqlService = sqlService;
@@ -39,6 +43,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             _dataAccessOptions = dataAccessOptions;
             _configurationService = configurationService;
             _configuration = options.Value;
+            _openAiService = openAiService;
             _sqlStudioDdsRepository = sqlStudioDdsRepository;
         }
 
@@ -63,6 +68,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
                 DarkMode = _configuration.DarkModeEnabled,
                 ShowCustomColumns = !_configuration.CustomColumnsEnabled,
+                ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
                 ConnectionStrings = connectionStringList
             };
 
@@ -72,7 +78,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string query, bool hideEmptyColumns, 
+        public ActionResult Index(string submit, string query, bool hideEmptyColumns, 
             int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
             int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading,
             string connectionString)
@@ -83,6 +89,15 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 {
                     StatusCode = (int?)HttpStatusCode.Unauthorized
                 };
+            }
+
+            if (submit.Contains("Generate"))
+            {
+                return Generate(query);
+            }
+            if (submit.Contains("Explain"))
+            {
+                return Explain(query);
             }
 
             // Dropdown is hidden from GUI, if there is only one connectionstring, or if the connectionstring is set in configuration
@@ -132,7 +147,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 ConnectionStrings = GetConnectionStringList(_dataAccessOptions, _configuration),
                 AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
                 DarkMode = _configuration.DarkModeEnabled,
-                ShowCustomColumns = _configuration.CustomColumnsEnabled
+                ShowCustomColumns = _configuration.CustomColumnsEnabled,
+                ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
             };
 
             // Check for configured allow regex pattern
@@ -259,6 +275,91 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 output = (connectionString?.Length ?? 0).ToString();
             }
             return output;
+        }
+
+        private ActionResult Generate(string query)
+        {
+            if (!_configurationService.Enabled() && !_configuration.AiEnabled)
+            {
+                return new ObjectResult("Unauthorized")
+                {
+                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                };
+            }
+
+            var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
+            var connectionString = connectionStringList.FirstOrDefault()?.Value;
+
+            var model = new SqlStudioViewModel
+            {                
+                ColumnsContentId = Enumerable.Empty<Column>(),
+                ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
+                ColumnsInsertIndex = Enumerable.Empty<Column>(),
+                AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
+                DarkMode = _configuration.DarkModeEnabled,
+                ShowCustomColumns = !_configuration.CustomColumnsEnabled,
+                ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ConnectionStrings = connectionStringList
+            };
+
+            if (!string.IsNullOrEmpty(_configuration.AiApiKey) && !string.IsNullOrWhiteSpace(query))
+            {
+                try
+                {
+                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, _sqlService.GetMetaData(connectionString), _configuration.AiApiKey).Result;
+                }
+                catch (Exception e)
+                {
+                    model.Message = e.Message;
+                }
+            }
+
+            FillModelWithTableMetaData(model, connectionString);
+
+            return View(model);
+        }
+
+        private ActionResult Explain(string query)
+        {
+            if (!_configurationService.Enabled() && !_configuration.AiEnabled)
+            {
+                return new ObjectResult("Unauthorized")
+                {
+                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                };
+            }
+
+            var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
+            var connectionString = connectionStringList.FirstOrDefault()?.Value;
+
+            var model = new SqlStudioViewModel
+            {
+                ColumnsContentId = Enumerable.Empty<Column>(),
+                ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
+                ColumnsInsertIndex = Enumerable.Empty<Column>(),
+                AutoIntelliSense = _configuration.AutoIntellisenseEnabled,
+                DarkMode = _configuration.DarkModeEnabled,
+                ShowCustomColumns = !_configuration.CustomColumnsEnabled,
+                ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ConnectionStrings = connectionStringList
+            };
+
+            if (!string.IsNullOrEmpty(_configuration.AiApiKey) && !string.IsNullOrWhiteSpace(query))
+            {
+                try
+                {
+                    var explaination = _openAiService.ExplainSql(query, _sqlService.GetMetaData(connectionString), _configuration.AiApiKey, _configuration.AiModel).Result;
+                    model.Query = explaination.ToSqlCommentedLines() + "\r\n" + query;
+                }
+                catch (Exception e)
+                {
+                    model.Message = e.Message;
+                }
+            }
+
+            FillModelWithTableMetaData(model, connectionString);
+
+            return View(model);
         }
     }
 }

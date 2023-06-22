@@ -35,5 +35,11 @@
         public string AuditLogDeleteGroupNames { get; set; }
 
         public int AuditLogDaysToKeep { get; set; } = 30;
+
+        public bool AiEnabled { get; set; } = true;
+
+        public string AiApiKey { get; set; }
+        
+        public string AiModel { get; set; } = "gpt-4";
     }
 }

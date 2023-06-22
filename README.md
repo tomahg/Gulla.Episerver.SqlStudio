@@ -1,4 +1,4 @@
-# Gulla.Episerver.SqlStudio for CMS 12
+# Gulla.Episerver.SqlStudio for CMS 12 - AI enabled 🤖
 
 This is the readme for the CMS 12 version, the version for CMS 11 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/cms11).
 
@@ -51,6 +51,9 @@ Below is a code snippet with all possible configuration options:
     x.AuditLogDeleteUsers = "Huey,Dewey,Louie";
     x.AuditLogDeleteGroupNames = "SuperAdmins,LogDeleterAdmin";
     x.AuditLogDaysToKeep = 10;
+    x.AiEnabled = true;
+    x.AiApiKey = "**********";
+    x.AiModel = "gpt-4";
 })
 ```
 
@@ -76,9 +79,35 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "AuditLogDeleteUsers": "Huey,Dewey,Louie",
       "AuditLogDeleteGroupNames": "SuperAdmins,LogDeleterAdmin",
       "AuditLogDaysToKeep": 10,
+      "AiEnabled": true,
+      "AiApiKey": "**********",
+      "AiModel": "gpt-4"
     }
   }
 ```
+
+## AI capabilities
+
+If you configure an API key for [OpenAI](https://platform.openai.com/) two extra buttons are shown.
+
+-   Generate query: will send metadata for your database (table + column names) and the provided input to OpenAI and return a generated SQL query.
+-   Explain query: will send metadata for your database (table + column names) and the provided query to OpenAI and return an explaination.
+
+There are three settings.
+
+-   Enabled: default true
+-   API key: AI buttons will be hidden, unless the key provided
+-   Model: You may choose any model available from OpenAI in Chat mode
+
+```csharp
+.AddSqlStudio(x => {
+    x.AiEnabled = true;
+    x.AiApiKey = "**********";
+    x.AiModel = "gpt-4";
+})
+```
+
+![AI buttons](img/ai.png "AI buttons")
 
 ## IntelliSense / AutoComplete
 
