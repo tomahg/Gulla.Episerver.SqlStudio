@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using EPiServer.Data;
 using EPiServer.Security;
 using Gulla.Episerver.SqlStudio.AI;
@@ -73,7 +72,6 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             };
 
             FillModelWithTableMetaData(model, connectionString);
-
             return View(model);
         }
 
@@ -306,7 +304,10 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             {
                 try
                 {
-                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, _sqlService.GetMetaData(connectionString), _configuration.AiApiKey).Result;
+                    // Do not include content type id when generating SQL, as it will make queries more cryptic
+                    var contentTypeNames = _sqlService.GetListOfContentTypes(false);
+                    var sqlMetaData = _sqlService.GetMetaData(connectionString);
+                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey).Result;
                 }
                 catch (Exception e)
                 {
@@ -315,7 +316,6 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
 
             FillModelWithTableMetaData(model, connectionString);
-
             return View(model);
         }
 
@@ -348,7 +348,10 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             {
                 try
                 {
-                    var explaination = _openAiService.ExplainSql(query, _sqlService.GetMetaData(connectionString), _configuration.AiApiKey, _configuration.AiModel).Result;
+                    // Include content type id when explaining SQL, as it will make it possible to explain cryptic queries
+                    var contentTypeNames = _sqlService.GetListOfContentTypes(true);
+                    var sqlMetaData = _sqlService.GetMetaData(connectionString);
+                    var explaination = _openAiService.ExplainSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel).Result;
                     model.Query = explaination.ToSqlCommentedLines() + "\r\n" + query;
                 }
                 catch (Exception e)
@@ -358,7 +361,6 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
 
             FillModelWithTableMetaData(model, connectionString);
-
             return View(model);
         }
     }

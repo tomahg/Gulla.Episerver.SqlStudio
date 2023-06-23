@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -18,13 +19,15 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         private readonly ILanguageBranchRepository _languageBranchRepository;
         private readonly IUrlResolver _urlResolver;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IContentTypeRepository _contentTypeRepository;
 
-        public SqlService(IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver, IHttpContextAccessor httpContextAccessor)
+        public SqlService(IContentLoader contentLoader, ILanguageBranchRepository languageBranchRepository, IUrlResolver urlResolver, IHttpContextAccessor httpContextAccessor, IContentTypeRepository contentTypeRepository)
         {
             _contentLoader = contentLoader;
             _languageBranchRepository = languageBranchRepository;
             _urlResolver = urlResolver;
             _httpContextAccessor = httpContextAccessor;
+            _contentTypeRepository = contentTypeRepository;
         }
 
         public IEnumerable<IEnumerable<string>> ExecuteQuery(string query, string connectionString)
@@ -192,6 +195,77 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
         public string TableNameMap(string connectionString)
         {
             return string.Join(",\r\n", GetTableNameMapRows(connectionString));
+        }
+
+        public string GetListOfContentTypes(bool includeId)
+        {
+            var contentTypes = _contentTypeRepository.List();
+            var pageTypes = contentTypes.Where(x => x.ModelType != null && typeof(PageData).IsAssignableFrom(x.ModelType));
+            var blockTypes = contentTypes.Where(x => x.ModelType != null && typeof(BlockData).IsAssignableFrom(x.ModelType));
+            var mediaTypes = contentTypes.Where(x => x.ModelType != null && typeof(MediaData).IsAssignableFrom(x.ModelType));
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Page types:");
+            foreach (var pageType in pageTypes)
+            {
+                if (includeId)
+                {
+                    sb.Append($"Id: {pageType.ID}, ");
+                }
+                sb.Append($"Name: {pageType.Name}");
+                if (!string.IsNullOrEmpty(pageType.DisplayName))
+                {
+                    sb.Append($", Display Name: {pageType.DisplayName}");
+                }
+                if (!string.IsNullOrEmpty(pageType.Description))
+                {
+                    sb.Append($", Description: {pageType.Description}");
+                }
+                sb.AppendLine("");
+            }
+            sb.AppendLine();
+
+            sb.AppendLine("Block types:");
+            foreach (var blockType in blockTypes)
+            {
+                if (includeId)
+                {
+                    sb.Append($"Id: {blockType.ID}, ");
+                }
+                sb.Append($"Name: {blockType.Name}");
+                if (!string.IsNullOrEmpty(blockType.DisplayName))
+                {
+                    sb.Append($", Display Name: {blockType.DisplayName}");
+                }
+                if (!string.IsNullOrEmpty(blockType.Description))
+                {
+                    sb.Append($", Description: {blockType.Description}");
+                }
+                sb.AppendLine("");
+            }
+            sb.AppendLine();
+
+            sb.AppendLine("Media types:");
+            foreach (var mediaType in mediaTypes)
+            {
+                if (includeId)
+                {
+                    sb.Append($"Id: {mediaType.ID}, ");
+                }
+                sb.Append($"Name: {mediaType.Name}");
+                if (!string.IsNullOrEmpty(mediaType.DisplayName))
+                {
+                    sb.Append($", Display Name: {mediaType.DisplayName}");
+                }
+                if (!string.IsNullOrEmpty(mediaType.Description))
+                {
+                    sb.Append($", Description: {mediaType.Description}");
+                }
+                sb.AppendLine("");
+            }
+            sb.AppendLine();
+
+            return sb.ToString();
         }
 
         private IEnumerable<string> GetTableNameMapRows(string connectionString)

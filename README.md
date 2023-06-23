@@ -109,6 +109,8 @@ There are three settings.
 
 ![AI buttons](img/ai.png "AI buttons")
 
+A list over table/column-names for the current database + a list content type ids/names/descriptions will be sent to the OpenAI API.
+
 ## IntelliSense / AutoComplete
 
 IntelliSense is added for all tables in the database, both Episerver tables and any custom tables you might have. The IntelliSense function will trigger after every key-up, with an exception for some special keys. The IntelliSense popup can be closed with [ESC].
