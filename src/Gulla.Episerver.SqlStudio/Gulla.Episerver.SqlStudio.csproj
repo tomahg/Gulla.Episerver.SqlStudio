@@ -15,7 +15,7 @@
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
     <Title>Gulla.Episerver.SqlStudio</Title>
     <Authors>Tomas Hensrud Gulla</Authors>
-    <Description>Adds an admin tool that let you query the SQL database from within Optimizely CMS UI.</Description>
+    <Description>An admin tool that lets you query the SQL database from within Optimizely CMS UI. Optional AI features.</Description>
     <PackageTags>Optimizely Episerver SQL</PackageTags>
     <PackageProjectUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
