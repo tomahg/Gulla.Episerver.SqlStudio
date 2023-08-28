@@ -50,7 +50,7 @@
 
     @Html.Raw(Html.CreatePlatformNavigationMenu())
     <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
-        <div class="epi-contentArea">
+        <div class="epi-contentArea" style="margin-top:20px;">
             @using (Html.BeginForm())
             {
                 if (Model.ConnectionStrings.Count() > 1)
@@ -61,7 +61,7 @@
                     </div>
                 }
 
-                if (Model.SavedQueries != null && Model.SavedQueries.Any())
+                if (Model.SavedQueries != null && Model.SavedQueries.Any() && Model.ShowSavedQueries)
                 {
                     <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
 

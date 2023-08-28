@@ -68,6 +68,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 DarkMode = _configuration.DarkModeEnabled,
                 ShowCustomColumns = !_configuration.CustomColumnsEnabled,
                 ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ShowSavedQueries = _configuration.ShowSavedQueries,
                 ConnectionStrings = connectionStringList
             };
 
@@ -147,6 +148,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 DarkMode = _configuration.DarkModeEnabled,
                 ShowCustomColumns = _configuration.CustomColumnsEnabled,
                 ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ShowSavedQueries = _configuration.ShowSavedQueries,
             };
 
             // Check for configured allow regex pattern
@@ -297,6 +299,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 DarkMode = _configuration.DarkModeEnabled,
                 ShowCustomColumns = !_configuration.CustomColumnsEnabled,
                 ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ShowSavedQueries = _configuration.ShowSavedQueries,
                 ConnectionStrings = connectionStringList
             };
 
@@ -341,6 +344,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 DarkMode = _configuration.DarkModeEnabled,
                 ShowCustomColumns = !_configuration.CustomColumnsEnabled,
                 ShowAiButtons = _configurationService.IsAiGenerationEnabled(),
+                ShowSavedQueries = _configuration.ShowSavedQueries,
                 ConnectionStrings = connectionStringList
             };
 

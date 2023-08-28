@@ -14,6 +14,8 @@
 
         public bool CustomColumnsEnabled { get; set; } = true;
 
+        public bool ShowSavedQueries { get; set; } = true;
+
         public string AllowPattern { get; set; }
 
         public string AllowMessage { get; set; }
