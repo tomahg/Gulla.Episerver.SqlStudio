@@ -34,11 +34,14 @@ namespace Gulla.Episerver.SqlStudio.Dds
 
         public void DeleteOldLogEntries(int olderThanDays)
         {
-            var store = GetStore();
-            var itemsToDelete = store.Items<SqlStudioDdsLogItem>().Where(x => x.Timestamp < System.DateTime.Now.AddDays(-olderThanDays));
-            foreach (var item in itemsToDelete)
+            var store = _dataStoreFactory.GetStore(typeof(SqlStudioDdsLogItem));
+            if (store != null)
             {
-                store.Delete(item);
+                var itemsToDelete = store.Items<SqlStudioDdsLogItem>().Where(x => x.Timestamp < DateTime.Now.AddDays(-olderThanDays));
+                foreach (var item in itemsToDelete)
+                {
+                    store.Delete(item);
+                }
             }
         }
 
