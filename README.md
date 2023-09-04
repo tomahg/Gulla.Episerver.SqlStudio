@@ -39,6 +39,7 @@ Below is a code snippet with all possible configuration options:
     x.AutoIntellisenseEnabled = true;
     x.DarkModeEnabled = true;
     x.CustomColumnsEnabled = true;
+    x.ShowSavedQueries = true;
     x.DenyMessage = "Careful, please!";
     x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
     x.Enabled = true;
@@ -67,6 +68,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "AutoIntellisenseEnabled": true,
       "DarkModeEnabled": true,
       "CustomColumnsEnabled": true,
+      "ShowSavedQueries": true,
       "DenyMessage": "Careful, please!",
       "DenyPattern": "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b",
       "Enabled": true,
@@ -241,6 +243,14 @@ Saved queries will be displayed by category like this:
 ![Saved queries](img/saved-queries.jpg "Selecting a saved query")
 
 Saved queries (and their categories) can be sorted by starting the name (of query or category) with a number enclosed in square brackets. The brackets/number will not be shown in the UI, and is only used for sorting.
+
+If you have saved queries in your database, but want to hide them from the UI, you can hide them like this.
+
+```csharp
+.AddSqlStudio(x => {
+    x.ShowSavedQueries = false;
+})
+```
 
 ## Custom columns
 
