@@ -18,8 +18,8 @@ namespace Gulla.Episerver.SqlStudio.Menu
 
             public IEnumerable<MenuItem> GetMenuItems()
             {
-                return new MenuItem[]
-                {
+                return
+                [
                     new UrlMenuItem("SQL", MenuPaths.Global + "/cms/sqlstudio", "/SqlStudio")
                     {
                         IsAvailable = context => _configurationService.Enabled()
@@ -30,17 +30,11 @@ namespace Gulla.Episerver.SqlStudio.Menu
                         IsAvailable = context => _configurationService.Enabled(),
                         SortIndex = 1
                     },
-                    new UrlMenuItem("Audit log", MenuPaths.Global + "/cms/sqlstudio/auditlog", "/SqlStudio/AuditLog")
+                    new UrlMenuItem("Audit Log", MenuPaths.Global + "/cms/sqlstudio/auditlog", "/SqlStudio/AuditLog")
                     {
                         IsAvailable = context => _configurationService.Enabled() && _configurationService.IsAuditLogEnabled(),
                         SortIndex = 2
                     },
-                    new UrlMenuItem("Admin", MenuPaths.Global + "/cms/sqlstudio/admin", "/SqlStudio/Admin")
-                    {
-                        IsAvailable = context => _configurationService.Enabled() && _configurationService.CanUserDeleteAuditLogs(),
-                        SortIndex = 3
-                    },
-                };
             }
         }
     }

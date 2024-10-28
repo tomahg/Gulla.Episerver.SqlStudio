@@ -315,7 +315,7 @@ Or add a group that should be able to delete the audit logs for all users.
 })
 ```
 
-Audit logs are stored in Dynamic Data Store (DSS), and when they are deleted from the UI (with the button «Clear all logs»), the entire DSS store is deleted.
+Audit logs are stored in Dynamic Data Store (DSS), and when they are deleted from the UI (with the button «Delete all logs»), the entire DSS store is deleted.
 
 By default audit logs are deleted automatically after a 30 day retention time, but this can be changed with this appsetting.
 

@@ -243,14 +243,14 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         {
             if (!string.IsNullOrEmpty(configuration.ConnectionString))
             {
-                return new List<SelectListItem>
-                {
+                return
+                [
                     new SelectListItem
                     {
                         Text = "Default",
                         Value = configuration.ConnectionString
                     }
-                };
+                ];
             }
             else
             {
@@ -267,7 +267,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             try
             {
                 var connection = new SqlConnectionStringBuilder(connectionString);
-                output = connection.UserID + " @ " + connection.InitialCatalog;
+                output = connection.UserID + "@" + connection.InitialCatalog;
             }
             catch 
             {

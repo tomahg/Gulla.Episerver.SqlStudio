@@ -6,10 +6,10 @@
     
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>2.10.0</Version>
-    <PackageVersion>2.10.0</PackageVersion>
-    <AssemblyVersion>2.10.0</AssemblyVersion>
-    <FileVersion>2.10.0</FileVersion>	  
+    <Version>2.11.0</Version>
+    <PackageVersion>2.11.0</PackageVersion>
+    <AssemblyVersion>2.11.0</AssemblyVersion>
+    <FileVersion>2.11.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
@@ -21,7 +21,7 @@
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Update to .NET8</PackageReleaseNotes>
+    <PackageReleaseNotes>Refactor audit log deletion</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

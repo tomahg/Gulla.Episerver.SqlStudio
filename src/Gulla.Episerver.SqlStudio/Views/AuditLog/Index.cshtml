@@ -9,7 +9,7 @@
 
 <html>
 <head>
-    <title>SqlStudio Log</title>
+    <title>SqlStudio Audit Log</title>
 
     <style>
         body {
@@ -64,6 +64,18 @@
                     </div>
                 }
             </div>
+            @if (Model.HasResults && Model.ShowDeleteButton)
+            {
+                <hr />
+                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
+                    <h4 style="margin-bottom: 5px">Danger Zone</h4>
+                    <p>Number of logs in DDS: @Model.LogsCount</p>
+                    @using (Html.BeginForm())
+                    {
+                        <input type="submit" id="btnDelete" name="Delete" value="Delete all logs" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" style="color: #d1242f; font-weight: bold;" />
+                    }
+                </div>
+            }
         </div>
     </div>
 
