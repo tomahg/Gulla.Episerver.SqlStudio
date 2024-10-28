@@ -54,7 +54,7 @@ Below is a code snippet with all possible configuration options:
     x.AuditLogDaysToKeep = 10;
     x.AiEnabled = true;
     x.AiApiKey = "**********";
-    x.AiModel = "gpt-4";
+    x.AiModel = "gpt-4o";
 })
 ```
 
@@ -83,7 +83,7 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "AuditLogDaysToKeep": 10,
       "AiEnabled": true,
       "AiApiKey": "**********",
-      "AiModel": "gpt-4"
+      "AiModel": "gpt-4o"
     }
   }
 ```
@@ -99,13 +99,13 @@ There are three settings.
 
 -   Enabled: default true
 -   API key: AI buttons will be hidden, unless the key provided
--   Model: You may choose any model available from OpenAI in Chat mode
+-   Model: You may choose any model available from OpenAI in Chat mode, default is gpt-4o 
 
 ```csharp
 .AddSqlStudio(x => {
     x.AiEnabled = true;
     x.AiApiKey = "**********";
-    x.AiModel = "gpt-4";
+    x.AiModel = "gpt-4o";
 })
 ```
 
