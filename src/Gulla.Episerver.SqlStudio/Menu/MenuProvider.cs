@@ -23,7 +23,7 @@ namespace Gulla.Episerver.SqlStudio.Menu
                     new UrlMenuItem("SQL", MenuPaths.Global + "/cms/sqlstudio", "/SqlStudio")
                     {
                         IsAvailable = context => _configurationService.Enabled()
-                 
+
                     },
                     new UrlMenuItem("SQL Studio", MenuPaths.Global + "/cms/sqlstudio/sqlstudio", "/SqlStudio")
                     {
@@ -34,7 +34,8 @@ namespace Gulla.Episerver.SqlStudio.Menu
                     {
                         IsAvailable = context => _configurationService.Enabled() && _configurationService.IsAuditLogEnabled(),
                         SortIndex = 2
-                    },
+                    }
+                ];
             }
         }
     }

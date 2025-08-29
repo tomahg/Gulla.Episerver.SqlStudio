@@ -310,7 +310,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                     // Do not include content type id when generating SQL, as it will make queries more cryptic
                     var contentTypeNames = _sqlService.GetListOfContentTypes(false);
                     var sqlMetaData = _sqlService.GetMetaData(connectionString);
-                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey).Result;
+                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature).Result;
                 }
                 catch (Exception e)
                 {
@@ -355,7 +355,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                     // Include content type id when explaining SQL, as it will make it possible to explain cryptic queries
                     var contentTypeNames = _sqlService.GetListOfContentTypes(true);
                     var sqlMetaData = _sqlService.GetMetaData(connectionString);
-                    var explaination = _openAiService.ExplainSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel).Result;
+                    var explaination = _openAiService.ExplainSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature).Result;
                     model.Query = explaination.ToSqlCommentedLines() + "\r\n" + query;
                 }
                 catch (Exception e)

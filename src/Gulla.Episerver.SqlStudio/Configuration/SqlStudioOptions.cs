@@ -42,6 +42,8 @@
 
         public string AiApiKey { get; set; }
         
-        public string AiModel { get; set; } = "gpt-4o";
+        public string AiModel { get; set; } = "gpt-5";
+
+        public double AiTemperature { get; set; } = 1.0;
     }
 }

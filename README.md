@@ -54,7 +54,8 @@ Below is a code snippet with all possible configuration options:
     x.AuditLogDaysToKeep = 10;
     x.AiEnabled = true;
     x.AiApiKey = "**********";
-    x.AiModel = "gpt-4o";
+    x.AiModel = "gpt-5";
+	x.AiTemperature = 1.0;
 })
 ```
 
@@ -83,7 +84,8 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "AuditLogDaysToKeep": 10,
       "AiEnabled": true,
       "AiApiKey": "**********",
-      "AiModel": "gpt-4o"
+      "AiModel": "gpt-5",
+	  "AiTemperature": 1.0
     }
   }
 ```
@@ -95,17 +97,19 @@ If you configure an API key for [OpenAI](https://platform.openai.com/) two extra
 -   Generate query: will send metadata for your database (table + column names) and the provided input to OpenAI and return a generated SQL query.
 -   Explain query: will send metadata for your database (table + column names) and the provided query to OpenAI and return an explaination.
 
-There are three settings.
+There are four settings.
 
 -   Enabled: default true
 -   API key: AI buttons will be hidden, unless the key provided
--   Model: You may choose any model available from OpenAI in Chat mode, default is gpt-4o 
+-   Model: You may choose any model available from OpenAI in Chat mode, default is gpt-5 
+-	Temperature: For gpt-5 only the default, 1.0, is supported
 
 ```csharp
 .AddSqlStudio(x => {
     x.AiEnabled = true;
     x.AiApiKey = "**********";
-    x.AiModel = "gpt-4o";
+    x.AiModel = "gpt-5";
+	x.AiTemperature = 1.0;
 })
 ```
 
