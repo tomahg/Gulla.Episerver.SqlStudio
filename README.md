@@ -8,7 +8,7 @@ With great powers comes great responsibility! This addon will indeed provide gre
 
 ## Usage
 
-This addon will let you query the database directly from the Optimizely/Episerver user interface. The result set can be exported to Excel, CSV, or PDF.
+This addon will let you query the database directly from the Optimizely CMS user interface. The result set can be exported to Excel, CSV, or PDF.
 
 Enter your query and execute it with the execute button - or hit F5, just like in Microsoft SQL Management Studio.
 
@@ -255,6 +255,9 @@ If you have saved queries in your database, but want to hide them from the UI, y
     x.ShowSavedQueries = false;
 })
 ```
+
+Starting with version 2.13.0 saved queries can also be viewed, and deleted, in the UI, as seen in the screenshot below.
+![Saved queries](img/saved_queries.png "Viewing and deleting saved queries")
 
 ## Custom columns
 
