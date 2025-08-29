@@ -30,6 +30,11 @@ namespace Gulla.Episerver.SqlStudio.Menu
                         IsAvailable = context => _configurationService.Enabled(),
                         SortIndex = 1
                     },
+                    new UrlMenuItem("Saved Queries", MenuPaths.Global + "/cms/sqlstudio/savedqueries", "/SqlStudio/SavedQueries")
+                    {
+                        IsAvailable = context => _configurationService.Enabled() && _configurationService.IsSavedQueriesEnabled(),
+                        SortIndex = 2
+                    },
                     new UrlMenuItem("Audit Log", MenuPaths.Global + "/cms/sqlstudio/auditlog", "/SqlStudio/AuditLog")
                     {
                         IsAvailable = context => _configurationService.Enabled() && _configurationService.IsAuditLogEnabled(),

@@ -59,6 +59,16 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             return true;
         }
 
+        public bool IsSavedQueriesEnabled()
+        {
+            if (_configuration.ShowSavedQueries)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public bool IsAiGenerationEnabled()
         {
             if (!_configuration.AiEnabled || string.IsNullOrEmpty(_configuration.AiApiKey))

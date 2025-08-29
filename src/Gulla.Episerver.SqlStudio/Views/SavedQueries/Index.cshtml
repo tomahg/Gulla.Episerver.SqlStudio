@@ -1,0 +1,142 @@
+@using EPiServer.Shell.Navigation
+@using Gulla.Episerver.SqlStudio.Dds
+
+@model Gulla.Episerver.SqlStudio.ViewModels.SavedQueriesViewModel
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <title>SqlStudio Saved Queries</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #FBFBFB
+        }
+
+        .inputcontainer select, .inputcontainer input {
+            padding: 5px 2px;
+        }
+
+        .category {
+            margin: 20px 0 10px 30px;
+        }
+
+        .queries {
+            margin-left: 30px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .query-row {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+        }
+
+        .query-row:last-child {
+            border-bottom: none;
+        }
+
+        .query-meta {
+            margin: 0 0 6px 0;
+            font-weight: 600;
+        }
+
+        .query-sql {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .delete-form {
+            display: flex;
+            align-items: start;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: #c62828;
+            color: #fff;
+            border-color: #b71c1c;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .muted {
+            color: #777;
+        }
+
+    </style>
+</head>
+<body>
+
+    @Html.Raw(Html.CreatePlatformNavigationMenu())
+    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+        <div class="epi-contentArea">
+            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
+                <h4 style="margin-bottom: 5px">Saved Queries</h4>
+                @if (Model.SavedQueries != null && Model.SavedQueries.Any())
+                {
+                    foreach (var category in Model.SavedQueries)
+                    {
+                        <div class="category">
+                            <h5>@(string.IsNullOrWhiteSpace(category.Name) ? "Uncategorized" : category.Name)</h5>
+                        </div>
+
+                        if (category.Queries != null && category.Queries.Any())
+                        {
+                            <div class="queries">
+                                @foreach (var query in category.Queries)
+                                {
+                                    <div class="query-row">
+                                        <div>
+                                            <p class="query-meta">@query.Name</p>
+                                            <pre class="query-sql">@query.Query</pre>
+                                        </div>
+                                        <div>
+                                            <form action="@Url.Action("Delete", "SavedQueries")" method="post" class="delete-form" onsubmit="return confirm('Delete the query &quot;@query.Name&quot; from &quot;@category.Name&quot;?');">
+                                                <input type="hidden" name="category" value="@category.Name" />
+                                                <input type="hidden" name="name" value="@query.Name" />
+                                                <button type="submit" class="btn btn-danger" title="Delete this query">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <div style="margin-left: 30px;">
+                        <p><em>No saved queries found.</em></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

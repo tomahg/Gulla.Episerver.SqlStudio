@@ -34,7 +34,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             return wrap ? "\"" + databaseString + "\"" : databaseString;
         }
 
-        public static IEnumerable<SqlQueryCategory> GetQueryCategoryList(this IDataReader dataReader)
+        public static IEnumerable<SqlQueryCategory> GetQueryCategoryList(this IDataReader dataReader, bool keepSortPrefix)
         {
             var flatQueryList = new List<SqlQuery>();
             while (true)
@@ -58,8 +58,11 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             var categoryQueries = new List<SqlQuery>();
             foreach (var query in flatQueryList)
             {
-                query.Category = query.Category.TrimSort();
-                query.Name = query.Name.TrimSort();
+                if (!keepSortPrefix)
+                {
+                    query.Category = query.Category.TrimSort();
+                    query.Name = query.Name.TrimSort();
+                }
 
                 if (first || category != query.Category)
                 {

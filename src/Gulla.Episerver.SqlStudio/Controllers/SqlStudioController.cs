@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -12,36 +11,31 @@ using Gulla.Episerver.SqlStudio.Dds;
 using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
     [Route("SqlStudio")]
-    public class SqlStudioController : Controller
+    public class SqlStudioController : BaseSqlController
     {
         private readonly SqlService _sqlService;
-        private readonly QueryLoader _queryLoader;
-        private readonly DataAccessOptions _dataAccessOptions;
+        private readonly QueryLoader _queryLoader;        
         private readonly ConfigurationService _configurationService;
-        private readonly SqlStudioOptions _configuration;
         private readonly OpenAiService _openAiService;
         private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;
 
         public SqlStudioController(SqlService sqlService, 
             QueryLoader queryLoader, 
-            DataAccessOptions dataAccessOptions, 
-            ConfigurationService configurationService, 
+            DataAccessOptions dataAccessOptions,
             IOptions<SqlStudioOptions> options,
+            ConfigurationService configurationService,
             OpenAiService openAiService,
-            ISqlStudioDdsRepository sqlStudioDdsRepository)
+            ISqlStudioDdsRepository sqlStudioDdsRepository) : base(dataAccessOptions, options)
         {
             _sqlService = sqlService;
-            _queryLoader = queryLoader;
-            _dataAccessOptions = dataAccessOptions;
+            _queryLoader = queryLoader;            
             _configurationService = configurationService;
-            _configuration = options.Value;
             _openAiService = openAiService;
             _sqlStudioDdsRepository = sqlStudioDdsRepository;
         }
@@ -229,7 +223,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         {
             try
             {
-                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString).ToList() : Enumerable.Empty<SqlQueryCategory>();
+                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, false).ToList() : Enumerable.Empty<SqlQueryCategory>();
                 model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
                 model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
             }
@@ -239,29 +233,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             }
         }
 
-        private List<SelectListItem> GetConnectionStringList(DataAccessOptions dataAccessOptions, SqlStudioOptions configuration)
-        {
-            if (!string.IsNullOrEmpty(configuration.ConnectionString))
-            {
-                return
-                [
-                    new SelectListItem
-                    {
-                        Text = "Default",
-                        Value = configuration.ConnectionString
-                    }
-                ];
-            }
-            else
-            {
-                return dataAccessOptions.ConnectionStrings
-                    .DistinctBy(x => x.Name)
-                    .OrderByDescending(x => x.Name == _dataAccessOptions.DefaultConnectionStringName)
-                    .Select(x => new SelectListItem { Text = x.Name, Value = x.ConnectionString }).ToList();
-            }
-        }
-
-        private static string AnonymizeConnectionString(string connectionString)
+        public static string AnonymizeConnectionString(string connectionString)
         {
             string output;
             try
