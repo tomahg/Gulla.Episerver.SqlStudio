@@ -334,6 +334,9 @@ By default audit logs are deleted automatically after a 30 day retention time, b
 
 Set the value to `0` to keep the audit logs forever.
 
+
+![Audit log](img/audit_log.png "Audit log")
+
 ## Troubleshooting
 
 If you are experiencing 404 when accessing the addon, try adding MapControllers to startups.cs.
