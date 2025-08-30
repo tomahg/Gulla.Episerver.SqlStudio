@@ -223,7 +223,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         {
             try
             {
-                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, false).ToList() : Enumerable.Empty<SqlQueryCategory>();
+                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, keepSortPrefix: false).ToList() : Enumerable.Empty<SqlQueryCategory>();
                 model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
                 model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
             }

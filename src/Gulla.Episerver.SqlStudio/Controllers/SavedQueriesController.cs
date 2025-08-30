@@ -47,7 +47,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
             var model = new SavedQueriesViewModel
             {
-                SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, true).ToList() : Enumerable.Empty<SqlQueryCategory>()
+                SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, keepSortPrefix: true).ToList() : Enumerable.Empty<SqlQueryCategory>()
             };
             return View(model);
         }
