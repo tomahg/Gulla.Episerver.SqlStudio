@@ -6,9 +6,9 @@
     
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>2.13.0</Version>
-    <PackageVersion>2.13.0</PackageVersion>
-    <AssemblyVersion>2.13.0</AssemblyVersion>
+    <Version>2.14.0</Version>
+    <PackageVersion>2.14.0</PackageVersion>
+    <AssemblyVersion>2.14.0</AssemblyVersion>
     <FileVersion>2.13.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>

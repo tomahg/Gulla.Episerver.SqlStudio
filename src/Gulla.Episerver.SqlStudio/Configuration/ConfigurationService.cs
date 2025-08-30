@@ -29,7 +29,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             var groupsConfigValue = _configuration.GroupNames;
             if (!string.IsNullOrEmpty(groupsConfigValue))
             {
-                var groups = groupsConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                var groups = groupsConfigValue.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
                 if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
                 {
                     return true;
@@ -39,7 +39,7 @@ namespace Gulla.Episerver.SqlStudio.Configuration
             var usersConfigValue = _configuration.Users;
             if (!string.IsNullOrEmpty(usersConfigValue))
             {
-                var users = usersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                var users = usersConfigValue.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
                 if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
                 {
                     return true;
