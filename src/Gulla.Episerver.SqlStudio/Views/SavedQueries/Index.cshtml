@@ -49,6 +49,21 @@
             padding: 10px 14px;
         }
 
+        .query-editor {
+            width: 100%;
+            min-height: 180px;
+            padding: 8px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background: #fff;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            white-space: pre;
+            overflow: auto;
+            box-sizing: border-box;
+            margin-top: 6px;
+        }
+
         .accordion-trigger {
             appearance: none;
             background: none;
@@ -92,11 +107,40 @@
         }
 
         .btn {
-            padding: 6px 10px;
+            padding: 0px 10px;
             border-radius: 4px;
             border: 1px solid transparent;
             cursor: pointer;
             font-size: 12px;
+            height: 30px;
+        }
+
+        .btn-default {
+            background: #f3f3f3;
+            border-color: #e5e5e5;
+        }
+
+        .btn-default:hover {
+            background: #ebebeb;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+            border-color: #1d4ed8;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border-color: #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
         }
 
         .btn-danger {
@@ -173,9 +217,17 @@
                                             </button>
                                         </div>
 
-                                        <div id="@itemId" class="accordion-panel" hidden>
+                                        <div id="@itemId" class="accordion-panel" data-name="@query.Name" data-category="@category.Name"
+                                             hidden>
                                             <pre class="query-sql">@query.Query</pre>
+                                            <textarea class="query-editor" hidden></textarea>
                                             <div class="panel-actions">
+                                                <button type="button" class="btn btn-default edit-btn">Edit</button>
+
+                                                <div class="edit-actions" hidden>
+                                                    <button type="button" class="btn btn-primary save-edit">Save</button>
+                                                    <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                                                </div>
                                                 <form action="@Url.Action("Delete", "SavedQueries")" method="post" class="delete-form" onsubmit="return confirm('Delete the query &quot;@query.Name&quot; from &quot;@category.Name&quot;?');">
                                                     <input type="hidden" name="category" value="@category.Name" />
                                                     <input type="hidden" name="name" value="@query.Name" />
@@ -230,5 +282,94 @@
             }, false);
         })();
     </script>
+
+    <script>
+        (function () {
+            var updateUrl = '@Url.Action("Update", "SavedQueries")';
+
+            function enterEdit(panel) {
+                var pre = panel.querySelector('.query-sql');
+                var ta = panel.querySelector('.query-editor');
+                var editBtn = panel.querySelector('.edit-btn');
+                var editActions = panel.querySelector('.edit-actions');
+                var deleteForm = panel.querySelector('.delete-form');
+
+                ta.value = pre.textContent;
+                pre.hidden = true;
+                ta.hidden = false;
+                editBtn.hidden = true;
+                editActions.hidden = false;
+                if (deleteForm) deleteForm.hidden = true; // reduce accidents while editing
+            }
+
+            function exitEdit(panel, keepChanges) {
+                var pre = panel.querySelector('.query-sql');
+                var ta = panel.querySelector('.query-editor');
+                var editBtn = panel.querySelector('.edit-btn');
+                var editActions = panel.querySelector('.edit-actions');
+                var deleteForm = panel.querySelector('.delete-form');
+
+                if (keepChanges) {
+                    pre.textContent = ta.value;
+                }
+                ta.hidden = true;
+                pre.hidden = false;
+                editBtn.hidden = false;
+                editActions.hidden = true;
+                if (deleteForm) deleteForm.hidden = false;
+            }
+
+            async function save(panel) {
+                var name = panel.getAttribute('data-name') || '';
+                var category = panel.getAttribute('data-category') || '';
+                var sql = panel.querySelector('.query-editor').value || '';
+
+                var fd = new FormData();
+                fd.append('name', name);
+                fd.append('category', category);
+                fd.append('query', sql);
+
+                var btns = panel.querySelectorAll('.save-edit, .cancel-edit, .edit-btn');
+                btns.forEach(b => b.disabled = true);
+
+                try {
+                    var resp = await fetch(updateUrl, {
+                        method: 'POST',
+                        body: fd,
+                        credentials: 'same-origin'
+                    });
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    var data = await resp.json();
+                    if (!data || !data.ok) throw new Error('Save failed.');
+                    exitEdit(panel, /*keepChanges*/true);
+                } catch (err) {
+                    alert('Could not save changes: ' + err.message);
+                } finally {
+                    btns.forEach(b => b.disabled = false);
+                }
+            }
+
+            document.addEventListener('click', function (e) {
+                var btn = e.target.closest('button');
+                if (!btn) return;
+
+                // Only handle buttons inside an accordion panel
+                var panel = btn.closest('.accordion-panel');
+                if (!panel) return;
+
+                if (btn.classList.contains('edit-btn')) {
+                    e.preventDefault();
+                    enterEdit(panel);
+                } else if (btn.classList.contains('cancel-edit')) {
+                    e.preventDefault();
+                    exitEdit(panel, /*keepChanges*/false);
+                } else if (btn.classList.contains('save-edit')) {
+                    e.preventDefault();
+                    save(panel);
+                }
+            }, false);
+        })();
+    </script>
+
 </body>
 </html>

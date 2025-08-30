@@ -11,7 +11,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Gulla.Episerver.SqlStudio.DataAccess
 {
-    public class QueryLoader
+    public class QueryRepository
     {
         public IEnumerable<SqlQueryCategory> GetQueries(string connectionString, bool keepSortPrefix)
         {
@@ -67,6 +67,35 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
                 var message = rows + " record " + (rows == 1 ? "" : "s") + " deleted.";
                 var replacedSql = sql.Replace("@name", $"'{name}'").Replace("@category", $"'{category}'");
                 sqlStudioDdsRepository.Log(PrincipalInfo.CurrentPrincipal.Identity.Name, replacedSql, message, SqlStudioController.AnonymizeConnectionString(connectionString));
+            }
+        }
+
+        public void UpdateQuery(
+            ConfigurationService configurationService,
+            ISqlStudioDdsRepository ddsRepository,
+            string connectionString,
+            string category,
+            string name,
+            string newQuery)
+        {
+            // 1) Update the DB
+            const string sql = @"
+                UPDATE SqlQueries
+                SET Query = @query
+                WHERE Name = @name AND Category = @category;";
+
+            var normalizedCategory = string.IsNullOrWhiteSpace(category) ? string.Empty : category;
+
+            using (var cn = new SqlConnection(connectionString))
+            {
+                cn.Open();
+                using (var cmd = new SqlCommand(sql, cn))
+                {
+                    cmd.Parameters.Add("@name", SqlDbType.NVarChar, 255).Value = name;
+                    cmd.Parameters.Add("@category", SqlDbType.NVarChar, 255).Value = normalizedCategory;
+                    cmd.Parameters.Add("@query", SqlDbType.NVarChar).Value = newQuery ?? string.Empty;
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
     }

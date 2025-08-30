@@ -17,7 +17,7 @@ namespace Gulla.Episerver.SqlStudio
         public static IServiceCollection AddSqlStudio(this IServiceCollection services, Action<SqlStudioOptions> setupAction)
         {
             services.AddTransient<SqlService, SqlService>();
-            services.AddTransient<QueryLoader, QueryLoader>();
+            services.AddTransient<QueryRepository, QueryRepository>();
             services.AddTransient<OpenAiService, OpenAiService>();
             services.AddTransient<ConfigurationService, ConfigurationService>();
             

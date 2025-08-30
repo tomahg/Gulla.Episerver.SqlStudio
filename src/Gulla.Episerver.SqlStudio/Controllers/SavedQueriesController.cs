@@ -16,20 +16,20 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;
         private readonly ConfigurationService _configurationService;
         private readonly SqlService _sqlService;
-        private readonly QueryLoader _queryLoader;
+        private readonly QueryRepository _queryRepository;
 
         public SavedQueriesController(
             ISqlStudioDdsRepository sqlStudioDdsRepository,
             ConfigurationService configurationService,
             SqlService sqlService,
-            QueryLoader queryLoader,
+            QueryRepository queryRepository,
             DataAccessOptions dataAccessOptions,
             IOptions<SqlStudioOptions> options) : base(dataAccessOptions, options)
         {
             _sqlStudioDdsRepository = sqlStudioDdsRepository;
             _configurationService = configurationService;
             _sqlService = sqlService;
-            _queryLoader = queryLoader;
+            _queryRepository = queryRepository;
         }
 
         public ActionResult Index()
@@ -47,7 +47,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
             var model = new SavedQueriesViewModel
             {
-                SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, keepSortPrefix: true).ToList() : Enumerable.Empty<SqlQueryCategory>()
+                SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryRepository.GetQueries(connectionString, keepSortPrefix: true).ToList() : Enumerable.Empty<SqlQueryCategory>()
             };
             return View(model);
         }
@@ -71,9 +71,33 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
             var connectionString = connectionStringList.FirstOrDefault()?.Value;
 
-            _queryLoader.DeleteQuery(_configurationService, _sqlStudioDdsRepository, connectionString, category, name);
+            _queryRepository.DeleteQuery(_configurationService, _sqlStudioDdsRepository, connectionString, category, name);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(string category, string name, string query)
+        {
+            if (!_configurationService.Enabled() || !_configurationService.IsSavedQueriesEnabled())
+            {
+                return new ObjectResult("Unauthorized")
+                {
+                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest(new { ok = false, message = "Missing query name." });
+            }
+
+            var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
+            var connectionString = connectionStringList.FirstOrDefault()?.Value;
+
+            _queryRepository.UpdateQuery(_configurationService, _sqlStudioDdsRepository, connectionString, category, name, query);
+
+            return Ok(new { ok = true });
         }
     }
 }

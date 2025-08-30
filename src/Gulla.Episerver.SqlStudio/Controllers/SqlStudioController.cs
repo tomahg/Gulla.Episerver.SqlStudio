@@ -20,13 +20,13 @@ namespace Gulla.Episerver.SqlStudio.Controllers
     public class SqlStudioController : BaseSqlController
     {
         private readonly SqlService _sqlService;
-        private readonly QueryLoader _queryLoader;        
+        private readonly QueryRepository _queryRepository;        
         private readonly ConfigurationService _configurationService;
         private readonly OpenAiService _openAiService;
         private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;
 
-        public SqlStudioController(SqlService sqlService, 
-            QueryLoader queryLoader, 
+        public SqlStudioController(SqlService sqlService,
+            QueryRepository queryRepository, 
             DataAccessOptions dataAccessOptions,
             IOptions<SqlStudioOptions> options,
             ConfigurationService configurationService,
@@ -34,7 +34,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             ISqlStudioDdsRepository sqlStudioDdsRepository) : base(dataAccessOptions, options)
         {
             _sqlService = sqlService;
-            _queryLoader = queryLoader;            
+            _queryRepository = queryRepository;            
             _configurationService = configurationService;
             _openAiService = openAiService;
             _sqlStudioDdsRepository = sqlStudioDdsRepository;
@@ -223,7 +223,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         {
             try
             {
-                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryLoader.GetQueries(connectionString, keepSortPrefix: false).ToList() : Enumerable.Empty<SqlQueryCategory>();
+                model.SavedQueries = _sqlService.GetTableNames(connectionString).Contains("SqlQueries") ? _queryRepository.GetQueries(connectionString, keepSortPrefix: false).ToList() : Enumerable.Empty<SqlQueryCategory>();
                 model.SqlAutoCompleteMetadata = _sqlService.GetMetaData(connectionString);
                 model.SqlTableNameMap = _sqlService.TableNameMap(connectionString);
             }
