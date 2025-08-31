@@ -9,7 +9,7 @@
     <Version>2.15.0.</Version>
     <PackageVersion>2.15.0</PackageVersion>
     <AssemblyVersion>2.15.0</AssemblyVersion>
-    <FileVersion>2.14.0</FileVersion>	  
+    <FileVersion>2.15.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
@@ -21,7 +21,7 @@
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Add accordions to ui for saved queries</PackageReleaseNotes>
+    <PackageReleaseNotes>Edit saved queries too</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
