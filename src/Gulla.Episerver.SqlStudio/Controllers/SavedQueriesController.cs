@@ -77,7 +77,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(string category, string name, string query)
+        public IActionResult Update(string category, string currentName, string newName, string query)
         {
             if (!_configurationService.Enabled() || !_configurationService.IsSavedQueriesEnabled())
             {
@@ -87,7 +87,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 };
             }
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(currentName))
             {
                 return BadRequest(new { ok = false, message = "Missing query name." });
             }
@@ -95,7 +95,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             var connectionStringList = GetConnectionStringList(_dataAccessOptions, _configuration);
             var connectionString = connectionStringList.FirstOrDefault()?.Value;
 
-            _queryRepository.UpdateQuery(_configurationService, _sqlStudioDdsRepository, connectionString, category, name, query);
+            _queryRepository.UpdateQuery(_configurationService, _sqlStudioDdsRepository, connectionString, category, currentName, newName, query);
 
             return Ok(new { ok = true });
         }

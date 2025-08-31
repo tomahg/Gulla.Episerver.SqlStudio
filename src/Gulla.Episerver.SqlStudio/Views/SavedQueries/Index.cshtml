@@ -106,6 +106,28 @@
             align-items: center;
         }
 
+        .name-row {
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .name-row label {
+            font-size: 12px;
+            color: #444;
+        }
+
+        .name-editor {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
         .btn {
             padding: 0px 10px;
             border-radius: 4px;
@@ -180,6 +202,12 @@
         .muted {
             color: #777;
         }
+
+        .name-row[hidden],
+        .query-editor[hidden],
+        .edit-actions[hidden] {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -213,14 +241,21 @@
                                                         <path d="M7 5l6 5-6 5V5z" />
                                                     </svg>
                                                 </span>
-                                                @query.Name
+                                                <span class="query-title">@query.Name</span>
                                             </button>
                                         </div>
 
-                                        <div id="@itemId" class="accordion-panel" data-name="@query.Name" data-category="@category.Name"
-                                             hidden>
+                                        <div id="@itemId" class="accordion-panel" data-name="@query.Name" data-category="@category.Name" hidden>
+                                            <!-- READ MODE -->
                                             <pre class="query-sql">@query.Query</pre>
+
+                                            <!-- EDIT MODE -->
+                                            <div class="name-row" hidden>
+                                                <label for="name-@itemId">Name</label>
+                                                <input id="name-@itemId" class="name-editor" type="text" />
+                                            </div>
                                             <textarea class="query-editor" hidden></textarea>
+
                                             <div class="panel-actions">
                                                 <button type="button" class="btn btn-default edit-btn">Edit</button>
 
@@ -259,27 +294,25 @@
 
     <script>
         (function () {
-            function toggle(panel, trigger) {
-                var isHidden = panel.hasAttribute('hidden');
-                if (isHidden) {
-                    panel.removeAttribute('hidden');
-                    trigger.setAttribute('aria-expanded', 'true');
-                } else {
-                    panel.setAttribute('hidden', '');
-                    trigger.setAttribute('aria-expanded', 'false');
-                }
+          function toggle(panel, trigger) {
+            var isHidden = panel.hasAttribute('hidden');
+            if (isHidden) {
+              panel.removeAttribute('hidden');
+              trigger.setAttribute('aria-expanded', 'true');
+            } else {
+              panel.setAttribute('hidden', '');
+              trigger.setAttribute('aria-expanded', 'false');
             }
+          }
 
-            document.addEventListener('click', function (e) {
-                var t = e.target;
-                if (t && t.classList && t.classList.contains('accordion-trigger')) {
-                    var id = t.getAttribute('aria-controls');
-                    var panel = document.getElementById(id);
-                    if (panel) {
-                        toggle(panel, t);
-                    }
-                }
-            }, false);
+          document.addEventListener('click', function (e) {
+            var trigger = e.target.closest('.accordion-trigger'); // <-- key change
+            if (!trigger) return;
+
+            var id = trigger.getAttribute('aria-controls');
+            var panel = document.getElementById(id);
+            if (panel) toggle(panel, trigger);
+          }, false);
         })();
     </script>
 
@@ -290,29 +323,54 @@
             function enterEdit(panel) {
                 var pre = panel.querySelector('.query-sql');
                 var ta = panel.querySelector('.query-editor');
+                var nameRow = panel.querySelector('.name-row');
+                var nameInput = panel.querySelector('.name-editor');
                 var editBtn = panel.querySelector('.edit-btn');
                 var editActions = panel.querySelector('.edit-actions');
                 var deleteForm = panel.querySelector('.delete-form');
 
                 ta.value = pre.textContent;
+                nameInput.value = panel.getAttribute('data-name') || '';
+
                 pre.hidden = true;
                 ta.hidden = false;
+                nameRow.hidden = false;
                 editBtn.hidden = true;
                 editActions.hidden = false;
-                if (deleteForm) deleteForm.hidden = true; // reduce accidents while editing
+                if (deleteForm) deleteForm.hidden = true;
+
+                nameInput.focus();
+                const end = nameInput.value.length;
+                if (typeof nameInput.setSelectionRange === 'function') {
+                  nameInput.setSelectionRange(end, end);
+                }
             }
 
             function exitEdit(panel, keepChanges) {
                 var pre = panel.querySelector('.query-sql');
                 var ta = panel.querySelector('.query-editor');
+                var nameRow = panel.querySelector('.name-row');
+                var nameInput = panel.querySelector('.name-editor');
+                var titleSpan = panel.parentElement.querySelector('.query-head .accordion-trigger .query-title')
+                              || panel.previousElementSibling.querySelector('.query-title'); // fallback
                 var editBtn = panel.querySelector('.edit-btn');
                 var editActions = panel.querySelector('.edit-actions');
                 var deleteForm = panel.querySelector('.delete-form');
 
                 if (keepChanges) {
                     pre.textContent = ta.value;
+
+                    var newName = nameInput.value || '';
+                    panel.setAttribute('data-name', newName);
+                    if (titleSpan) titleSpan.textContent = newName;
+
+                    // keep delete form in sync
+                    var hiddenName = deleteForm && deleteForm.querySelector('input[name="name"]');
+                    if (hiddenName) hiddenName.value = newName;
                 }
+
                 ta.hidden = true;
+                nameRow.hidden = true;
                 pre.hidden = false;
                 editBtn.hidden = false;
                 editActions.hidden = true;
@@ -320,12 +378,14 @@
             }
 
             async function save(panel) {
-                var name = panel.getAttribute('data-name') || '';
-                var category = panel.getAttribute('data-category') || '';
+                var currentName = panel.getAttribute('data-name') || '';
+                var newName = (panel.querySelector('.name-editor').value || '').trim();
                 var sql = panel.querySelector('.query-editor').value || '';
+                var category = panel.getAttribute('data-category') || '';
 
                 var fd = new FormData();
-                fd.append('name', name);
+                fd.append('currentName', currentName);
+                fd.append('newName', newName);
                 fd.append('category', category);
                 fd.append('query', sql);
 
@@ -338,7 +398,10 @@
                         body: fd,
                         credentials: 'same-origin'
                     });
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    if (!resp.ok) {
+                        var text = await resp.text();
+                        throw new Error('HTTP ' + resp.status + (text ? (': ' + text) : ''));
+                    }
                     var data = await resp.json();
                     if (!data || !data.ok) throw new Error('Save failed.');
                     exitEdit(panel, /*keepChanges*/true);
@@ -366,7 +429,7 @@
                 } else if (btn.classList.contains('save-edit')) {
                     e.preventDefault();
                     save(panel);
-                }
+            }
             }, false);
         })();
     </script>

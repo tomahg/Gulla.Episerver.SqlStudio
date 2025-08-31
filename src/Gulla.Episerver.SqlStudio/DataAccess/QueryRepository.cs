@@ -76,12 +76,13 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
             string connectionString,
             string category,
             string name,
+            string newName,
             string newQuery)
         {
-            // 1) Update the DB
+
             const string sql = @"
                 UPDATE SqlQueries
-                SET Query = @query
+                SET Name = @newName, Query = @query
                 WHERE Name = @name AND Category = @category;";
 
             var normalizedCategory = string.IsNullOrWhiteSpace(category) ? string.Empty : category;
@@ -92,6 +93,7 @@ namespace Gulla.Episerver.SqlStudio.DataAccess
                 using (var cmd = new SqlCommand(sql, cn))
                 {
                     cmd.Parameters.Add("@name", SqlDbType.NVarChar, 255).Value = name;
+                    cmd.Parameters.Add("@newName", SqlDbType.NVarChar, 255).Value = newName;
                     cmd.Parameters.Add("@category", SqlDbType.NVarChar, 255).Value = normalizedCategory;
                     cmd.Parameters.Add("@query", SqlDbType.NVarChar).Value = newQuery ?? string.Empty;
                     cmd.ExecuteNonQuery();
