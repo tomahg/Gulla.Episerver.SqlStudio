@@ -24,11 +24,10 @@ dotnet add package Gulla.Episerver.SqlStudio
 
 ## Configuration
 
-For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have three options:
+For SqlStudio to work, you will have to call the `.AddSqlStudio()` extension method in the Startup.ConfigureServices method. This method provides a configuration with default values. In order for the SqlStudio menu item to show up, you have two options:
 
 -   Add your user to the group `SqlAdmin`
--   Add your user to the `Users` configuration setting
--   Add a group that your user belongs to, to the `GroupNames` configuration setting
+-   Add your/user group to the `SqlAuthorizationPolicy.Default` authentication policy.
 
 Below is a code snippet with all possible configuration options:
 
@@ -43,19 +42,33 @@ Below is a code snippet with all possible configuration options:
     x.DenyMessage = "Careful, please!";
     x.DenyPattern = "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b";
     x.Enabled = true;
-    x.GroupNames = "SuperAdmins,DatabaseAdmins"
-    x.Users = "Huey,Dewey,Louie";
     x.ConnectionString = "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;";
     x.DisableAuditLog = true;
-    x.AuditLogViewAllUsers = "Huey,Dewey,Louie";
-    x.AuditLogViewAllGroupNames = "SuperAdmins,LogViewerAdmin";
-    x.AuditLogDeleteUsers = "Huey,Dewey,Louie";
-    x.AuditLogDeleteGroupNames = "SuperAdmins,LogDeleterAdmin";
     x.AuditLogDaysToKeep = 10;
     x.AiEnabled = true;
     x.AiApiKey = "**********";
     x.AiModel = "gpt-5";
-	x.AiTemperature = 1.0;
+    x.AiTemperature = 1.0;
+},
+auth =>
+{
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("SuperAdmins") ||
+            context.User.Identity?.Name == "Huey" ||
+            context.User.Identity?.Name == "Dewey" ||
+            context.User.Identity?.Name == "Louie");
+
+    });
+    auth.AddPolicy(SqlAuthorizationPolicy.AuditLogsViewAll, policy =>
+    {
+        policy.RequireRole("Auditors");
+    });
+    auth.AddPolicy(SqlAuthorizationPolicy.AuditLogsDelete, policy =>
+    {
+        policy.RequireUserName("DemolitionMan");
+    });
 })
 ```
 
@@ -73,14 +86,8 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
       "DenyMessage": "Careful, please!",
       "DenyPattern": "\\b(DROP|DELETE|UPDATE|ALTER|ADD|EXEC|TRUNCATE)\\b",
       "Enabled": true,
-      "GroupNames": "SuperAdmins,DatabaseAdmins",
-      "Users": "Huey,Dewey,Louie",
       "ConnectionString": "Data Source=foo.net;Database=bar;User Id=watman;Password=pass;",
       "DisableAuditLog": true,
-      "AuditLogViewAllUsers": "Huey,Dewey,Louie",
-      "AuditLogViewAllGroupNames": "SuperAdmins,LogViewerAdmin",
-      "AuditLogDeleteUsers": "Huey,Dewey,Louie",
-      "AuditLogDeleteGroupNames": "SuperAdmins,LogDeleterAdmin",
       "AuditLogDaysToKeep": 10,
       "AiEnabled": true,
       "AiApiKey": "**********",
@@ -89,13 +96,32 @@ You can also configure SqlStudio using `appsettings.json`. A configuration setti
     }
   }
 ```
+Authentication must be configured using the extension method in `startup.cs`.
+
+## Opti ID Support
+
+Starting with version 3.0.0, SqlStudio is compatible with Optimizely's new Opti ID authentication system. Using Opti ID you will probably need to add `policy.AddAuthenticationSchemes(OptimizelyIdentityDefaults.SchemeName);` to the authentication options as per the example below. This constant is available in the namespace `EPiServer.OptimizelyIdentity.OptimizelyIdentityDefaults`.
+
+```
+.AddSqlStudio(x => {
+    x.Enabled = true;
+},
+auth =>
+{
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.AddAuthenticationSchemes(OptimizelyIdentityDefaults.SchemeName);
+        policy.RequireRole("SqlAdmin");
+    });
+})
+```
 
 ## AI capabilities
 
 If you configure an API key for [OpenAI](https://platform.openai.com/) two extra buttons are shown.
 
 -   Generate query: will send metadata for your database (table + column names) and the provided input to OpenAI and return a generated SQL query.
--   Explain query: will send metadata for your database (table + column names) and the provided query to OpenAI and return an explaination.
+-   Explain query: will send metadata for your database (table + column names) and the provided query to OpenAI and return an explanation.
 
 There are four settings.
 
@@ -301,7 +327,7 @@ If some users should be able to see the audit log for all users, add their user 
 Or add a group that should be able to see the audit log for all users.
 
 ```csharp
-.AddSqlStudio(x => {
+.AddSqlStudio(x => { 
     x.AuditLogViewAllGroupNames = "SuperAdmins,LogViewerAdmin";
 })
 ```

@@ -10,6 +10,7 @@ using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Dds;
 using Gulla.Episerver.SqlStudio.Extensions;
 using Gulla.Episerver.SqlStudio.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Options;
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
     [Route("SqlStudio")]
+    [Authorize(Policy = SqlAuthorizationPolicy.Default)]
     public class SqlStudioController : BaseSqlController
     {
         private readonly SqlService _sqlService;

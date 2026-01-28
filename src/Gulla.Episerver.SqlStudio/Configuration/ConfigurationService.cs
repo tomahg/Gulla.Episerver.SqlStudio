@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
-using EPiServer.Security;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Configuration
@@ -8,45 +8,26 @@ namespace Gulla.Episerver.SqlStudio.Configuration
     public class ConfigurationService
     {
         private readonly SqlStudioOptions _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationPolicyProvider _policyProvider;
 
-        public ConfigurationService(IOptions<SqlStudioOptions> options)
+        public ConfigurationService(IOptions<SqlStudioOptions> options,
+            IHttpContextAccessor httpContextAccessor,
+            IAuthorizationService authorizationService,
+            IAuthorizationPolicyProvider policyProvider)
         {
             _configuration = options.Value;
+            _httpContextAccessor = httpContextAccessor;
+            _authorizationService = authorizationService;
+            _policyProvider = policyProvider;
         }
+
+        private ClaimsPrincipal CurrentUser => _httpContextAccessor.HttpContext?.User;
 
         public bool Enabled()
         {
-            if (!_configuration.Enabled)
-            {
-                return false;
-            }
-
-            if (PrincipalInfo.CurrentPrincipal.IsInRole("SqlAdmin"))
-            {
-                return true;
-            }
-
-            var groupsConfigValue = _configuration.GroupNames;
-            if (!string.IsNullOrEmpty(groupsConfigValue))
-            {
-                var groups = groupsConfigValue.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
-                {
-                    return true;
-                }
-            }
-
-            var usersConfigValue = _configuration.Users;
-            if (!string.IsNullOrEmpty(usersConfigValue))
-            {
-                var users = usersConfigValue.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return _configuration.Enabled;
         }
 
         public bool IsAuditLogEnabled()
@@ -81,52 +62,28 @@ namespace Gulla.Episerver.SqlStudio.Configuration
 
         public bool CanUserViewAllAuditLogs()
         {
-            var auditLogViewAllGroupNamesConfigValue = _configuration.AuditLogViewAllGroupNames;
-            if (!string.IsNullOrEmpty(auditLogViewAllGroupNamesConfigValue))
-            {
-                var groups = auditLogViewAllGroupNamesConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
-                {
-                    return true;
-                }
-            }
-
-            var auditLogViewAllUsersConfigValue = _configuration.AuditLogViewAllUsers;
-            if (!string.IsNullOrEmpty(auditLogViewAllUsersConfigValue))
-            {
-                var users = auditLogViewAllUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return AuthorizeIfPolicyExist(SqlAuthorizationPolicy.AuditLogsViewAll);
         }
 
         public bool CanUserDeleteAuditLogs()
         {
-            var auditLogDeleteGroupNamesConfigValue = _configuration.AuditLogDeleteGroupNames;
-            if (!string.IsNullOrEmpty(auditLogDeleteGroupNamesConfigValue))
+            return AuthorizeIfPolicyExist(SqlAuthorizationPolicy.AuditLogsDelete);
+        }
+
+        private bool AuthorizeIfPolicyExist(string policyName)
+        {
+            if (CurrentUser == null)
             {
-                var groups = auditLogDeleteGroupNamesConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && groups.Any(group => PrincipalInfo.CurrentPrincipal.IsInRole(group)))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            var auditLogDeleteUsersConfigValue = _configuration.AuditLogDeleteUsers;
-            if (!string.IsNullOrEmpty(auditLogDeleteUsersConfigValue))
+            var policy = _policyProvider.GetPolicyAsync(policyName).Result;
+            if (policy == null)
             {
-                var users = auditLogDeleteUsersConfigValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                if (PrincipalInfo.CurrentPrincipal.Identity != null && users.Contains(PrincipalInfo.CurrentPrincipal.Identity.Name, StringComparer.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return _authorizationService.AuthorizeAsync(CurrentUser, policy).Result.Succeeded;
         }
 
         public int GetAuditLogDaysToKeep()

@@ -5,12 +5,14 @@ using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
 using Gulla.Episerver.SqlStudio.Dds;
 using Gulla.Episerver.SqlStudio.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
     [Route("SqlStudio/SavedQueries")]
+    [Authorize(Policy = SqlAuthorizationPolicy.Default)]
     public class SavedQueriesController : BaseSqlController
     {
         private readonly ISqlStudioDdsRepository _sqlStudioDdsRepository;

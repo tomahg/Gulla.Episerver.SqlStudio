@@ -2,6 +2,7 @@
 using Gulla.Episerver.SqlStudio.AI;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +15,10 @@ namespace Gulla.Episerver.SqlStudio
             return AddSqlStudio(services, _ => { });
         }
 
-        public static IServiceCollection AddSqlStudio(this IServiceCollection services, Action<SqlStudioOptions> setupAction)
+        public static IServiceCollection AddSqlStudio(
+            this IServiceCollection services,
+            Action<SqlStudioOptions> setupAction,
+            Action<AuthorizationOptions> authorizationOptions = null)
         {
             services.AddTransient<SqlService, SqlService>();
             services.AddTransient<QueryRepository, QueryRepository>();
@@ -26,6 +30,16 @@ namespace Gulla.Episerver.SqlStudio
                 setupAction(options);
                 configuration.GetSection("Gulla:SqlStudio").Bind(options);
             });
+
+            // Authorization
+            if (authorizationOptions != null)
+            {
+                services.AddAuthorization(authorizationOptions);
+            }
+            else
+            {
+                services.AddAuthorizationBuilder().AddPolicy(SqlAuthorizationPolicy.Default, policy => { policy.RequireRole("SqlAdmin"); });
+            }
 
             return services;
         }

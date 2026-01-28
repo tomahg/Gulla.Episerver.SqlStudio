@@ -22,22 +22,26 @@ namespace Gulla.Episerver.SqlStudio.Menu
                 [
                     new UrlMenuItem("SQL", MenuPaths.Global + "/cms/sqlstudio", "/SqlStudio")
                     {
-                        IsAvailable = context => _configurationService.Enabled()
+                        IsAvailable = context => _configurationService.Enabled(),
+                        AuthorizationPolicy = SqlAuthorizationPolicy.Default
 
                     },
                     new UrlMenuItem("SQL Studio", MenuPaths.Global + "/cms/sqlstudio/sqlstudio", "/SqlStudio")
                     {
                         IsAvailable = context => _configurationService.Enabled(),
+                        AuthorizationPolicy = SqlAuthorizationPolicy.Default,
                         SortIndex = 1
                     },
                     new UrlMenuItem("Saved Queries", MenuPaths.Global + "/cms/sqlstudio/savedqueries", "/SqlStudio/SavedQueries")
                     {
                         IsAvailable = context => _configurationService.Enabled() && _configurationService.IsSavedQueriesEnabled(),
+                        AuthorizationPolicy = SqlAuthorizationPolicy.Default,
                         SortIndex = 2
                     },
                     new UrlMenuItem("Audit Log", MenuPaths.Global + "/cms/sqlstudio/auditlog", "/SqlStudio/AuditLog")
                     {
                         IsAvailable = context => _configurationService.Enabled() && _configurationService.IsAuditLogEnabled(),
+                        AuthorizationPolicy = SqlAuthorizationPolicy.Default,
                         SortIndex = 2
                     }
                 ];

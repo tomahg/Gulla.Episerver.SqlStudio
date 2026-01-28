@@ -3,11 +3,13 @@ using System.Net;
 using Gulla.Episerver.SqlStudio.Configuration;
 using Gulla.Episerver.SqlStudio.Dds;
 using Gulla.Episerver.SqlStudio.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gulla.Episerver.SqlStudio.Controllers
 {
     [Route("SqlStudio/AuditLog")]
+    [Authorize(Policy = SqlAuthorizationPolicy.Default)]
     public class AuditLogController : Controller
     {
         private readonly ConfigurationService _configurationService;
