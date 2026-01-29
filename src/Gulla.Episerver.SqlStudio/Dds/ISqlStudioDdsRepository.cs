@@ -10,6 +10,8 @@ namespace Gulla.Episerver.SqlStudio.Dds
 
         public void DeleteAll();
 
+        public void DeleteForUser(string username);
+
         public IEnumerable<SqlStudioDdsLogItem> ListAll(string username = null);
     }
 }

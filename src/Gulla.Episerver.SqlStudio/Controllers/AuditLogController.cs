@@ -43,7 +43,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             {
                 Logs = _configurationService.CanUserViewAllAuditLogs() ? _sqlStudioDdsRepository.ListAll() : _sqlStudioDdsRepository.ListAll(User.Identity.Name),
                 LogsCount = _configurationService.CanUserDeleteAuditLogs() ? _sqlStudioDdsRepository.ListAll().Count() : 0,
-                ShowDeleteButton = _configurationService.CanUserDeleteAuditLogs()
+                ShowDeleteMyLogsButton = _configurationService.CanUserDeleteAuditLogs(),
+                ShowDeleteAllLogsButton = _configurationService.CanUserDeleteAuditLogs() && _configurationService.CanUserViewAllAuditLogs(),
             };
 
             return View(model);
@@ -60,7 +61,16 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                 };
             }
 
-            _sqlStudioDdsRepository.DeleteAll();
+            // Don't delete logs you can't see
+            if (_configurationService.CanUserViewAllAuditLogs())
+            {
+                _sqlStudioDdsRepository.DeleteAll();
+            }
+            else
+            {
+                _sqlStudioDdsRepository.DeleteForUser(User.Identity.Name);
+            }
+
             return RedirectToAction("Index");
         }
     }

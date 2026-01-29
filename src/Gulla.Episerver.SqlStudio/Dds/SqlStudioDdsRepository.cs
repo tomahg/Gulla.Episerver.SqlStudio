@@ -50,6 +50,19 @@ namespace Gulla.Episerver.SqlStudio.Dds
             _dataStoreFactory.DeleteStore(typeof(SqlStudioDdsLogItem), true);
         }
 
+        public void DeleteForUser(string username)
+        {
+            var store = _dataStoreFactory.GetStore(typeof(SqlStudioDdsLogItem));
+            if (store != null)
+            {
+                var itemsToDelete = store.Items<SqlStudioDdsLogItem>().Where(x => x.UserName == username);
+                foreach (var item in itemsToDelete)
+                {
+                    store.Delete(item);
+                }
+            }
+        }
+
         public IEnumerable<SqlStudioDdsLogItem> ListAll(string username = null)
         {
             return GetStore().LoadAll<SqlStudioDdsLogItem>()

@@ -64,15 +64,15 @@
                     </div>
                 }
             </div>
-            @if (Model.HasResults && Model.ShowDeleteButton)
+            @if (Model.HasResults && (Model.ShowDeleteMyLogsButton || Model.ShowDeleteAllLogsButton))
             {
                 <hr />
                 <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
                     <h4 style="margin-bottom: 5px">Danger Zone</h4>
-                    <p>Number of logs in DDS: @Model.LogsCount</p>
+                    <p>Total number of logs in DDS: @Model.LogsCount</p>
                     @using (Html.BeginForm())
                     {
-                        <input type="submit" id="btnDelete" name="Delete" value="Delete all logs" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" style="color: #d1242f; font-weight: bold;" />
+                        <input type="submit" id="btnDelete" name="Delete" value="@(Model.ShowDeleteAllLogsButton ? "Delete all logs" : "Delete my logs")" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" style="color: #d1242f; font-weight: bold;" />
                     }
                 </div>
             }
