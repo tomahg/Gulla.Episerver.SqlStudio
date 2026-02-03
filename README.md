@@ -200,19 +200,50 @@ The addon is by default only available for users in the group `SqlAdmin`. Other 
 })
 ```
 
-The addon can also be made available to users not in the group `SqlAdmin`, by listing their user names like this.
+The addon can also be made available to users not in the group `SqlAdmin`, by adding their user name like this.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.Users = "Huey,Dewey,Louie";
+    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.RequireRole("Huey");
+    });
 })
 ```
 
-The addon can also be made available to users in other groups than `SqlAdmin`, by listing possible user groups like this.
+Or if there are more than one user.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.GroupNames = "SuperAdmins,DatabaseAdmins";
+    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.RequireAssertion(context =>
+            context.User.Identity?.Name == "Huey" ||
+            context.User.Identity?.Name == "Dewey" ||
+            context.User.Identity?.Name == "Louie");
+    });
+})
+```
+
+The addon can also be made available to users in other groups than `SqlAdmin`, by specifying the group like this.
+
+```csharp
+.AddSqlStudio(x => {
+    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.RequireRole("SuperAdmins");
+    });
+})
+```
+
+Or if there are more than one group.
+
+```csharp
+.AddSqlStudio(x => {
+    x.RequireAssertion(context =>
+        context.User.IsInRole("SuperAdmins") ||
+        context.User.IsInRole("DatabaseAdmins")
+    });
 })
 ```
 
@@ -316,11 +347,14 @@ By default the audit log is enabled, and each user may see a log of their own qu
 })
 ```
 
-If some users should be able to see the audit log for all users, add their user names like this.
+If some user should be able to see the audit log for all users, add their user names like this.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.AuditLogViewAllUsers = "Huey,Dewey,Louie";
+    x.AddPolicy(SqlAuthorizationPolicy.AuditLogsViewAll, policy =>
+    {
+        policy.RequireUserName("Huey");
+    });
 })
 ```
 
@@ -328,23 +362,32 @@ Or add a group that should be able to see the audit log for all users.
 
 ```csharp
 .AddSqlStudio(x => { 
-    x.AuditLogViewAllGroupNames = "SuperAdmins,LogViewerAdmin";
+    x.AddPolicy(SqlAuthorizationPolicy.AuditLogsViewAll, policy =>
+    {
+        policy.RequireRole("LogViewerAdmin");
+    });
 })
 ```
 
-If some users should be able to delete the audit logs for all users, add their user names like this.
+If some user should be able to delete audit logs, add their user names like this. They will then be able to delete the audit logs they are able to see.
 
 ```csharp
 .AddSqlStudio(x => {
-    x.AuditLogDeleteUsers = "Huey,Dewey,Louie";
+    x.AddPolicy(SqlAuthorizationPolicy.AuditLogsDelete, policy =>
+    {
+        policy.RequireUserName("Dewey");
+    });
 })
 ```
 
 Or add a group that should be able to delete the audit logs for all users.
 
 ```csharp
-.AddSqlStudio(x => {
-    x.AuditLogDeleteGroupNames = "SuperAdmins,LogDeleterAdmin";
+.AddSqlStudio(x => { 
+    x.AddPolicy(SqlAuthorizationPolicy.AuditLogsDelete, policy =>
+    {
+        policy.RequireRole("LogDeleterAdmin");
+    });
 })
 ```
 

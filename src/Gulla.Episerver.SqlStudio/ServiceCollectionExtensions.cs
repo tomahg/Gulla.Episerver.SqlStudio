@@ -10,24 +10,50 @@ namespace Gulla.Episerver.SqlStudio
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds SQL Studio services with default configuration and default authorization (requires "SqlAdmin" role).
+        /// </summary>
         public static IServiceCollection AddSqlStudio(this IServiceCollection services)
         {
-            return AddSqlStudio(services, _ => { });
+            return AddSqlStudio(services, null, null);
         }
 
+        /// <summary>
+        /// Adds SQL Studio services with custom options and default authorization (requires "SqlAdmin" role).
+        /// </summary>
+        public static IServiceCollection AddSqlStudioWithDefaultAuthorization(
+            this IServiceCollection services,
+            Action<SqlStudioOptions> setupAction)
+        {
+            return AddSqlStudio(services, setupAction, null);
+        }
+
+        /// <summary>
+        /// Adds SQL Studio services with default options and custom authorization.
+        /// </summary>
+        public static IServiceCollection AddSqlStudio(
+            this IServiceCollection services,
+            Action<AuthorizationOptions> authorizationOptions)
+        {
+            return AddSqlStudio(services, null, authorizationOptions);
+        }
+
+        /// <summary>
+        /// Adds SQL Studio services with custom options and custom authorization.
+        /// </summary>
         public static IServiceCollection AddSqlStudio(
             this IServiceCollection services,
             Action<SqlStudioOptions> setupAction,
-            Action<AuthorizationOptions> authorizationOptions = null)
+            Action<AuthorizationOptions> authorizationOptions)
         {
             services.AddTransient<SqlService, SqlService>();
             services.AddTransient<QueryRepository, QueryRepository>();
             services.AddTransient<OpenAiService, OpenAiService>();
             services.AddTransient<ConfigurationService, ConfigurationService>();
-            
+
             services.AddOptions<SqlStudioOptions>().Configure<IConfiguration>((options, configuration) =>
             {
-                setupAction(options);
+                setupAction?.Invoke(options);
                 configuration.GetSection("Gulla:SqlStudio").Bind(options);
             });
 
