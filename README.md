@@ -203,8 +203,8 @@ The addon is by default only available for users in the group `SqlAdmin`. Other 
 The addon can also be made available to users not in the group `SqlAdmin`, by adding their user name like this.
 
 ```csharp
-.AddSqlStudio(x => {
-    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+.AddSqlStudio(auth => {
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
     {
         policy.RequireRole("Huey");
     });
@@ -214,8 +214,8 @@ The addon can also be made available to users not in the group `SqlAdmin`, by ad
 Or if there are more than one user.
 
 ```csharp
-.AddSqlStudio(x => {
-    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+.AddSqlStudio(auth => {
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
     {
         policy.RequireAssertion(context =>
             context.User.Identity?.Name == "Huey" ||
@@ -228,8 +228,8 @@ Or if there are more than one user.
 The addon can also be made available to users in other groups than `SqlAdmin`, by specifying the group like this.
 
 ```csharp
-.AddSqlStudio(x => {
-    x.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+.AddSqlStudio(auth => {
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
     {
         policy.RequireRole("SuperAdmins");
     });
@@ -239,10 +239,13 @@ The addon can also be made available to users in other groups than `SqlAdmin`, b
 Or if there are more than one group.
 
 ```csharp
-.AddSqlStudio(x => {
-    x.RequireAssertion(context =>
-        context.User.IsInRole("SuperAdmins") ||
-        context.User.IsInRole("DatabaseAdmins")
+.AddSqlStudio(auth => {
+    auth.AddPolicy(SqlAuthorizationPolicy.Default, policy =>
+    {
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("SuperAdmins") ||
+            context.User.IsInRole("DatabaseAdmins")
+        );
     });
 })
 ```
