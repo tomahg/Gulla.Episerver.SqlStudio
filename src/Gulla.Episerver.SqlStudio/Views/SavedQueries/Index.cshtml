@@ -1,3 +1,4 @@
+@using EPiServer.Framework.Web
 @using EPiServer.Shell.Navigation
 @using Gulla.Episerver.SqlStudio.Dds
 
@@ -211,7 +212,7 @@
     </style>
 </head>
 <body>
-
+    @Html.AntiForgeryToken()
     @Html.Raw(Html.CreatePlatformNavigationMenu())
     <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
         <div class="epi-contentArea">
@@ -433,6 +434,6 @@
             }, false);
         })();
     </script>
-
+    <required-client-resources area="@RenderingTags.Footer" />
 </body>
 </html>
