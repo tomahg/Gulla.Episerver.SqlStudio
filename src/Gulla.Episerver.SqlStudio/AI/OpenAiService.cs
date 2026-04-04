@@ -40,6 +40,7 @@ namespace Gulla.Episerver.SqlStudio.AI
 
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
             var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 
             using var doc = JsonDocument.Parse(json);
@@ -66,7 +67,7 @@ namespace Gulla.Episerver.SqlStudio.AI
                 }
             }
 
-            return "Error generating explaination";
+            throw new InvalidOperationException("OpenAI returned a response with no choices.");
         }
     }
 }
