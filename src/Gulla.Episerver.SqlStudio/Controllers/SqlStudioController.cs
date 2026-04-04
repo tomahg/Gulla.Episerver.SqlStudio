@@ -254,7 +254,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
         private async Task<ActionResult> Generate(string query)
         {
-            if (!_configurationService.Enabled() && !_configuration.AiEnabled)
+            if (!_configuration.AiEnabled)
             {
                 return new ObjectResult("Unauthorized")
                 {
@@ -299,7 +299,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
         private async Task<ActionResult> Explain(string query)
         {
-            if (!_configurationService.Enabled() && !_configuration.AiEnabled)
+            if (!_configuration.AiEnabled)
             {
                 return new ObjectResult("Unauthorized")
                 {
