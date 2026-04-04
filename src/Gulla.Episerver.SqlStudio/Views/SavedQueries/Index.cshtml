@@ -1,5 +1,4 @@
 @using EPiServer.Framework.Web
-@using EPiServer.Shell.Navigation
 @using Gulla.Episerver.SqlStudio.Dds
 
 @model Gulla.Episerver.SqlStudio.ViewModels.SavedQueriesViewModel
@@ -212,11 +211,11 @@
     </style>
 </head>
 <body>
+    <platform-navigation />
     @Html.AntiForgeryToken()
-    @Html.Raw(Html.CreatePlatformNavigationMenu())
-    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+    <div>
         <div class="epi-contentArea">
-            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px; margin-right: 20px">
+            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px; margin-right: 20px">
                 <h4 style="margin-bottom: 5px">Saved Queries</h4>
 
                 @if (Model?.SavedQueries != null && Model.SavedQueries.Any())

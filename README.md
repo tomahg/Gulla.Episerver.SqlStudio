@@ -1,6 +1,6 @@
-# Gulla.Episerver.SqlStudio for CMS 12 - AI enabled 🤖
+# Gulla.Episerver.SqlStudio for CMS 13 - AI enabled 🤖
 
-This is the readme for the CMS 12 version, the version for CMS 11 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/cms11).
+This is the readme for the CMS 13 version, the version for CMS 11 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/cms11) and the version for CMS 12 is [over here](https://github.com/tomahg/Gulla.Episerver.SqlStudio/tree/cms12).
 
 ## Warning
 

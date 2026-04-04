@@ -5,14 +5,15 @@
   </PropertyGroup>
     
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Version>3.0.3</Version>
-    <PackageVersion>3.0.3</PackageVersion>
-    <AssemblyVersion>3.0.3</AssemblyVersion>
-    <FileVersion>3.0.3</FileVersion>	  
+    <TargetFramework>net10.0</TargetFramework>
+    <Version>4.0.0</Version>
+    <PackageVersion>4.0.0</PackageVersion>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
+    <FileVersion>4.0.0</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
+    <ProjectName>Gulla.Episerver.SqlStudio</ProjectName>
     <Title>Gulla.Episerver.SqlStudio</Title>
     <Authors>Tomas Hensrud Gulla</Authors>
     <Description>An admin tool that lets you query the SQL database from within Optimizely CMS UI. Optional AI features.</Description>
@@ -21,16 +22,16 @@
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Add antiforgerytoken</PackageReleaseNotes>
+    <PackageReleaseNotes>Update to .NET 10 and add support for CMS 13</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-    
+  
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.Core" Version="[12.0.3, 13.0.0)" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="[12.0.2, 13.0.0)" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="[13.0.0, 14.0.0)" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="[13.0.0, 14.0.0)" />
   </ItemGroup>
 
 </Project>

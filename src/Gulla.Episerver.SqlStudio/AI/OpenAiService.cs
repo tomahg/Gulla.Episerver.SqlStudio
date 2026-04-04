@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Gulla.Episerver.SqlStudio.AI
 {
@@ -29,23 +29,37 @@ namespace Gulla.Episerver.SqlStudio.AI
             using var httpClient = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, _endpointCompletions);
             var messages = new[] { new { role = "system", content = systemPrompt }, new { role = "user", content = userPrompt } };
-            var content = new StringContent(JsonConvert.SerializeObject(new { messages = messages, model = model, temperature = temperature }), Encoding.UTF8, "application/json");
-            request.Content = content;
+            var body = JsonSerializer.Serialize(new { messages = messages, model = model, temperature = temperature });
+            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
             var response = await httpClient.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<dynamic>(json);
-            var errorMessage = data.error?.message?.ToString();
-            if (!string.IsNullOrEmpty(errorMessage))
+
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("error", out var error) && error.TryGetProperty("message", out var errorMsg))
             {
-                throw new Exception(errorMessage);
+                var errorMessage = errorMsg.GetString();
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    throw new Exception(errorMessage);
+                }
             }
-            var text = data?.choices[0]?.message?.content?.ToString();
-            if (!string.IsNullOrEmpty(text))
+
+            if (root.TryGetProperty("choices", out var choices) &&
+                choices.GetArrayLength() > 0 &&
+                choices[0].TryGetProperty("message", out var message) &&
+                message.TryGetProperty("content", out var contentProp))
             {
-                return text;
+                var text = contentProp.GetString();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    return text;
+                }
             }
+
             return "Error generating explaination";
         }
     }
