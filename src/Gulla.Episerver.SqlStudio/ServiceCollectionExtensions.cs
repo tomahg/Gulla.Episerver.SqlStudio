@@ -46,6 +46,7 @@ namespace Gulla.Episerver.SqlStudio
             Action<SqlStudioOptions> setupAction,
             Action<AuthorizationOptions> authorizationOptions)
         {
+            services.AddHttpClient();
             services.AddTransient<SqlService, SqlService>();
             services.AddTransient<QueryRepository, QueryRepository>();
             services.AddTransient<OpenAiService, OpenAiService>();

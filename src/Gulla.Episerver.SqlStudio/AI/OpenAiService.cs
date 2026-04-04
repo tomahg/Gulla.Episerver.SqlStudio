@@ -8,9 +8,15 @@ namespace Gulla.Episerver.SqlStudio.AI
 {
     public class OpenAiService
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _endpointCompletions = "https://api.openai.com/v1/chat/completions";
         private readonly string _aiGenerateSystemTextIntroduction = "You are an SQL expert. Consider the following MSSQL tables from Episerver/Optimizely CMS, with their properties. There might be some tables not part of the default installation.\r\n\r\nAnswer every question with SQL query only. Your response should not include anything other than the SQL query.\r\n\r\n";
         private readonly string _aiExplainSystemTextIntroduction = "You are an SQL expert. Consider the following MSSQL query and the tables from Episerver/Optimizely CMS, with their properties. There might be some tables not part of the default installation.\r\n\r\nPlease explain the SQL query. Each line in your response should start with two dashes --. Do not use markdown formatting for any SQL snippets.\r\n\r\n";
+
+        public OpenAiService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
 
         public async Task<string> GenerateSql(string prompt, string tablesMetaData, string contentTypeNames, string apiKey, string model, double temperature)
         {
@@ -26,7 +32,7 @@ namespace Gulla.Episerver.SqlStudio.AI
 
         private async Task<string> SendPrompt(string userPrompt, string systemPrompt, string apiKey, string model, double temperature)
         {
-            using var httpClient = new HttpClient();
+            var httpClient = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Post, _endpointCompletions);
             var messages = new[] { new { role = "system", content = systemPrompt }, new { role = "user", content = userPrompt } };
             var body = JsonSerializer.Serialize(new { messages = messages, model = model, temperature = temperature });

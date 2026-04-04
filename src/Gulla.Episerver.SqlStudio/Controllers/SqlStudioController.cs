@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using EPiServer.Data;
 using EPiServer.Security;
 using Gulla.Episerver.SqlStudio.AI;
@@ -73,7 +74,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string submit, string query, bool hideEmptyColumns, 
+        public async Task<ActionResult> Index(string submit, string query, bool hideEmptyColumns,
             int? contentNameIndex, int? contentNameLanguageIndex, int? contentNameInsertIndex, string contentNameHeading,
             int? contentLinkIndex, int? contentLinkLanguageIndex, int? contentLinkInsertIndex, string contentLinkHeading,
             string connectionString)
@@ -88,11 +89,11 @@ namespace Gulla.Episerver.SqlStudio.Controllers
 
             if (submit.Contains("Generate"))
             {
-                return Generate(query);
+                return await Generate(query);
             }
             if (submit.Contains("Explain"))
             {
-                return Explain(query);
+                return await Explain(query);
             }
 
             // Dropdown is hidden from GUI, if there is only one connectionstring, or if the connectionstring is set in configuration
@@ -251,7 +252,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             return output;
         }
 
-        private ActionResult Generate(string query)
+        private async Task<ActionResult> Generate(string query)
         {
             if (!_configurationService.Enabled() && !_configuration.AiEnabled)
             {
@@ -265,7 +266,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             var connectionString = connectionStringList.FirstOrDefault()?.Value;
 
             var model = new SqlStudioViewModel
-            {                
+            {
                 ColumnsContentId = Enumerable.Empty<Column>(),
                 ColumnsLanguageBranchId = Enumerable.Empty<Column>(),
                 ColumnsInsertIndex = Enumerable.Empty<Column>(),
@@ -284,7 +285,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                     // Do not include content type id when generating SQL, as it will make queries more cryptic
                     var contentTypeNames = _sqlService.GetListOfContentTypes(false);
                     var sqlMetaData = _sqlService.GetMetaData(connectionString);
-                    model.Query = query.ToSqlCommentedLines() + "\r\n" + _openAiService.GenerateSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature).Result;
+                    model.Query = query.ToSqlCommentedLines() + "\r\n" + await _openAiService.GenerateSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature);
                 }
                 catch (Exception e)
                 {
@@ -296,7 +297,7 @@ namespace Gulla.Episerver.SqlStudio.Controllers
             return View(model);
         }
 
-        private ActionResult Explain(string query)
+        private async Task<ActionResult> Explain(string query)
         {
             if (!_configurationService.Enabled() && !_configuration.AiEnabled)
             {
@@ -329,8 +330,8 @@ namespace Gulla.Episerver.SqlStudio.Controllers
                     // Include content type id when explaining SQL, as it will make it possible to explain cryptic queries
                     var contentTypeNames = _sqlService.GetListOfContentTypes(true);
                     var sqlMetaData = _sqlService.GetMetaData(connectionString);
-                    var explaination = _openAiService.ExplainSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature).Result;
-                    model.Query = explaination.ToSqlCommentedLines() + "\r\n" + query;
+                    var explanation = await _openAiService.ExplainSql(query, sqlMetaData, contentTypeNames, _configuration.AiApiKey, _configuration.AiModel, _configuration.AiTemperature);
+                    model.Query = explanation.ToSqlCommentedLines() + "\r\n" + query;
                 }
                 catch (Exception e)
                 {
