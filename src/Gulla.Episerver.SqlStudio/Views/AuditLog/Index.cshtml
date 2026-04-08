@@ -25,59 +25,57 @@
 <body>
     <platform-navigation />
     @Html.AntiForgeryToken()
-    <div>
-        <div class="epi-contentArea">
-            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px">
-                <h4 style="margin-bottom: 5px">Audit Log</h4>
-                @if (Model.HasResults)
-                {
-                    <div style="margin-right: 30px;">
-                        <table class="stripe cell-border" id="result" style="font-size: 80%;">
-                            <thead>
-                                <tr>
-                                    <th>@nameof(SqlStudioDdsLogItem.UserName)</th>
-                                    <th>@nameof(SqlStudioDdsLogItem.Timestamp) (UTC)</th>
-                                    <th>@nameof(SqlStudioDdsLogItem.Query)</th>
-                                    <th>@nameof(SqlStudioDdsLogItem.Message)</th>
-                                    <th>@nameof(SqlStudioDdsLogItem.ConnectionString)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var log in Model.Logs)
-                                {
-                                    <tr>
-                                        <td>@log.UserName</td>
-                                        <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm.ss")</td>
-                                        <td>@log.Query</td>
-                                        <td>@log.Message</td>
-                                        <td>@log.ConnectionString</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <div style="margin-left: 30px;">
-                        <p><em>No audit logs found.</em></p>
-                    </div>
-                }
-            </div>
-            @if (Model.HasResults && (Model.ShowDeleteMyLogsButton || Model.ShowDeleteAllLogsButton))
+    <platform-navigation-wrapper>
+        <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px">
+            <h4 style="margin-bottom: 5px">Audit Log</h4>
+            @if (Model.HasResults)
             {
-                <hr />
-                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
-                    <h4 style="margin-bottom: 5px">Danger Zone</h4>
-                    <p>Total number of logs in DDS: @Model.LogsCount</p>
-                    @using (Html.BeginForm())
-                    {
-                        <input type="submit" id="btnDelete" name="Delete" value="@(Model.ShowDeleteAllLogsButton ? "Delete all logs" : "Delete my logs")" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" style="color: #d1242f; font-weight: bold;" />
-                    }
+                <div style="margin-right: 30px;">
+                    <table class="stripe cell-border" id="result" style="font-size: 80%;">
+                        <thead>
+                            <tr>
+                                <th>@nameof(SqlStudioDdsLogItem.UserName)</th>
+                                <th>@nameof(SqlStudioDdsLogItem.Timestamp) (UTC)</th>
+                                <th>@nameof(SqlStudioDdsLogItem.Query)</th>
+                                <th>@nameof(SqlStudioDdsLogItem.Message)</th>
+                                <th>@nameof(SqlStudioDdsLogItem.ConnectionString)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var log in Model.Logs)
+                            {
+                                <tr>
+                                    <td>@log.UserName</td>
+                                    <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm.ss")</td>
+                                    <td>@log.Query</td>
+                                    <td>@log.Message</td>
+                                    <td>@log.ConnectionString</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div style="margin-left: 30px;">
+                    <p><em>No audit logs found.</em></p>
                 </div>
             }
         </div>
-    </div>
+        @if (Model.HasResults && (Model.ShowDeleteMyLogsButton || Model.ShowDeleteAllLogsButton))
+        {
+            <hr />
+            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 20px">
+                <h4 style="margin-bottom: 5px">Danger Zone</h4>
+                <p>Total number of logs in DDS: @Model.LogsCount</p>
+                @using (Html.BeginForm())
+                {
+                    <input type="submit" id="btnDelete" name="Delete" value="@(Model.ShowDeleteAllLogsButton ? "Delete all logs" : "Delete my logs")" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" style="color: #d1242f; font-weight: bold;" />
+                }
+            </div>
+        }
+    </platform-navigation-wrapper>
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 

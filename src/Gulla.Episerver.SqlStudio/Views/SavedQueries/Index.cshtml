@@ -213,84 +213,82 @@
 <body>
     <platform-navigation />
     @Html.AntiForgeryToken()
-    <div>
-        <div class="epi-contentArea">
-            <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px; margin-right: 20px">
-                <h4 style="margin-bottom: 5px">Saved Queries</h4>
+    <platform-navigation-wrapper>
+        <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px; margin-right: 20px">
+            <h4 style="margin-bottom: 5px">Saved Queries</h4>
 
-                @if (Model?.SavedQueries != null && Model.SavedQueries.Any())
+            @if (Model?.SavedQueries != null && Model.SavedQueries.Any())
+            {
+                foreach (var category in Model.SavedQueries)
                 {
-                    foreach (var category in Model.SavedQueries)
+                    <div class="category">
+                        <h5>@(string.IsNullOrWhiteSpace(category.Name) ? "Uncategorized" : category.Name)</h5>
+                    </div>
+
+                    if (category.Queries != null && category.Queries.Any())
                     {
-                        <div class="category">
-                            <h5>@(string.IsNullOrWhiteSpace(category.Name) ? "Uncategorized" : category.Name)</h5>
-                        </div>
+                        <div class="queries">
+                            @foreach (var query in category.Queries)
+                            {
+                                var itemId = "q_" + System.Guid.NewGuid().ToString("N");
 
-                        if (category.Queries != null && category.Queries.Any())
-                        {
-                            <div class="queries">
-                                @foreach (var query in category.Queries)
-                                {
-                                    var itemId = "q_" + System.Guid.NewGuid().ToString("N");
+                                <div class="query-row">
+                                    <div class="query-head">
+                                        <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="@itemId">
+                                            <span class="chev" aria-hidden="true">
+                                                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                                    <path d="M7 5l6 5-6 5V5z" />
+                                                </svg>
+                                            </span>
+                                            <span class="query-title">@query.Name</span>
+                                        </button>
+                                    </div>
 
-                                    <div class="query-row">
-                                        <div class="query-head">
-                                            <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="@itemId">
-                                                <span class="chev" aria-hidden="true">
-                                                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" focusable="false">
-                                                        <path d="M7 5l6 5-6 5V5z" />
-                                                    </svg>
-                                                </span>
-                                                <span class="query-title">@query.Name</span>
-                                            </button>
+                                    <div id="@itemId" class="accordion-panel" data-name="@query.Name" data-category="@category.Name" hidden>
+                                        <!-- READ MODE -->
+                                        <pre class="query-sql">@query.Query</pre>
+
+                                        <!-- EDIT MODE -->
+                                        <div class="name-row" hidden>
+                                            <label for="name-@itemId">Name</label>
+                                            <input id="name-@itemId" class="name-editor" type="text" />
                                         </div>
+                                        <textarea class="query-editor" hidden></textarea>
 
-                                        <div id="@itemId" class="accordion-panel" data-name="@query.Name" data-category="@category.Name" hidden>
-                                            <!-- READ MODE -->
-                                            <pre class="query-sql">@query.Query</pre>
+                                        <div class="panel-actions">
+                                            <button type="button" class="btn btn-default edit-btn">Edit</button>
 
-                                            <!-- EDIT MODE -->
-                                            <div class="name-row" hidden>
-                                                <label for="name-@itemId">Name</label>
-                                                <input id="name-@itemId" class="name-editor" type="text" />
+                                            <div class="edit-actions" hidden>
+                                                <button type="button" class="btn btn-primary save-edit">Save</button>
+                                                <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
                                             </div>
-                                            <textarea class="query-editor" hidden></textarea>
-
-                                            <div class="panel-actions">
-                                                <button type="button" class="btn btn-default edit-btn">Edit</button>
-
-                                                <div class="edit-actions" hidden>
-                                                    <button type="button" class="btn btn-primary save-edit">Save</button>
-                                                    <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
-                                                </div>
-                                                <form action="@Url.Action("Delete", "SavedQueries")" method="post" class="delete-form" onsubmit="return confirm('Delete the query &quot;@query.Name&quot; from &quot;@category.Name&quot;?');">
-                                                    <input type="hidden" name="category" value="@category.Name" />
-                                                    <input type="hidden" name="name" value="@query.Name" />
-                                                    <button type="submit" class="btn btn-danger" title="Delete this query">Delete</button>
-                                                </form>
-                                            </div>
+                                            <form action="@Url.Action("Delete", "SavedQueries")" method="post" class="delete-form" onsubmit="return confirm('Delete the query &quot;@query.Name&quot; from &quot;@category.Name&quot;?');">
+                                                <input type="hidden" name="category" value="@category.Name" />
+                                                <input type="hidden" name="name" value="@query.Name" />
+                                                <button type="submit" class="btn btn-danger" title="Delete this query">Delete</button>
+                                            </form>
                                         </div>
                                     </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <div style="margin-left: 30px;">
-                                <p class="muted"><em>No queries in this category.</em></p>
-                            </div>
-                        }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="margin-left: 30px;">
+                            <p class="muted"><em>No queries in this category.</em></p>
+                        </div>
                     }
                 }
-                else
-                {
-                    <div style="margin-left: 30px;">
-                        <p><em>No saved queries found.</em></p>
-                    </div>
-                }
-            </div>
+            }
+            else
+            {
+                <div style="margin-left: 30px;">
+                    <p><em>No saved queries found.</em></p>
+                </div>
+            }
         </div>
-    </div>
+    </platform-navigation-wrapper>
 
     <script>
         (function () {

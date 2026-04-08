@@ -49,121 +49,119 @@
 <body>
     <platform-navigation />
     @Html.AntiForgeryToken()
-    <div>
-        <div class="epi-contentArea" style="margin-top:20px;">
-            @using (Html.BeginForm())
+    <platform-navigation-wrapper>
+        @using (Html.BeginForm())
+        {
+            if (Model.ConnectionStrings.Count() > 1)
             {
-                if (Model.ConnectionStrings.Count() > 1)
-                {
-                    <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 10px;">
-                        <h4 style="margin-bottom: 5px">Connection string</h4>
-                        @Html.DropDownListFor(m => m.ConnectionString, Model.ConnectionStrings, new { onchange = "editor.setValue('');this.form.submit();" })
-                    </div>
-                }
-
-                if (Model.SavedQueries != null && Model.SavedQueries.Any() && Model.ShowSavedQueries)
-                {
-                    <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px">
-
-                        <h4 style="margin-bottom: 5px;">Saved queries</h4>
-                        @foreach (var category in Model.SavedQueries)
-                        {
-                            <select class="savedquery">
-                                <option value="">[@category.Name]</option>
-                                @foreach (var query in category.Queries)
-                                {
-                                    <option value="@query.Query">@query.Name</option>
-                                }
-                            </select>
-                        }
-                    </div>
-                }
-
-                if (Model.HasResults && Model.ShowCustomColumns)
-                {
-                    <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 5px">Add custom columns</h4>
-                        <div style="margin-bottom: 5px">
-                            @Html.TextBoxFor(m => m.ContentNameHeading, new { @placeholder = "Name" })
-                            @Html.DropDownListFor(m => m.ContentNameIndex, new SelectList(Model.ColumnsContentId, "Id", "Name"))
-                            @Html.DropDownListFor(m => m.ContentNameLanguageIndex, new SelectList(Model.ColumnsLanguageBranchId, "Id", "Name"))
-                            @Html.DropDownListFor(m => m.ContentNameInsertIndex, new SelectList(Model.ColumnsInsertIndex, "Id", "Name"))
-                        </div>
-
-                        <div>
-                            @Html.TextBoxFor(m => m.ContentLinkHeading, new { @placeholder = "Url" })
-                            @Html.DropDownListFor(m => m.ContentLinkIndex, new SelectList(Model.ColumnsContentId, "Id", "Name"))
-                            @Html.DropDownListFor(m => m.ContentLinkLanguageIndex, new SelectList(Model.ColumnsLanguageBranchId, "Id", "Name"))
-                            @Html.DropDownListFor(m => m.ContentLinkInsertIndex, new SelectList(Model.ColumnsInsertIndex, "Id", "Name"))
-                        </div>
-                    </div>
-                }
-
-                <span class="epi-cmsButton" style="margin-left: 30px; margin-bottom: 10px;">
-                    <input type="submit" id="btnSubmit" name="submit" value="Execute query" title="Execute (F5)" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" onclick="document.getElementById('spinner1').style.visibility = 'visible'; return true;" />
-                </span>
-                <div class="spinner" id="spinner1" style="visibility: hidden">🚀</div>
-                @if(Model.ShowAiButtons)
-                {
-                    <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
-                        <input type="submit" id="btnGenerate" name="submit" value="Generate query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Refresh" onclick="document.getElementById('spinner2').style.visibility = 'visible'; return true;" />
-                    </span>
-                    <div class="spinner" id="spinner2" style="visibility: hidden">🤖</div>
-                    <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
-                        <input type="submit" id="btnGenerate" name="submit" value="Explain query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Help" onclick="document.getElementById('spinner3').style.visibility = 'visible'; return true;" />
-                    </span>
-                    <div class="spinner" id="spinner3" style="visibility: hidden">🤖</div>
-                }
-
-                <span>
-                    @Html.CheckBoxFor(m => m.HideEmptyColumns) <label for="HideEmptyColumns">Hide empty columns</label>
-                </span>
-
-                <div>
-                    <textarea id="query" name="query">@Html.Raw(Model.Query)</textarea>
+                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 10px;">
+                    <h4 style="margin-bottom: 5px">Connection string</h4>
+                    @Html.DropDownListFor(m => m.ConnectionString, Model.ConnectionStrings, new { onchange = "editor.setValue('');this.form.submit();" })
                 </div>
             }
 
-            @if (Model.HasResults)
+            if (Model.SavedQueries != null && Model.SavedQueries.Any() && Model.ShowSavedQueries)
             {
-                <div style="padding: 0 30px">
-                    <table class="stripe cell-border" id="result" style="font-size: 80%;">
-                        <thead>
+                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px; margin-top: 50px">
+
+                    <h4 style="margin-bottom: 5px;">Saved queries</h4>
+                    @foreach (var category in Model.SavedQueries)
+                    {
+                        <select class="savedquery">
+                            <option value="">[@category.Name]</option>
+                            @foreach (var query in category.Queries)
+                            {
+                                <option value="@query.Query">@query.Name</option>
+                            }
+                        </select>
+                    }
+                </div>
+            }
+
+            if (Model.HasResults && Model.ShowCustomColumns)
+            {
+                <div class="inputcontainer" style="margin-left: 30px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 5px">Add custom columns</h4>
+                    <div style="margin-bottom: 5px">
+                        @Html.TextBoxFor(m => m.ContentNameHeading, new { @placeholder = "Name" })
+                        @Html.DropDownListFor(m => m.ContentNameIndex, new SelectList(Model.ColumnsContentId, "Id", "Name"))
+                        @Html.DropDownListFor(m => m.ContentNameLanguageIndex, new SelectList(Model.ColumnsLanguageBranchId, "Id", "Name"))
+                        @Html.DropDownListFor(m => m.ContentNameInsertIndex, new SelectList(Model.ColumnsInsertIndex, "Id", "Name"))
+                    </div>
+
+                    <div>
+                        @Html.TextBoxFor(m => m.ContentLinkHeading, new { @placeholder = "Url" })
+                        @Html.DropDownListFor(m => m.ContentLinkIndex, new SelectList(Model.ColumnsContentId, "Id", "Name"))
+                        @Html.DropDownListFor(m => m.ContentLinkLanguageIndex, new SelectList(Model.ColumnsLanguageBranchId, "Id", "Name"))
+                        @Html.DropDownListFor(m => m.ContentLinkInsertIndex, new SelectList(Model.ColumnsInsertIndex, "Id", "Name"))
+                    </div>
+                </div>
+            }
+
+            <span class="epi-cmsButton" style="margin-left: 30px; margin-bottom: 10px;">
+                <input type="submit" id="btnSubmit" name="submit" value="Execute query" title="Execute (F5)" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Check" onclick="document.getElementById('spinner1').style.visibility = 'visible'; return true;" />
+            </span>
+            <div class="spinner" id="spinner1" style="visibility: hidden">🚀</div>
+            @if(Model.ShowAiButtons)
+            {
+                <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
+                    <input type="submit" id="btnGenerate" name="submit" value="Generate query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Refresh" onclick="document.getElementById('spinner2').style.visibility = 'visible'; return true;" />
+                </span>
+                <div class="spinner" id="spinner2" style="visibility: hidden">🤖</div>
+                <span class="epi-cmsButton" style="margin-left: 10px; margin-bottom: 10px;">
+                    <input type="submit" id="btnGenerate" name="submit" value="Explain query" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Help" onclick="document.getElementById('spinner3').style.visibility = 'visible'; return true;" />
+                </span>
+                <div class="spinner" id="spinner3" style="visibility: hidden">🤖</div>
+            }
+
+            <span>
+                @Html.CheckBoxFor(m => m.HideEmptyColumns) <label for="HideEmptyColumns">Hide empty columns</label>
+            </span>
+
+            <div>
+                <textarea id="query" name="query">@Html.Raw(Model.Query)</textarea>
+            </div>
+        }
+
+        @if (Model.HasResults)
+        {
+            <div style="padding: 0 30px">
+                <table class="stripe cell-border" id="result" style="font-size: 80%;">
+                    <thead>
+                        <tr>
+                            @foreach (var headerColumn in Model.SqlResult.First())
+                            {
+                                <th>@headerColumn</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.SqlResult.Skip(1))
+                        {
                             <tr>
-                                @foreach (var headerColumn in Model.SqlResult.First())
+                                @foreach (var col in row)
                                 {
-                                    <th>@headerColumn</th>
+                                    <td>@col</td>
                                 }
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.SqlResult.Skip(1))
-                            {
-                                <tr>
-                                    @foreach (var col in row)
-                                    {
-                                        <td>@col</td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else if (Model.SqlResult != null && Model.SqlResult.Any())
-            {
-                <div style="margin-left: 30px;">
-                    <p><em>Query executed.</em></p>
-                </div>
-            }
-            else if (!string.IsNullOrEmpty(Model.Message))
-            {
-                <div style="margin-left: 30px;">
-                    <p><em>@Model.Message</em></p>
-                </div>
-            }
-        </div>
-    </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else if (Model.SqlResult != null && Model.SqlResult.Any())
+        {
+            <div style="margin-left: 30px;">
+                <p><em>Query executed.</em></p>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div style="margin-left: 30px;">
+                <p><em>@Model.Message</em></p>
+            </div>
+        }
+    </platform-navigation-wrapper>
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <link href="/_content/Gulla.Episerver.SqlStudio/Static/Styles/ToolButton.css?d=220623" type="text/css" rel="stylesheet">

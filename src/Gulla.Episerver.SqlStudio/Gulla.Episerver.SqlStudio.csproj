@@ -6,10 +6,10 @@
     
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Version>4.0.0</Version>
-    <PackageVersion>4.0.0</PackageVersion>
-    <AssemblyVersion>4.0.0</AssemblyVersion>
-    <FileVersion>4.0.0</FileVersion>	  
+    <Version>4.0.1</Version>
+    <PackageVersion>4.0.1</PackageVersion>
+    <AssemblyVersion>4.0.1</AssemblyVersion>
+    <FileVersion>4.0.1</FileVersion>	  
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Gulla.Episerver.SqlStudio</PackageId>
@@ -22,7 +22,7 @@
     <RepositoryUrl>https://github.com/tomahg/Gulla.Episerver.SqlStudio/</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Update to .NET 10 and add support for CMS 13</PackageReleaseNotes>
+    <PackageReleaseNotes>Use optimizely tag helper to adjust content height</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
